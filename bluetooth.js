@@ -83,7 +83,10 @@ async function connectDisconnect() {
 
 // Function to transmit serial data to the device
 async function sendUartData(string) {
-
+    if(nativeFunc){
+        window.ReactNativeWebView.postMessage(string)
+        return;
+    }
     // Encode the UTF-8 string into an array
     let encoder = new TextEncoder('utf-8');
     let data = encoder.encode(string);
