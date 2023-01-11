@@ -73,6 +73,8 @@
 
         </div>
 
+        <img id="photo"></img>
+
         <!-- Footer -->
         <footer>
 
@@ -562,7 +564,7 @@
      function showImage(){
         let img_blob = new Blob([final_buffer], { type: "image/jpeg" });
         let urlCreator = window.URL || window.webkitURL;
-        let imageUrl = urlCreator.createObjectURL(blob);
+        let imageUrl = urlCreator.createObjectURL(img_blob);
         let img = document.querySelector("#photo");
         img.src = imageUrl;
         
