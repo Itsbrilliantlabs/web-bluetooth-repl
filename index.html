@@ -6,22 +6,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon" />
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
 
     <!-- SEO title & description -->
-    <title>MicroPython Web REPL | Silicon Witchery</title>
-    <meta name="description"
-        content="Web Bluetooth based REPL for MicroPython running on Silicon Witchery FPGA modules.">
-    <link rel="canonical" href="https://repl.siliconwitchery.com" />
+    <title>MicroPython Web REPL | Brilliant Labs</title>
+    <meta name="description" content="Web Bluetooth based REPL for Brilliant Labs AR devices.">
+    <link rel="canonical" href="https://repl.brilliant.xyz" />
 
     <!-- Facebook & Twitter card meta -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@SiliconWitchery" />
-    <meta property="og:title" content="MicroPython Web REPL | Silicon Witchery" />
-    <meta property="og:description"
-        content="Web Bluetooth based REPL for MicroPython running on Silicon Witchery FPGA modules." />
-    <meta property="og:image" content="https://repl.siliconwitchery.com/images/share.png" />
-    <meta property="og:url" content="https://repl.siliconwitchery.com" />
+    <meta name="twitter:site" content="@brilliantlabsAR" />
+    <meta property="og:title" content="MicroPython Web REPL | Brilliant Labs" />
+    <meta property="og:description" content="Web Bluetooth based REPL for Brilliant Labs AR devices." />
+    <meta property="og:image" content="https://repl.brilliant.xyz/images/share.png" />
+    <meta property="og:url" content="https://repl.brilliant.xyz" />
     <meta property="og:type" content="website" />
 
     <!-- Import the bluetooth functions from the bluetooth.js file -->
@@ -38,10 +36,10 @@
 
         <!-- Latest version and docs link -->
         <p>Latest MicroPython build:
-            <a href="https://github.com/siliconwitchery/micropython/releases/latest" target="_blank"
+            <a href="https://github.com/brilliantlabsAR/micropython/releases/latest" target="_blank"
                 id="latestVersion"></a>.
             Use <b>machine.git_tag</b> to check your current version. For full reference, check out the
-            <a href="https://docs.siliconwitchery.com/micropython/micropython/" target="_blank">documentation</a>.
+            <a href="https://docs.brilliant.xyz/micropython/micropython/" target="_blank">documentation</a>.
         </p>
 
         <!-- REPL console -->
@@ -79,10 +77,10 @@
         <footer>
 
             <p>For help, bug reporting, and source code, visit the
-                <a href="https://github.com/siliconwitchery/web-bluetooth-repl" target="_blank">repository</a>
+                <a href="https://github.com/brilliantlabsAR/web-bluetooth-repl" target="_blank">repository</a>
             </p>
 
-            <p>Copyright © 2022 <a href="https://www.siliconwitchery.com" target="_blank">Silicon Witchery</a></p>
+            <p>Copyright © 2023 <a href="https://www.brilliant.xyz" target="_blank">Brilliant Labs</a></p>
 
         </footer>
 
@@ -115,30 +113,30 @@
     //on connect actions
     const onConnectRepl = () => {
 
-            // Clear placeholder text in the REPL console
-            replConsole.placeholder = "";
+        // Clear placeholder text in the REPL console
+        replConsole.placeholder = "";
 
-            // Change the button text to "Disconnect"
-            connectButton.innerHTML = "Disconnect";
+        // Change the button text to "Disconnect"
+        connectButton.innerHTML = "Disconnect";
 
-            // Enable the control buttons
-            controlButtons.forEach(ele => {
-                ele.disabled = false;
-            })
+        // Enable the control buttons
+        controlButtons.forEach(ele => {
+            ele.disabled = false;
+        })
 
-            // Print "connected" in the REPL console
-            replConsole.value = replConsole.value + "\nConnected";
+        // Print "connected" in the REPL console
+        replConsole.value = replConsole.value + "\nConnected";
 
-            // Move the cursor forward
-            cursorPosition = replConsole.value.length;
+        // Move the cursor forward
+        cursorPosition = replConsole.value.length;
 
     }
     //for app
-    const nativeFunc = window.ReactNativeWebView?.postMessage||false; 
-    
+    const nativeFunc = window.ReactNativeWebView?.postMessage || false;
+
     // When the connect/disconnect button is pressed
-    connectButton.addEventListener('click', ()=>{
-        if(nativeFunc){
+    connectButton.addEventListener('click', () => {
+        if (nativeFunc) {
             onConnectRepl()
             focusREPL();
             sendUartData("\x03");
@@ -181,7 +179,7 @@
     replConsole.onkeyup = (event) => {
 
         key = replConsole.value.slice(cursorPosition)
-        if(key=="\n"){
+        if (key == "\n") {
             key = "\r\n"
         }
 
@@ -200,7 +198,7 @@
 
                 // Move the cursor forward
                 cursorPosition = replConsole.value.length;
-                
+
                 // Focus the cursor to the REPL console, and scroll down
                 focusREPL();
 
@@ -208,7 +206,7 @@
                 console.error(error);
             });
 
-        
+
     }
 
     // Whenever keys such as Ctrl, Tab or Backspace are pressed/held
@@ -467,7 +465,7 @@
             });
     }
 
-    function uartStringDataHandler(string){
+    function uartStringDataHandler(string) {
         // For every character in the incoming string (i is incremented internally)
         for (let i = 0; i < string.length;) {
 
@@ -525,14 +523,14 @@
                 // Skip one character
                 i++;
             }
-            }
+        }
 
-            // Reposition the cursor
-            replConsole.selectionEnd = cursorPosition;
-            replConsole.selectionStart = cursorPosition;
+        // Reposition the cursor
+        replConsole.selectionEnd = cursorPosition;
+        replConsole.selectionStart = cursorPosition;
 
-            // Make sure the REPL console is scrolled all the way down
-            replConsole.scrollTop = replConsole.scrollHeight;
+        // Make sure the REPL console is scrolled all the way down
+        replConsole.scrollTop = replConsole.scrollHeight;
     }
     // Whenever data arrives over bluetooth
     function receiveUartData(event) {
@@ -542,44 +540,44 @@
         let value = event.target.value;
         let string = decoder.decode(value);
         uartStringDataHandler(string)
-        
+
     }
     // Whenever raw data arrives over bluetooth
     function receiveRawData(event) {
         console.log(event.target.value);
 
-        try{
-            if(appendBuffer(event.target.value.buffer)){
+        try {
+            if (appendBuffer(event.target.value.buffer)) {
                 showImage()
-            }else{
+            } else {
                 console.log(`progress: ${file_name} -  ${final_buffer.byteLength} of ${file_size}`)
             }
-        }catch(error){
+        } catch (error) {
             console.log(error)
         }
-        
+
     }
 
     //for displaying recieved imaged
-     function showImage(){
+    function showImage() {
         let img_blob = new Blob([final_buffer], { type: "image/jpeg" });
         let urlCreator = window.URL || window.webkitURL;
         let imageUrl = urlCreator.createObjectURL(img_blob);
         let img = document.querySelector("#photo");
         img.src = imageUrl;
-        
+
         let a = document.createElement('a');
         a.href = imageUrl;
         a.download = file_name;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
-        
+
         final_buffer = null;
         file_size = null;
         file_name = null;
-     }
-    
+    }
+
     // Image Variables
     let final_buffer = null;
     let file_name = null;
@@ -589,23 +587,23 @@
     const appendBuffer = function (buffer) {
         let w_temp = new Uint8Array(buffer)
 
-    //FLAGS for data read
+        //FLAGS for data read
         const FILE_INDEX = w_temp[0]
         const FILE_SIZE_START = 1
         const FILE_SIZE_BITS = 4
         const FILE_NAME_LENGTH_SIZE = 5
-        const FILE_NAME_LENGTH_BIT= 1
+        const FILE_NAME_LENGTH_BIT = 1
 
         const FILE_NAME_START = FILE_NAME_LENGTH_SIZE + FILE_NAME_LENGTH_BIT
-    
+
         if (FILE_INDEX === 1 || FILE_INDEX === 0) {
 
-            file_size = new Int32Array(w_temp.slice(FILE_SIZE_START, FILE_SIZE_START+FILE_SIZE_BITS).buffer).toString(10)
+            file_size = new Int32Array(w_temp.slice(FILE_SIZE_START, FILE_SIZE_START + FILE_SIZE_BITS).buffer).toString(10)
             file_name = new TextDecoder("utf-8").decode(w_temp.slice(FILE_NAME_START, w_temp[FILE_NAME_LENGTH_SIZE] + FILE_NAME_START))
             final_buffer = w_temp.slice(w_temp[FILE_NAME_LENGTH_SIZE] + FILE_NAME_START, w_temp.byteLength).buffer
         }
-        if(FILE_INDEX === 2 || FILE_INDEX === 3){
-            let tmp = new Uint8Array(final_buffer.byteLength + w_temp.byteLength-1);
+        if (FILE_INDEX === 2 || FILE_INDEX === 3) {
+            let tmp = new Uint8Array(final_buffer.byteLength + w_temp.byteLength - 1);
             tmp.set(new Uint8Array(final_buffer), 0);
             tmp.set(new Uint8Array(w_temp.slice(1, w_temp.byteLength)), final_buffer.byteLength);
             final_buffer = tmp.buffer
@@ -614,7 +612,7 @@
         if (FILE_INDEX === 0 || FILE_INDEX === 3) {
             return true;
             // payload finished
-        }else{
+        } else {
             return false;
         }
 
@@ -667,8 +665,8 @@
         // Call the API for latest release
         const octokit = new Octokit({});
         const latestRelease = await octokit.request('GET /repos/{owner}/{repo}/releases/latest', {
-            owner: 'siliconwitchery',
-            repo: 'micropython'
+            owner: 'brilliantlabsAR',
+            repo: 'monocle-micropython'
         });
 
         // Set the inner value of the <a> link to the tag string

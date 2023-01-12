@@ -1,6 +1,6 @@
 # Web Bluetooth based MicroPython REPL 
 
-For use with Bluetooth enabled devices, including the [S1 Module](https://www.siliconwitchery.com/module).
+For use with Bluetooth enabled MicroPython devices, including the [Brilliant Monocle](https://www.brilliant.xyz).
 
 ![Demo of the Bluetooth REPL in action](images/demo.gif)
 
