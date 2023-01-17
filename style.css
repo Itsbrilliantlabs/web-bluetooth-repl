@@ -122,12 +122,15 @@ a:hover {
     display: none;;
 }
 .menu-btn{
-    padding: 10px;
-    padding-right: 0;
+    padding: 8px;
+    /* padding-right: 0; */
     cursor: pointer;
+    height: 40px;
+    /* background-color: red; */
+    padding-top: 20px;
 }
 .menu-icon {
-    transform: scale(var(--ggs,1));
+    transform: scale(1.3);
     /* margin-top: -1rem; */
 }
 .menu-icon,
@@ -136,19 +139,19 @@ a:hover {
     box-sizing: border-box;
     position: relative;
     display: block;
-    width: 20px;
+    width: 24px;
     height: 2px;
-    border-radius: 3px;
+    border-radius: 2px;
     background: currentColor
 }
 .menu-icon::after,
 .menu-icon::before {
     content: "";
     position: absolute;
-    top: -6px
+    top: -8px
 }
 .menu-icon::after {
-    top: 6px
+    top: 8px
 }
 .app-header{
     display: none;
@@ -161,21 +164,21 @@ a:hover {
     color: var(--text-color);
     display: inline-block;
     position: relative;
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
   }
   .lds-spinner div {
-    transform-origin: 12px 12px;
+    transform-origin: 13px 13px;
     animation: lds-spinner 1.2s linear infinite;
   }
   .lds-spinner div:after {
     content: " ";
     display: block;
     position: absolute;
-    top: 17px;
-    left: 10px;
+    top: 22px;
+    left: 12px;
     width: 2px;
-    height: 7px;
+    height: 8px;
     border-radius: 20%;
     background: #fff;
   }
