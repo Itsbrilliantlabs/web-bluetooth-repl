@@ -1,6 +1,15 @@
 const nativeFunc = window.ReactNativeWebView?.postMessage||false; 
 
-    
+    if(nativeFunc){
+        connectButton.remove()
+        menuBtn.addEventListener('click',function(){
+            window.ReactNativeWebView.postMessage("/menu")
+        })
+    }else{
+
+        menuBtn.innerHTML = ""
+        spinner.style.display = "none"
+    }
     // Variable for keeping track of the current cursor position
     let cursorPosition = 0;
 
@@ -11,6 +20,7 @@ const nativeFunc = window.ReactNativeWebView?.postMessage||false;
 
 //on connect actions
 const onConnectRepl = () => {
+    spinner.style.display = "none"
 
     // Clear placeholder text in the REPL console
     replConsole.placeholder = "";
@@ -34,6 +44,7 @@ const onConnectRepl = () => {
 
 // When the connect/disconnect button is pressed
 connectButton.addEventListener('click', ()=>{
+    spinner.style.display = "inline-block"
     if(nativeFunc){
         onConnectRepl()
         focusREPL();
@@ -50,7 +61,6 @@ connectButton.addEventListener('click', ()=>{
                 onConnectRepl()
                 // Send Ctrl-C to the device
                 sendUartData("\x03");
-
                 // Focus the cursor to the REPL console, and scroll down
                 focusREPL();
             }
@@ -70,6 +80,8 @@ connectButton.addEventListener('click', ()=>{
 
             // Log the error to the debug console
             console.error(error);
+            spinner.style.display = "none"
+
         })
 })
 
@@ -524,7 +536,8 @@ function disconnectHandler() {
 
     // Print "disconnected" in the REPL console
     replConsole.value = replConsole.value + "\nDisconnected";
-
+    spinner.style.display = "none"
+    
     // Move the cursor forward
     cursorPosition = replConsole.value.length;
 

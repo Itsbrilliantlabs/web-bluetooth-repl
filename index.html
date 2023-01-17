@@ -34,10 +34,16 @@
     <div class="app">
 
         <!-- Title -->
-        <h1>MicroPython Web REPL</h1>
-
+        <h1 class="brand-title">MicroPython Web REPL</h1>
+        <div class="app-header">
+            <div>
+                <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+            </div>
+            <h1 class="app-title">TERMINAL</h1>
+            <span class="menu-btn"><i class="menu-icon"></i></span>
+        </div>
         <!-- Latest version and docs link -->
-        <p>Latest MicroPython build:
+        <p class="build-info">Latest MicroPython build:
             <a href="https://github.com/brilliantlabsAR/micropython/releases/latest" target="_blank"
                 id="latestVersion"></a>.
             Use <b>machine.git_tag</b> to check your current version. For full reference, check out the
@@ -103,9 +109,10 @@
     const connectButton = document.getElementById('connectButton');
     const controlButtons = document.getElementsByName('controlButton');
     const IMG_TAG = "#photo"
+    const menuBtn = document.querySelector('.menu-btn')
+    const spinner = document.querySelector('.lds-spinner')
     
     
-
     
 </script>
 <script src="terminal.js"></script>
