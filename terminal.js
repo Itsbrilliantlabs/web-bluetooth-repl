@@ -562,13 +562,13 @@ function focusREPL() {
     replConsole.scrollTop = replConsole.scrollHeight;
 }
 
-replConsole.addEventListener('focusout',()=>{
-    if(nativeFunc){
-        replConsole.setAttribute("rows",20)
-    }
-})
-replConsole.addEventListener('focus',()=>{
-    if(nativeFunc){
-        replConsole.setAttribute("rows",16)
-    }
-})
+// replConsole.addEventListener('focusout',()=>{
+//     if(nativeFunc){
+//         replConsole.setAttribute("rows",20)
+//     }
+// })
+// replConsole.addEventListener('focus',()=>{
+//     if(nativeFunc){
+//         replConsole.setAttribute("rows",16)
+//     }
+// })
