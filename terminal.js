@@ -555,10 +555,20 @@ function disconnectHandler() {
 
 // Helper function to ensure the REPL console is scrolled down and focused
 function focusREPL() {
-
     // Focus the cursor to the REPL console
     replConsole.focus();
 
     // Make sure the REPL console is scrolled all the way down
     replConsole.scrollTop = replConsole.scrollHeight;
 }
+
+replConsole.addEventListener('focusout',()=>{
+    if(nativeFunc){
+        replConsole.setAttribute("rows",20)
+    }
+})
+replConsole.addEventListener('focus',()=>{
+    if(nativeFunc){
+        replConsole.setAttribute("rows",16)
+    }
+})
