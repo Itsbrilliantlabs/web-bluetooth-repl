@@ -98,8 +98,8 @@ connectButton.addEventListener('click', ()=>{
     if(key=="\n"){
         key = "\r\n"
     }
-    if(key=="\b"){
-        sendUartData("\x08");
+    if(key==""){
+        // key="\x08";
         return;
     }
 
