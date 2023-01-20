@@ -34,7 +34,7 @@
     <div class="app">
 
         <!-- Title -->
-        <h1 class="brand-title">MicroPython Web REPL</h1>
+        <!-- <h1 class="brand-title">MicroPython Web REPL</h1> -->
         <div class="app-header">
             <div>
                 <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
@@ -74,7 +74,7 @@
             <button onclick="sendUartData('\x05'); replConsole.focus()" name="controlButton" disabled
                 title="Enter paste mode (Ctrl-E)">Ctrl-E</button>
 
-            <button onclick="replConsole.value = ''; cursorPosition = 0; sendUartData('\x03');focusREPL();"
+            <button onclick="clearConsole();"
                 title="Clear console (Cmd-k or Ctrl-k)">Clear</button>
 
         </div>

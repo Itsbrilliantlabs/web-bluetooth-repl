@@ -18,6 +18,12 @@ const nativeFunc = window.ReactNativeWebView?.postMessage||false;
         replConsole.placeholder = replPlaceholderText;
     });
 
+const clearConsole = () =>{
+    replConsole.value = '';
+     cursorPosition = 0;
+    sendUartData('\x03');
+    focusREPL();
+}
 //on connect actions
 const onConnectRepl = () => {
     spinner.style.display = "none"
@@ -104,7 +110,10 @@ replConsole.onbeforeinput = (event) => {
     if (event.inputType === 'deleteContentBackward') {
         key = "\x08";
     }
-
+    if(key===null){
+        event.preventDefault();
+        return
+    }
     // Send the keypress
     sendUartData(key)
 
