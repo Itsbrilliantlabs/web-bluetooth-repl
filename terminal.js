@@ -7,7 +7,7 @@ const nativeFunc = window.ReactNativeWebView?.postMessage||false;
         })
     }else{
 
-        menuBtn.innerHTML = ""
+        // menuBtn.innerHTML = ""
         spinner.style.display = "none"
     }
     // Variable for keeping track of the current cursor position
@@ -18,12 +18,12 @@ const nativeFunc = window.ReactNativeWebView?.postMessage||false;
         replConsole.placeholder = replPlaceholderText;
     });
 
-const clearConsole = () =>{
-    replConsole.value = '';
-     cursorPosition = 0;
-    sendUartData('\x03');
-    focusREPL();
-}
+    const clearConsole = () =>{
+        replConsole.value = '';
+         cursorPosition = 0;
+        sendUartData('\x03');
+        focusREPL();
+    }
 //on connect actions
 const onConnectRepl = () => {
     spinner.style.display = "none"
@@ -92,28 +92,21 @@ connectButton.addEventListener('click', ()=>{
 })
 
 // Whenever keys are pressed
-replConsole.onbeforeinput = (event) => {
+ replConsole.onkeyup = (event) => {
 
-    // Create a mutable copy of the event.key value
-    let key = event.data;
-
-    // If Enter is pressed
-    if (event.inputType === 'insertLineBreak') {
-
-        // Move cursor to the end of the line
-        cursorPosition = replConsole.value.length;
-
-        // Replace it with CRLF
-        key = "\r\n";
+    key = replConsole.value.slice(cursorPosition)
+    if(key=="\n"){
+        key = "\r\n"
     }
-    // If Backspace is pressed
-    if (event.inputType === 'deleteContentBackward') {
-        key = "\x08";
+    if(key=="\b"){
+        sendUartData("\x08");
+        return;
     }
-    if(key===null){
-        event.preventDefault();
-        return
-    }
+
+    // Don't print characters to the REPL console because the response will print it for us
+    // event.preventDefault();
+    replConsole.value = replConsole.value.slice(0, cursorPosition);
+
     // Send the keypress
     sendUartData(key)
 
@@ -125,7 +118,7 @@ replConsole.onbeforeinput = (event) => {
 
             // Move the cursor forward
             cursorPosition = replConsole.value.length;
-
+            
             // Focus the cursor to the REPL console, and scroll down
             focusREPL();
 
@@ -133,8 +126,7 @@ replConsole.onbeforeinput = (event) => {
             console.error(error);
         });
 
-    // Don't print characters to the REPL console because the response will print it for us
-    event.preventDefault();
+    
 }
 
 // Whenever keys such as Ctrl, Tab or Backspace are pressed/held
@@ -271,17 +263,17 @@ replConsole.onkeydown = (event) => {
     }
 
     // If backspace is pressed
-    // if (event.key === 'Backspace') {
+    if (event.key === 'Backspace') {
 
-    //     // Send control code 08
-    //     sendUartData("\x08");
+        // Send control code 08
+        sendUartData("\x08");
 
-    //     // Prevent any action in the REPL console
-    //     event.preventDefault();
+        // Prevent any action in the REPL console
+        event.preventDefault();
 
-    //     // Return
-    //     return;
-    // }
+        // Return
+        return;
+    }
 
     // If up is pressed
     if (event.key === 'ArrowUp') {
