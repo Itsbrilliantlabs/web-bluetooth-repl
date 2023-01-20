@@ -99,8 +99,8 @@ connectButton.addEventListener('click', ()=>{
         key = "\r\n"
     }
     if(key==""){
-        // key="\x08";
-        return;
+        key="\x08";
+        // return;
     }
 
     // Don't print characters to the REPL console because the response will print it for us
@@ -128,7 +128,12 @@ connectButton.addEventListener('click', ()=>{
 
     
 }
-
+const appBleDisconnected = function(){
+    controlButtons.forEach(ele => { ele.disabled = true;}); 
+    replConsole.value  += "\nBluetooth error. Are you connected? Trying to connect!";
+    cursorPosition = replConsole.value.length;
+    spinner.style.display = "inline-block"
+}
 // Whenever keys such as Ctrl, Tab or Backspace are pressed/held
 replConsole.onkeydown = (event) => {
 
@@ -266,7 +271,7 @@ replConsole.onkeydown = (event) => {
     if (event.key === 'Backspace') {
 
         // Send control code 08
-        sendUartData("\x08");
+        // sendUartData("\x08");
 
         // Prevent any action in the REPL console
         event.preventDefault();
