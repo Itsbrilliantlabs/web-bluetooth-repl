@@ -86,16 +86,24 @@ connectButton.addEventListener('click', ()=>{
 })
 
 // Whenever keys are pressed
- replConsole.onkeyup = (event) => {
+replConsole.onbeforeinput = (event) => {
 
-    key = replConsole.value.slice(cursorPosition)
-    if(key=="\n"){
-        key = "\r\n"
+    // Create a mutable copy of the event.key value
+    let key = event.data;
+
+    // If Enter is pressed
+    if (event.inputType === 'insertLineBreak') {
+
+        // Move cursor to the end of the line
+        cursorPosition = replConsole.value.length;
+
+        // Replace it with CRLF
+        key = "\r\n";
     }
-
-    // Don't print characters to the REPL console because the response will print it for us
-    // event.preventDefault();
-    replConsole.value = replConsole.value.slice(0, cursorPosition);
+    // If Backspace is pressed
+    if (event.inputType === 'deleteContentBackward') {
+        key = "\x08";
+    }
 
     // Send the keypress
     sendUartData(key)
@@ -108,7 +116,7 @@ connectButton.addEventListener('click', ()=>{
 
             // Move the cursor forward
             cursorPosition = replConsole.value.length;
-            
+
             // Focus the cursor to the REPL console, and scroll down
             focusREPL();
 
@@ -116,7 +124,8 @@ connectButton.addEventListener('click', ()=>{
             console.error(error);
         });
 
-    
+    // Don't print characters to the REPL console because the response will print it for us
+    event.preventDefault();
 }
 
 // Whenever keys such as Ctrl, Tab or Backspace are pressed/held
@@ -253,17 +262,17 @@ replConsole.onkeydown = (event) => {
     }
 
     // If backspace is pressed
-    if (event.key === 'Backspace') {
+    // if (event.key === 'Backspace') {
 
-        // Send control code 08
-        sendUartData("\x08");
+    //     // Send control code 08
+    //     sendUartData("\x08");
 
-        // Prevent any action in the REPL console
-        event.preventDefault();
+    //     // Prevent any action in the REPL console
+    //     event.preventDefault();
 
-        // Return
-        return;
-    }
+    //     // Return
+    //     return;
+    // }
 
     // If up is pressed
     if (event.key === 'ArrowUp') {
