@@ -353,6 +353,9 @@ a:hover {
         letter-spacing: 0.3em;
 
     }
+    .arrow-pad{
+      bottom: 88px;
+    }
     .brand-title{
         display: none;
     }

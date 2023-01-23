@@ -1,0 +1,106 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto:wght@100;400&display=swap'); */
+
+:root {
+    --text-color: #ffffff;
+    --bg-color: rgb(255, 255, 255);
+    --textbox-color: rgb(30, 31, 39);
+    --button-hover-color: rgb(100, 100, 110);
+    --button-click-color: rgb(80, 80, 90);
+    --button-disabled-color: rgb(90, 90, 100);
+    --link-color: rgb(255, 104, 192);
+    --link-hover-color: var(--text-color);
+}
+
+* {
+    margin: 0;
+    border: 0;
+    box-sizing: border-box;
+    /* outline: none; */
+    font-family: 'Roboto', sans-serif;
+    font-weight: 100;
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--bg-color);
+}
+
+.login {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    /* padding-top: 1.5rem; */
+
+}
+.heading{
+    margin-top: 27vh;
+    width: 100%;
+    padding-left: 10px;
+    font-family: 'Apercu Pro';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 150%;
+    margin-bottom: 1rem;
+    /* or 45px */
+    color: #000000;
+
+}
+.buttons{
+    width: 100%;
+    /* background-color: #000000 ; */
+    /* border-radius: 15px; */
+    margin-top: 12px;
+    height: 53px;
+}
+.buttons a{
+    padding: 18px;
+    /* padding-bottom: 15px; */
+    /* height: 53px; */
+    padding-left: 5rem;
+    width: 100%;
+    display: inline-block;
+    position: relative;
+    background-color: #000000 ;
+    text-align: justify;
+    border-radius: 15px;
+    vertical-align: middle;
+
+}
+.sub-heading{
+    width: 100%;
+    padding-left: 10px;
+    height: 66px;
+
+    font-family: 'Apercu Pro';
+    font-style: normal;
+    font-size: 16px;
+    /* or 45px */
+    color: #000000;
+
+}
+.img-icon{
+    width: 29px;
+    position: absolute;
+    left: 15px;
+    top: 12px;
+}
+.terms {
+    text-align: center;
+    margin-top: 10px;
+}
+.terms a{
+    color: #060606c4 !important;
+    font-size: 12px;
+    text-decoration: underline;
+}
+@media only screen and (min-width: 900px) {
+    .login {
+        width: 30%;
+    }
+}
