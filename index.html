@@ -50,10 +50,19 @@
             <a href="https://docs.brilliant.xyz/micropython/micropython/" target="_blank">documentation</a>.
         </p>
 
+        <div class="console-area">
         <!-- REPL console -->
         <textarea type="text" id="replConsole" rows=20 autocomplete="off" autocorrect="off" autocapitalize="off"
             spellcheck="false" placeholder="" onpaste="pasteEvent();event.preventDefault()"></textarea>
-
+        <!-- <div class="controls"> -->
+            <div class="arrow-pad">
+                <div class="arrow up" ><span data-cmd="UP">&uarr;</span></div>
+                <div class="arrow down" ><span data-cmd="DOWN">&darr;</span></div>
+                <div class="arrow left" ><span data-cmd="LEFT">&larr;</span></div>
+                <div class="arrow right" ><span data-cmd="RIGHT">&rarr;</span></div>
+            </div>
+            <div class="arrow-toggle"><span>&rsaquo;</span></div>
+        <!-- </div> -->
         <!-- Buttons -->
         <div class="buttons">
 
@@ -78,6 +87,8 @@
                 title="Clear console (Cmd-k or Ctrl-k)">Clear</button>
 
         </div>
+    </div>
+       
 
         <img id="photo"></img>
 
