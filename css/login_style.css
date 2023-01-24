@@ -1,5 +1,14 @@
 /* @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto:wght@100;400&display=swap'); */
-
+@font-face {
+    font-family: "Apercu Pro";
+    src: url('../fonts/ApercuProBold.otf');
+    font-weight: 700;
+  }
+@font-face {
+    font-family: "Apercu Pro";
+    src: url('../fonts/ApercuProRegular.otf');
+  }
+ 
 :root {
     --text-color: #ffffff;
     --bg-color: rgb(255, 255, 255);
@@ -21,6 +30,7 @@
     text-decoration: none;
     color: var(--text-color);
 }
+
 
 body {
     display: flex;
@@ -70,6 +80,17 @@ body {
     text-align: justify;
     border-radius: 15px;
     vertical-align: middle;
+    
+    font-family: 'Apercu Pro';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 24px;
+    /* identical to box height, or 133% */
+
+
+    color: #FFFFFF;
+
 
 }
 .sub-heading{
@@ -88,16 +109,24 @@ body {
     width: 29px;
     position: absolute;
     left: 15px;
-    top: 12px;
+    top: 17px;
 }
 .terms {
     text-align: center;
-    margin-top: 10px;
+    margin-top: 40px;
 }
 .terms a{
-    color: #060606c4 !important;
+    font-family: 'Apercu Pro';
+    font-style: normal;
+    font-weight: 400;
     font-size: 12px;
-    text-decoration: underline;
+    line-height: 29px;
+    /* identical to box height, or 242% */
+
+    text-align: center;
+    text-decoration-line: underline;
+
+    color: #000000
 }
 @media only screen and (min-width: 900px) {
     .login {

@@ -6,8 +6,10 @@ const nativeFunc = window.ReactNativeWebView?.postMessage||false;
             window.ReactNativeWebView.postMessage("/menu")
         })
     }else{
-
-        menuBtn.innerHTML = ""
+        menuBtn.addEventListener('click',function(){
+            window.location = "profile"
+        })
+        // menuBtn.innerHTML = ""
         spinner.style.display = "none"
     }
     // Variable for keeping track of the current cursor position
