@@ -126,7 +126,7 @@ connectButton.addEventListener('click', ()=>{
     }
     if(key==""){
         key="\x08";
-        // return;
+        return;
     }
 
     // Don't print characters to the REPL console because the response will print it for us
@@ -284,7 +284,7 @@ replConsole.onkeydown = (event) => {
     if (event.key === 'Backspace') {
 
         // Send control code 08
-        // sendUartData("\x08");
+        sendUartData("\x08");
 
         // Prevent any action in the REPL console
         event.preventDefault();
