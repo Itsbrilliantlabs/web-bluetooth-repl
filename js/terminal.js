@@ -613,19 +613,26 @@ replConsole.addEventListener('focus',()=>{
 })
 let arrowBtns = document.querySelectorAll(".arrow")
 arrowBtns.forEach(el=>{
-    el.addEventListener("click",function(){
+    el.addEventListener("click",function(e){
         console.log(el.getAttribute("data-cmd"))
         switch(el.getAttribute("data-cmd")){
             case 'UP':
-                sendUartData("\x1B[A");
+                sendUartData("\x1B[A").catch(disconnectError);
+                break;
             case 'DOWN':
-                sendUartData("\x1B[B");
+                sendUartData("\x1B[B").catch(disconnectError);
+                break;
             case 'LEFT':
-                sendUartData("\x1B[D");
+                sendUartData("\x1B[D").catch(disconnectError);
+                break;
             case 'RIGHT':
-                sendUartData("\x1B[C");
+                sendUartData("\x1B[C").catch(disconnectError);
+                break;
+            default:
+                break;
 
         }
+        e.preventDefault()
     })
 })
 arrowToggleBtn.addEventListener('click',function(){
