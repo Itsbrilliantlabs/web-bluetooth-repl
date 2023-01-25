@@ -21,10 +21,10 @@ let touchendX = 0
     
     function checkDirection() {
     if (touchendX < touchstartX) {
-        document.querySelector('.sidebar')?.classList.remove('close')
+        document.querySelector('.sidebar')?.classList.add('close')
     };
     if (touchendX > touchstartX) {
-        // document.querySelector('.sidebar')?.classList.add('close')
+        document.querySelector('.sidebar')?.classList.remove('close')
     };
     }
 
