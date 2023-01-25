@@ -151,6 +151,10 @@
         document.querySelector('.menu-close').addEventListener('click',()=>{
             document.querySelector('.sidebar').classList.add('close')
         })
+        document.querySelector('.logout-btn').addEventListener("click",function(){
+            localStorage.removeItem("replUser")
+            window.location = "../login"
+        })
     // },2000)
     
 </script>
