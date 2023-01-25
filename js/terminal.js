@@ -6,12 +6,36 @@ const nativeFunc = window.ReactNativeWebView?.postMessage||false;
             window.ReactNativeWebView.postMessage("/menu")
         })
     }else{
+        
         menuBtn.addEventListener('click',function(){
-            window.location = "profile"
+            // window.location = "profile"
+            document.querySelector('.sidebar').classList.remove('close')
+            
         })
         // menuBtn.innerHTML = ""
         spinner.style.display = "none"
     }
+
+    let touchstartX = 0
+let touchendX = 0
+    
+    function checkDirection() {
+    if (touchendX < touchstartX) {
+        document.querySelector('.sidebar')?.classList.remove('close')
+    };
+    if (touchendX > touchstartX) {
+        // document.querySelector('.sidebar')?.classList.add('close')
+    };
+    }
+
+    document.addEventListener('touchstart', e => {
+    touchstartX = e.changedTouches[0].screenX
+    })
+
+    document.addEventListener('touchend', e => {
+    touchendX = e.changedTouches[0].screenX
+    checkDirection()
+    })
     // Variable for keeping track of the current cursor position
     let cursorPosition = 0;
 

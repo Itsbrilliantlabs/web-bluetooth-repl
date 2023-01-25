@@ -1,4 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto:wght@100;400&display=swap');
+@font-face {
+  font-family: "Apercu Pro";
+  src: url('../fonts/ApercuProBold.otf');
+  font-weight: 700;
+}
+@font-face {
+  font-family: "Apercu Pro";
+  src: url('../fonts/ApercuProRegular.otf');
+}
 
 :root {
     --text-color: rgb(247, 247, 240);
@@ -343,11 +352,123 @@ a:hover {
     opacity: 0.2;
     pointer-events: none;
   }
+
+  /* for sidebar css */
+  .sidebar{
+    height: 100vh;
+    width: 30vw;
+    /* padding: 10px 20px; */
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: var(--text-color);
+    z-index: 1;
+    transition: left 0.7s;
+  }
+  .sidebar.close{
+
+    left: -1000px;
+    transition: left 0.4s unset;
+
+  }
+.menu-close{
+ color: #000000 ;
+ font-family: 'Apercu Pro';
+ padding: 16px;
+ font-weight: 700;
+
+}
+.profile-info{
+    margin-top: 2rem;
+    padding-left: 16px;
+}
+.profile-info a{
+    color: #000000;
+    padding: 5px 10px;
+    margin-bottom: 0.2rem;
+    margin-top: 0;
+    display: block;
+    font-family: 'Apercu Pro';
+    /* font-style: normal; */
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 300%;
+/* or 48px */
+}
+.menu-img-icon{
+    width: 25px;
+    margin-right: 1rem;
+}
+.profile-info a span {
+    padding: 4px;
+    color: #000000;
+    display: inline-block;
+    padding-top: 0;
+    font-family: 'Apercu Pro';
+    vertical-align: middle;
+    margin-top: -8px;
+    font-weight: 400;
+
+}
+.avatar{
+  width: 80px;
+  border-radius: 100%;
+
+}
+.heading{
+  margin-top: 1rem;
+  width: 100%;
+  padding-left: 10px;
+  font-family: 'Apercu Pro';
+  /* font-style: normal; */
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 150%;
+  color: #000000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+      
+
+}
+.heading span{
+  color: #000000;
+  flex: 2;
+  font-family: 'Apercu Pro';
+  font-weight: 700;
+
+  margin-left: 1rem;
+  /* padding: 15px; */
+}
+
+.logout-btn{
+  width: 80%;
+  padding: 10px;
+  display: inline-block;
+  bottom: 2rem;
+  left: 50%;
+  position: relative;
+  color: #000000;
+  border-radius: 15px;
+  border: 1px solid #000000;
+  transform: translateX(-50%);
+  font-family: 'Apercu Pro';
+  /* font-style: normal; */
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24px;
+  /* identical to box height, or 133% */
+
+  text-align: center;
+}
 @media only screen and (max-width: 900px) {
     
     .app {
         width: 90%;
         padding-top: 2rem;
+    }
+    .sidebar{
+      width: 74vw;
     }
     .app-title{
         display: block;
@@ -369,5 +490,13 @@ a:hover {
     .build-info{
         display: none;
     }
-  }
+    .heading{
+      flex-direction: column;
+    }
+    .heading span{
+      margin-left: 0;
 
+    }
+    
+  }
+  

@@ -98,7 +98,7 @@ body {
     width: 100%;
     padding-left: 10px;
     font-family: 'Apercu Pro';
-    font-style: normal;
+    /* font-style: normal; */
     font-weight: 700;
     font-size: 30px;
     line-height: 150%;
@@ -143,8 +143,10 @@ body {
 .logout-btn{
     width: 80%;
     padding: 10px;
+    top: 2rem;
+    /* bottom: 2rem; */
     left: 50%;
-    position: absolute;
+    position: relative;
     bottom: 5rem;
     /* padding: 10px; */
     /* background-color: red; */
@@ -153,8 +155,8 @@ body {
     border: 1px solid #000000;
     transform: translateX(-50%);
     font-family: 'Apercu Pro';
-    font-style: normal;
-    font-weight: bold;
+    /* font-style: normal; */
+    font-weight: 400;
     font-size: 18px;
     line-height: 24px;
     /* identical to box height, or 133% */

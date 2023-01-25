@@ -31,6 +31,22 @@
 
 <body>
 
+    <div class="sidebar">
+        <div class="app-header">
+            <span></span>
+            <span class="menu-close">&#9587;</span>
+        </div>
+			<div class="heading"></div>
+            <div class="profile-info">
+                <a href="#"><img src="images/black_user.png" class="menu-img-icon" alt=""> <span> Update Profile</span></a>
+                <a href="#"><img src="images/menu_device_frame_new.png" class="menu-img-icon" alt=""> <span> Update Device Firmware</span></a>
+                <a href="#"><img src="images/menu_licence_new.png" class="menu-img-icon" alt=""> <span> License Agreement</span></a>
+                <a href="#"><img src="images/menu_data_new.png" class="menu-img-icon" alt=""> <span> Data Privacy</span></a>
+                <a href="#"><img src="images/menu_help_new.png" class="menu-img-icon" alt=""> <span> Documentation</span></a>
+            </div>
+            <a href="javascript:void()" class="logout-btn">Logout</a>
+            <br><br>
+    </div>
     <div class="app">
 
         <!-- Title -->
@@ -123,7 +139,19 @@
     const menuBtn = document.querySelector('.menu-btn')
     const spinner = document.querySelector('.lds-spinner')
     
-    
+    // setTimeout(()=>{
+        let rplUser = localStorage.getItem("replUser");
+        if(rplUser && JSON.parse(rplUser).username){
+            rplUser = JSON.parse(rplUser)
+            let img = `<img class="avatar" src="https://cdn.discordapp.com/avatars/${rplUser.id}/${rplUser.avatar}?size=80">`
+            document.querySelector(".heading").innerHTML = img + " <span>" + rplUser.username+"</span>"
+        }else{
+            // window.location ="../login"
+        }
+        document.querySelector('.menu-close').addEventListener('click',()=>{
+            document.querySelector('.sidebar').classList.add('close')
+        })
+    // },2000)
     
 </script>
 <script src="js/terminal.js"></script>
