@@ -538,20 +538,20 @@ const appendBuffer = function (buffer) {
 
     const FILE_NAME_START = FILE_NAME_LENGTH_SIZE + FILE_NAME_LENGTH_BIT
 
-    if (FILE_INDEX === 1 || FILE_INDEX === 0) {
+    if (FILE_INDEX === 0 || FILE_INDEX === 0) {
 
         file_size = new Int32Array(w_temp.slice(FILE_SIZE_START, FILE_SIZE_START+FILE_SIZE_BITS).buffer).toString(10)
         file_name = new TextDecoder("utf-8").decode(w_temp.slice(FILE_NAME_START, w_temp[FILE_NAME_LENGTH_SIZE] + FILE_NAME_START))
         final_buffer = w_temp.slice(w_temp[FILE_NAME_LENGTH_SIZE] + FILE_NAME_START, w_temp.byteLength).buffer
     }
-    if(FILE_INDEX === 2 || FILE_INDEX === 3){
+    if(FILE_INDEX === 1 || FILE_INDEX === 1){
         let tmp = new Uint8Array(final_buffer.byteLength + w_temp.byteLength-1);
         tmp.set(new Uint8Array(final_buffer), 0);
         tmp.set(new Uint8Array(w_temp.slice(1, w_temp.byteLength)), final_buffer.byteLength);
         final_buffer = tmp.buffer
     }
 
-    if (FILE_INDEX === 0 || FILE_INDEX === 3) {
+    if (FILE_INDEX === 2 || FILE_INDEX === 2) {
         return true;
         // payload finished
     }else{
