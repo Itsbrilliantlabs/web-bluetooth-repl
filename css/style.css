@@ -291,39 +291,43 @@ a:hover {
     width: 100%;
   }
   .arrow-pad .arrow{
-    height: 20px;
-    width: 20px;
+    height: 40px;
+    width: 40px;
     position: absolute;
+    font-size: 1.5rem;
     /* background-color: var(--text-color); */
     transform: translate(-50%,-50%);
     top: 50%;
     left: 50%;
     text-align: center;
+    vertical-align: middle;
     padding: auto;
+    cursor: pointer;
 
   }
-  .arrow span{
-    display: block;
-    width: 100%;
-    height: 100%;
-    /* pointer-events: all; */
-    cursor: pointer;
-  }
+  
   .arrow.right{
-    left: 65%;
+    /* left: 65%; */
+    transform:  translate(-10%,-50%) rotate(90deg);
   }
   .arrow.down{
-    top:65%;
+    /* top:65%; */
+    transform: translate(-50%,-10%)  rotate(180deg);
+
   }
   .arrow.up{
-    top:35%;
+    /* top:35%; */
+    transform: translate(-50%,-90%) rotate(0deg);
+
   }
   .arrow.left{
-    left:35%;
+    /* left:35%; */
+    transform: translate(-90%,-50%) rotate(270deg);
+
   }
   .arrow-toggle{
     position: absolute;
-    bottom: 130px;
+    bottom: 129px;
     right: 4px;
     font-size: 1.5rem;
     font-weight: bold;
@@ -355,6 +359,9 @@ a:hover {
     }
     .arrow-pad{
       bottom: 88px;
+    }
+    .arrow-toggle{
+      bottom: 144px;
     }
     .brand-title{
         display: none;

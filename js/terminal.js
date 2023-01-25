@@ -587,7 +587,7 @@ replConsole.addEventListener('focus',()=>{
     consoleControl.classList.add("blur")
     // arrowToggleBtn.parentNode.classList.add("blur")
 })
-let arrowBtns = document.querySelectorAll(".arrow span")
+let arrowBtns = document.querySelectorAll(".arrow")
 arrowBtns.forEach(el=>{
     el.addEventListener("click",function(){
         console.log(el.getAttribute("data-cmd"))
