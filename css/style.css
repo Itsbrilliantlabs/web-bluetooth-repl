@@ -179,6 +179,15 @@ a:hover {
   margin-top: 0.5rem;
 }
 /* loader  */
+.app-header > div {
+width: 13%;
+}
+.app-header > span {
+  width: 13%;
+}
+.app-header > h1 {
+  width: 100%;
+}
 
 .lds-spinner {
     color: var(--text-color);

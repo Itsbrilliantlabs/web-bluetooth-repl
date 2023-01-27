@@ -12,7 +12,7 @@ const nativeFunc = window.ReactNativeWebView?.postMessage||false;
         //     document.querySelector('.sidebar').classList.remove('close')
             
         // })
-        menuBtn.innerHTML = ""
+        // menuBtn.innerHTML = ""
         // spinner.style.display = "none"
     }
 
