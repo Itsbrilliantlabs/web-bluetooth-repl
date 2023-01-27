@@ -31,7 +31,7 @@
 
 <body>
 
-    <!-- <div class="sidebar close">
+    <div class="sidebar close">
         <div class="app-header">
             <span></span>
             <span class="menu-close">&#9587;</span>
@@ -46,7 +46,7 @@
             </div>
             <a href="javascript:void()" class="logout-btn">Logout</a>
             <br><br>
-    </div> -->
+    </div>
     <div class="app">
 
         <!-- Title -->
@@ -71,13 +71,13 @@
         <textarea type="textarea" id="replConsole" rows=20 autocomplete="off" autocorrect="off" autocapitalize="off"
             spellcheck="false" placeholder="" onpaste="pasteEvent();event.preventDefault()"></textarea>
         <!-- <div class="controls"> -->
-            <!-- <div class="arrow-pad">
+            <div class="arrow-pad">
                 <div class="arrow up" data-cmd="UP">&uarr;</div>
                 <div class="arrow down" data-cmd="DOWN" >&uarr;</div>
                 <div class="arrow left" data-cmd="LEFT">&uarr;</div>
                 <div class="arrow right"  data-cmd="RIGHT">&uarr;</div>
             </div>
-            <div class="arrow-toggle"><span>&rsaquo;</span></div> -->
+            <div class="arrow-toggle"><span>&rsaquo;</span></div>
         <!-- </div> -->
         <!-- Buttons -->
         <div class="buttons">
@@ -139,23 +139,22 @@
     const menuBtn = document.querySelector('.menu-btn')
     const spinner = document.querySelector('.lds-spinner')
     
-    // // setTimeout(()=>{
-    //     let rplUser = localStorage.getItem("replUser");
-    //     if(rplUser && JSON.parse(rplUser).username){
-    //         rplUser = JSON.parse(rplUser)
-    //         let img = `<img class="avatar" src="https://cdn.discordapp.com/avatars/${rplUser.id}/${rplUser.avatar}?size=80">`
-    //         document.querySelector(".heading").innerHTML = img + " <span>" + rplUser.username+"</span>"
-    //     }else{
-    //         // window.location ="../login"
-    //     }
-    //     document.querySelector('.menu-close').addEventListener('click',()=>{
-    //         document.querySelector('.sidebar').classList.add('close')
-    //     })
-    //     document.querySelector('.logout-btn').addEventListener("click",function(){
-    //         localStorage.removeItem("replUser")
-    //         window.location = "../login"
-    //     })
-    // },2000)
+    // setTimeout(()=>{
+        let rplUser = localStorage.getItem("replUser");
+        if(rplUser && JSON.parse(rplUser).username){
+            rplUser = JSON.parse(rplUser)
+            let img = `<img class="avatar" src="https://cdn.discordapp.com/avatars/${rplUser.id}/${rplUser.avatar}?size=80">`
+            document.querySelector(".heading").innerHTML = img + " <span>" + rplUser.username+"</span>"
+        }else{
+            // window.location ="../login"
+        }
+        document.querySelector('.menu-close').addEventListener('click',()=>{
+            document.querySelector('.sidebar').classList.add('close')
+        })
+        document.querySelector('.logout-btn').addEventListener("click",function(){
+            localStorage.removeItem("replUser")
+            window.location = "../login"
+        })
     
 </script>
 <script src="js/terminal.js"></script>

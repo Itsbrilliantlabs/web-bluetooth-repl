@@ -7,11 +7,11 @@ const nativeFunc = window.ReactNativeWebView?.postMessage||false;
         })
     }else{
         
-        // menuBtn.addEventListener('click',function(){
-        //     // window.location = "profile"
-        //     document.querySelector('.sidebar').classList.remove('close')
+        menuBtn.addEventListener('click',function(){
+            // window.location = "profile"
+            document.querySelector('.sidebar').classList.remove('close')
             
-        // })
+        })
         menuBtn.innerHTML = ""
         spinner.style.display = "none"
     }
@@ -604,15 +604,15 @@ function focusREPL() {
 }
 
 
-// const arrowToggleBtn = document.querySelector('.arrow-toggle span')
-// const arrowPad = document.querySelector(".arrow-pad")
-// const consoleControl = document.querySelector('.arrow-pad')
+const arrowToggleBtn = document.querySelector('.arrow-toggle span')
+const arrowPad = document.querySelector(".arrow-pad")
+const consoleControl = document.querySelector('.arrow-pad')
 
 replConsole.addEventListener('focusout',()=>{
     if(nativeFunc){
         replConsole.setAttribute("rows",20)
     }
-    // consoleControl.classList.remove("blur")
+    consoleControl.classList.remove("blur")
     // arrowToggleBtn.parentNode.classList.remove("blur")
     
 })
@@ -620,39 +620,39 @@ replConsole.addEventListener('focus',()=>{
     if(nativeFunc){
         replConsole.setAttribute("rows",18)
     }
-    // consoleControl.classList.add("blur")
+    consoleControl.classList.add("blur")
     // arrowToggleBtn.parentNode.classList.add("blur")
 })
-// let arrowBtns = document.querySelectorAll(".arrow")
-// arrowBtns.forEach(el=>{
-//     el.addEventListener("click",function(e){
-//         console.log(el.getAttribute("data-cmd"))
-//         switch(el.getAttribute("data-cmd")){
-//             case 'UP':
-//                 sendUartData("\x1B[A").catch(disconnectError);
-//                 break;
-//             case 'DOWN':
-//                 sendUartData("\x1B[B").catch(disconnectError);
-//                 break;
-//             case 'LEFT':
-//                 sendUartData("\x1B[D").catch(disconnectError);
-//                 break;
-//             case 'RIGHT':
-//                 sendUartData("\x1B[C").catch(disconnectError);
-//                 break;
-//             default:
-//                 break;
+let arrowBtns = document.querySelectorAll(".arrow")
+arrowBtns.forEach(el=>{
+    el.addEventListener("click",function(e){
+        console.log(el.getAttribute("data-cmd"))
+        switch(el.getAttribute("data-cmd")){
+            case 'UP':
+                sendUartData("\x1B[A").catch(disconnectError);
+                break;
+            case 'DOWN':
+                sendUartData("\x1B[B").catch(disconnectError);
+                break;
+            case 'LEFT':
+                sendUartData("\x1B[D").catch(disconnectError);
+                break;
+            case 'RIGHT':
+                sendUartData("\x1B[C").catch(disconnectError);
+                break;
+            default:
+                break;
 
-//         }
-//         e.preventDefault()
-//     })
-// })
-// arrowToggleBtn.addEventListener('click',function(){
-//     arrowPad.classList.toggle("hide")
-//     if(arrowPad.classList.contains("hide")){
-//         arrowToggleBtn.innerHTML = "&lsaquo;"
-//     }else{
-//         arrowToggleBtn.innerHTML = "&rsaquo;"
+        }
+        e.preventDefault()
+    })
+})
+arrowToggleBtn.addEventListener('click',function(){
+    arrowPad.classList.toggle("hide")
+    if(arrowPad.classList.contains("hide")){
+        arrowToggleBtn.innerHTML = "&lsaquo;"
+    }else{
+        arrowToggleBtn.innerHTML = "&rsaquo;"
 
-//     }
-// })
+    }
+})
