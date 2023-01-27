@@ -12,8 +12,8 @@ const nativeFunc = window.ReactNativeWebView?.postMessage||false;
         //     document.querySelector('.sidebar').classList.remove('close')
             
         // })
-        // menuBtn.innerHTML = ""
-        // spinner.style.display = "none"
+        menuBtn.innerHTML = ""
+        spinner.style.display = "none"
     }
 
 let touchstartX = 0
