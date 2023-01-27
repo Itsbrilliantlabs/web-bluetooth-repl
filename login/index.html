@@ -69,7 +69,7 @@
 <script type="module">
 	window.onload = () => {
         let rplUser = localStorage.getItem("replUser");
-        if(rplUser && rplUser.username){
+        if(rplUser && JSON.parse(rplUser).username){
             window.location.href ="../"
         }
 		const fragment = new URLSearchParams(window.location.hash.slice(1));
