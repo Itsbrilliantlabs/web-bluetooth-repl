@@ -13,7 +13,7 @@ const nativeFunc = window.ReactNativeWebView?.postMessage||false;
             
         // })
         menuBtn.innerHTML = ""
-        spinner.style.display = "none"
+        // spinner.style.display = "none"
     }
 
 let touchstartX = 0
@@ -35,18 +35,18 @@ let startTime = 0
     };
     }
 
-    document.addEventListener('touchstart', e => {
-        // console.log(e)
-    startTime = new Date()
-    touchstartX = e.changedTouches[0].screenX
-    touchstartY = e.changedTouches[0].screenY
-    })
+    // document.addEventListener('touchstart', e => {
+    //     // console.log(e)
+    // startTime = new Date()
+    // touchstartX = e.changedTouches[0].screenX
+    // touchstartY = e.changedTouches[0].screenY
+    // })
 
-    document.addEventListener('touchend', e => {
-    touchendX = e.changedTouches[0].screenX
-    touchendY = e.changedTouches[0].screenY
-    checkDirection()
-    })
+    // document.addEventListener('touchend', e => {
+    // touchendX = e.changedTouches[0].screenX
+    // touchendY = e.changedTouches[0].screenY
+    // checkDirection()
+    // })
     // Variable for keeping track of the current cursor position
     let cursorPosition = 0;
 

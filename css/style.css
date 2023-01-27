@@ -186,6 +186,7 @@ a:hover {
     position: relative;
     width: 25px;
     height: 25px;
+    padding-left: 3px;
   }
   .lds-spinner div {
     transform-origin: 13px 13px;
