@@ -1,6 +1,52 @@
 const nativeFunc = window.ReactNativeWebView?.postMessage||false; 
 
-    
+    if(nativeFunc){
+        connectButton.remove()
+        menuBtn.addEventListener('click',function(){
+            window.ReactNativeWebView.postMessage("/menu")
+        })
+    }else{
+        
+        // menuBtn.addEventListener('click',function(){
+        //     // window.location = "profile"
+        //     document.querySelector('.sidebar').classList.remove('close')
+            
+        // })
+        menuBtn.innerHTML = ""
+        spinner.style.display = "none"
+    }
+
+let touchstartX = 0
+let touchendX = 0
+let touchstartY = 0
+let touchendY = 0
+let startTime = 0
+    function checkDirection() {
+        let elapsedTime = (new Date() - startTime)
+        console.log(`(${touchendX-touchstartX}, ${touchendY-touchstartY})`)
+        console.log(`(${(touchendX-touchstartX)*1000/elapsedTime} x_px/s,${(touchendY-touchstartY)*1000/elapsedTime} y_px/s)`)
+    if (touchendX < touchstartX) {
+        // left swiped
+        document.querySelector('.sidebar')?.classList.add('close')
+    };
+    if (touchendX > touchstartX+80) {
+        // right swiped
+        // document.querySelector('.sidebar')?.classList.remove('close')
+    };
+    }
+
+    document.addEventListener('touchstart', e => {
+        // console.log(e)
+    startTime = new Date()
+    touchstartX = e.changedTouches[0].screenX
+    touchstartY = e.changedTouches[0].screenY
+    })
+
+    document.addEventListener('touchend', e => {
+    touchendX = e.changedTouches[0].screenX
+    touchendY = e.changedTouches[0].screenY
+    checkDirection()
+    })
     // Variable for keeping track of the current cursor position
     let cursorPosition = 0;
 
@@ -9,8 +55,15 @@ const nativeFunc = window.ReactNativeWebView?.postMessage||false;
         replConsole.placeholder = replPlaceholderText;
     });
 
+    const clearConsole = () =>{
+        replConsole.value = '';
+         cursorPosition = 0;
+        sendUartData('\x03');
+        focusREPL();
+    }
 //on connect actions
 const onConnectRepl = () => {
+    spinner.style.display = "none"
 
     // Clear placeholder text in the REPL console
     replConsole.placeholder = "";
@@ -24,7 +77,7 @@ const onConnectRepl = () => {
     })
 
     // Print "connected" in the REPL console
-    replConsole.value = replConsole.value + "\nConnected";
+    replConsole.value = replConsole.value + "\nConnected\n";
 
     // Move the cursor forward
     cursorPosition = replConsole.value.length;
@@ -34,6 +87,7 @@ const onConnectRepl = () => {
 
 // When the connect/disconnect button is pressed
 connectButton.addEventListener('click', ()=>{
+    spinner.style.display = "inline-block"
     if(nativeFunc){
         onConnectRepl()
         focusREPL();
@@ -50,7 +104,6 @@ connectButton.addEventListener('click', ()=>{
                 onConnectRepl()
                 // Send Ctrl-C to the device
                 sendUartData("\x03");
-
                 // Focus the cursor to the REPL console, and scroll down
                 focusREPL();
             }
@@ -70,6 +123,8 @@ connectButton.addEventListener('click', ()=>{
 
             // Log the error to the debug console
             console.error(error);
+            spinner.style.display = "none"
+
         })
 })
 
@@ -80,6 +135,10 @@ connectButton.addEventListener('click', ()=>{
     if(key=="\n"){
         key = "\r\n"
     }
+    if(key==""){
+        key="\x08";
+        return;
+    }
 
     // Don't print characters to the REPL console because the response will print it for us
     // event.preventDefault();
@@ -89,24 +148,16 @@ connectButton.addEventListener('click', ()=>{
     sendUartData(key)
 
         // If an error occurs
-        .catch(error => {
-
-            // Print an error message in the REPL console
-            replConsole.value += "\nBluetooth error. Are you connected?";
-
-            // Move the cursor forward
-            cursorPosition = replConsole.value.length;
-            
-            // Focus the cursor to the REPL console, and scroll down
-            focusREPL();
-
-            // Log the error to the debug console
-            console.error(error);
-        });
+        .catch(disconnectError);
 
     
 }
-
+const appBleDisconnected = function(){
+    controlButtons.forEach(ele => { ele.disabled = true;}); 
+    replConsole.value  += "\nBluetooth error. Are you connected? Trying to connect!";
+    cursorPosition = replConsole.value.length;
+    spinner.style.display = "inline-block"
+}
 // Whenever keys such as Ctrl, Tab or Backspace are pressed/held
 replConsole.onkeydown = (event) => {
 
@@ -118,7 +169,7 @@ replConsole.onkeydown = (event) => {
             case 'a':
 
                 // Send control code 01
-                sendUartData("\x01");
+                sendUartData("\x01").catch(disconnectError);
 
                 // Prevent any action in the REPL console
                 event.preventDefault();
@@ -130,7 +181,7 @@ replConsole.onkeydown = (event) => {
             case 'b':
 
                 // Send control code 02
-                sendUartData("\x02");
+                sendUartData("\x02").catch(disconnectError);
 
                 // Prevent any action in the REPL console
                 event.preventDefault();
@@ -142,7 +193,7 @@ replConsole.onkeydown = (event) => {
             case 'c':
 
                 // Send control code 03
-                sendUartData("\x03");
+                sendUartData("\x03").catch(disconnectError);
 
                 // Prevent any action in the REPL console
                 event.preventDefault();
@@ -154,7 +205,7 @@ replConsole.onkeydown = (event) => {
             case 'd':
 
                 // Send control code 04
-                sendUartData("\x04");
+                sendUartData("\x04").catch(disconnectError);
 
                 // Prevent any action in the REPL console
                 event.preventDefault();
@@ -166,7 +217,7 @@ replConsole.onkeydown = (event) => {
             case 'e':
 
                 // Send control code 05
-                sendUartData("\x05");
+                sendUartData("\x05").catch(disconnectError);
 
                 // Prevent any action in the REPL console
                 event.preventDefault();
@@ -190,7 +241,7 @@ replConsole.onkeydown = (event) => {
                 cursorPosition = 0;
 
                 // Send control code 03 to reset the REPL
-                sendUartData("\x03");
+                sendUartData("\x03").catch(disconnectError);
 
                 // Prevent any action in the REPL console
                 event.preventDefault();
@@ -202,7 +253,7 @@ replConsole.onkeydown = (event) => {
             case 'Backspace':
 
                 // Send a bunch of backspaces to clear the whole line
-                sendUartData("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
+                sendUartData("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b").catch(disconnectError);
 
                 // Prevent any action in the REPL console
                 event.preventDefault();
@@ -216,7 +267,7 @@ replConsole.onkeydown = (event) => {
                 // Send a bunch of right arrow keys
                 sendUartData("\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C" +
                     "\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C" +
-                    "\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C");
+                    "\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C").catch(disconnectError);
 
                 // Prevent any action in the REPL console
                 event.preventDefault();
@@ -230,7 +281,7 @@ replConsole.onkeydown = (event) => {
                 // Send a bunch of left arrow keys
                 sendUartData("\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D" +
                     "\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D" +
-                    "\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D");
+                    "\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D").catch(disconnectError);
 
                 // Prevent any action in the REPL console
                 event.preventDefault();
@@ -257,7 +308,7 @@ replConsole.onkeydown = (event) => {
     if (event.key === 'ArrowUp') {
 
         // Send control sequence ESC-[A
-        sendUartData("\x1B[A");
+        sendUartData("\x1B[A").catch(disconnectError);
 
         // Prevent any action in the REPL console
         event.preventDefault();
@@ -270,7 +321,7 @@ replConsole.onkeydown = (event) => {
     if (event.key === 'ArrowDown') {
 
         // Send control sequence ESC-[B
-        sendUartData("\x1B[B");
+        sendUartData("\x1B[B").catch(disconnectError);
 
         // Prevent any action in the REPL console
         event.preventDefault();
@@ -283,7 +334,7 @@ replConsole.onkeydown = (event) => {
     if (event.key === 'ArrowRight') {
 
         // Send control sequence ESC-[C
-        sendUartData("\x1B[C");
+        sendUartData("\x1B[C").catch(disconnectError);
 
         // Prevent any action in the REPL console
         event.preventDefault();
@@ -296,7 +347,7 @@ replConsole.onkeydown = (event) => {
     if (event.key === 'ArrowLeft') {
 
         // Send control sequence ESC-[D
-        sendUartData("\x1B[D");
+        sendUartData("\x1B[D").catch(disconnectError);
 
         // Prevent any action in the REPL console
         event.preventDefault();
@@ -309,7 +360,7 @@ replConsole.onkeydown = (event) => {
     if (event.key === 'Tab') {
 
         // Send control code 09
-        sendUartData("\x09");
+        sendUartData("\x09").catch(disconnectError);
 
         // Prevent any action in the REPL console
         event.preventDefault();
@@ -319,6 +370,20 @@ replConsole.onkeydown = (event) => {
     }
 }
 
+const disconnectError = error => {
+
+    // Print an error message in the REPL console
+    replConsole.value += "\nBluetooth error. Are you connected?";
+
+    // Move the cursor forward
+    cursorPosition = replConsole.value.length;
+
+    // Focus the cursor to the REPL console, and scroll down
+    focusREPL();
+
+    // Log the error to the debug console
+    console.error(error);
+}
 // Handle pasting of text into the REPL
 function pasteEvent() {
 
@@ -330,20 +395,7 @@ function pasteEvent() {
             sendUartData(text.replace('\n', '\r\n'))
 
                 // If an error occurs
-                .catch(error => {
-
-                    // Print an error message in the REPL console
-                    replConsole.value += "\nBluetooth error. Are you connected?";
-
-                    // Move the cursor forward
-                    cursorPosition = replConsole.value.length;
-
-                    // Focus the cursor to the REPL console, and scroll down
-                    focusREPL();
-
-                    // Log the error to the debug console
-                    console.error(error);
-                });
+                .catch(disconnectError);
         })
 
         // Catch any errors
@@ -439,6 +491,7 @@ function receiveUartData(event) {
     let value = event.target.value;
     let string = decoder.decode(value);
     uartStringDataHandler(string)
+    focusREPL()
     
 }
 // Whenever raw data arrives over bluetooth
@@ -524,7 +577,8 @@ function disconnectHandler() {
 
     // Print "disconnected" in the REPL console
     replConsole.value = replConsole.value + "\nDisconnected";
-
+    spinner.style.display = "none"
+    
     // Move the cursor forward
     cursorPosition = replConsole.value.length;
 
@@ -542,10 +596,63 @@ function disconnectHandler() {
 
 // Helper function to ensure the REPL console is scrolled down and focused
 function focusREPL() {
-
     // Focus the cursor to the REPL console
     replConsole.focus();
 
     // Make sure the REPL console is scrolled all the way down
     replConsole.scrollTop = replConsole.scrollHeight;
 }
+
+
+// const arrowToggleBtn = document.querySelector('.arrow-toggle span')
+// const arrowPad = document.querySelector(".arrow-pad")
+// const consoleControl = document.querySelector('.arrow-pad')
+
+replConsole.addEventListener('focusout',()=>{
+    if(nativeFunc){
+        replConsole.setAttribute("rows",20)
+    }
+    // consoleControl.classList.remove("blur")
+    // arrowToggleBtn.parentNode.classList.remove("blur")
+    
+})
+replConsole.addEventListener('focus',()=>{
+    if(nativeFunc){
+        replConsole.setAttribute("rows",18)
+    }
+    // consoleControl.classList.add("blur")
+    // arrowToggleBtn.parentNode.classList.add("blur")
+})
+// let arrowBtns = document.querySelectorAll(".arrow")
+// arrowBtns.forEach(el=>{
+//     el.addEventListener("click",function(e){
+//         console.log(el.getAttribute("data-cmd"))
+//         switch(el.getAttribute("data-cmd")){
+//             case 'UP':
+//                 sendUartData("\x1B[A").catch(disconnectError);
+//                 break;
+//             case 'DOWN':
+//                 sendUartData("\x1B[B").catch(disconnectError);
+//                 break;
+//             case 'LEFT':
+//                 sendUartData("\x1B[D").catch(disconnectError);
+//                 break;
+//             case 'RIGHT':
+//                 sendUartData("\x1B[C").catch(disconnectError);
+//                 break;
+//             default:
+//                 break;
+
+//         }
+//         e.preventDefault()
+//     })
+// })
+// arrowToggleBtn.addEventListener('click',function(){
+//     arrowPad.classList.toggle("hide")
+//     if(arrowPad.classList.contains("hide")){
+//         arrowToggleBtn.innerHTML = "&lsaquo;"
+//     }else{
+//         arrowToggleBtn.innerHTML = "&rsaquo;"
+
+//     }
+// })
