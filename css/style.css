@@ -111,8 +111,12 @@ button:disabled {
 footer {
     display: flex;
     justify-content: space-between;
+    flex-direction: column;
 }
-
+footer p {
+  text-align: center;
+  margin-top: 0.5rem;
+}
 p {
     font-size: small;
 }
@@ -136,7 +140,7 @@ a:hover {
 }
 .menu-btn{
     padding: 8px;
-    /* padding-right: 0; */
+    padding-right: 0;
     cursor: pointer;
     height: 40px;
     /* background-color: red; */

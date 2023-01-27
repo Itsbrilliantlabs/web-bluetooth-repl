@@ -7,33 +7,44 @@ const nativeFunc = window.ReactNativeWebView?.postMessage||false;
         })
     }else{
         
-        menuBtn.addEventListener('click',function(){
-            // window.location = "profile"
-            document.querySelector('.sidebar').classList.remove('close')
+        // menuBtn.addEventListener('click',function(){
+        //     // window.location = "profile"
+        //     document.querySelector('.sidebar').classList.remove('close')
             
-        })
-        // menuBtn.innerHTML = ""
+        // })
+        menuBtn.innerHTML = ""
         spinner.style.display = "none"
     }
 
-    let touchstartX = 0
+let touchstartX = 0
 let touchendX = 0
-    
+let touchstartY = 0
+let touchendY = 0
+let startTime = 0
     function checkDirection() {
+        let elapsedTime = (new Date() - startTime)
+        console.log(`(${touchendX-touchstartX}, ${touchendY-touchstartY})`)
+        console.log(`(${(touchendX-touchstartX)*1000/elapsedTime} x_px/s,${(touchendY-touchstartY)*1000/elapsedTime} y_px/s)`)
     if (touchendX < touchstartX) {
+        // left swiped
         document.querySelector('.sidebar')?.classList.add('close')
     };
-    if (touchendX > touchstartX) {
-        document.querySelector('.sidebar')?.classList.remove('close')
+    if (touchendX > touchstartX+80) {
+        // right swiped
+        // document.querySelector('.sidebar')?.classList.remove('close')
     };
     }
 
     document.addEventListener('touchstart', e => {
+        // console.log(e)
+    startTime = new Date()
     touchstartX = e.changedTouches[0].screenX
+    touchstartY = e.changedTouches[0].screenY
     })
 
     document.addEventListener('touchend', e => {
     touchendX = e.changedTouches[0].screenX
+    touchendY = e.changedTouches[0].screenY
     checkDirection()
     })
     // Variable for keeping track of the current cursor position
@@ -66,7 +77,7 @@ const onConnectRepl = () => {
     })
 
     // Print "connected" in the REPL console
-    replConsole.value = replConsole.value + "\nConnected";
+    replConsole.value = replConsole.value + "\nConnected\n";
 
     // Move the cursor forward
     cursorPosition = replConsole.value.length;
@@ -480,6 +491,7 @@ function receiveUartData(event) {
     let value = event.target.value;
     let string = decoder.decode(value);
     uartStringDataHandler(string)
+    focusREPL()
     
 }
 // Whenever raw data arrives over bluetooth
@@ -592,15 +604,15 @@ function focusREPL() {
 }
 
 
-const arrowToggleBtn = document.querySelector('.arrow-toggle span')
-const arrowPad = document.querySelector(".arrow-pad")
-const consoleControl = document.querySelector('.arrow-pad')
+// const arrowToggleBtn = document.querySelector('.arrow-toggle span')
+// const arrowPad = document.querySelector(".arrow-pad")
+// const consoleControl = document.querySelector('.arrow-pad')
 
 replConsole.addEventListener('focusout',()=>{
     if(nativeFunc){
         replConsole.setAttribute("rows",20)
     }
-    consoleControl.classList.remove("blur")
+    // consoleControl.classList.remove("blur")
     // arrowToggleBtn.parentNode.classList.remove("blur")
     
 })
@@ -608,39 +620,39 @@ replConsole.addEventListener('focus',()=>{
     if(nativeFunc){
         replConsole.setAttribute("rows",18)
     }
-    consoleControl.classList.add("blur")
+    // consoleControl.classList.add("blur")
     // arrowToggleBtn.parentNode.classList.add("blur")
 })
-let arrowBtns = document.querySelectorAll(".arrow")
-arrowBtns.forEach(el=>{
-    el.addEventListener("click",function(e){
-        console.log(el.getAttribute("data-cmd"))
-        switch(el.getAttribute("data-cmd")){
-            case 'UP':
-                sendUartData("\x1B[A").catch(disconnectError);
-                break;
-            case 'DOWN':
-                sendUartData("\x1B[B").catch(disconnectError);
-                break;
-            case 'LEFT':
-                sendUartData("\x1B[D").catch(disconnectError);
-                break;
-            case 'RIGHT':
-                sendUartData("\x1B[C").catch(disconnectError);
-                break;
-            default:
-                break;
+// let arrowBtns = document.querySelectorAll(".arrow")
+// arrowBtns.forEach(el=>{
+//     el.addEventListener("click",function(e){
+//         console.log(el.getAttribute("data-cmd"))
+//         switch(el.getAttribute("data-cmd")){
+//             case 'UP':
+//                 sendUartData("\x1B[A").catch(disconnectError);
+//                 break;
+//             case 'DOWN':
+//                 sendUartData("\x1B[B").catch(disconnectError);
+//                 break;
+//             case 'LEFT':
+//                 sendUartData("\x1B[D").catch(disconnectError);
+//                 break;
+//             case 'RIGHT':
+//                 sendUartData("\x1B[C").catch(disconnectError);
+//                 break;
+//             default:
+//                 break;
 
-        }
-        e.preventDefault()
-    })
-})
-arrowToggleBtn.addEventListener('click',function(){
-    arrowPad.classList.toggle("hide")
-    if(arrowPad.classList.contains("hide")){
-        arrowToggleBtn.innerHTML = "&lsaquo;"
-    }else{
-        arrowToggleBtn.innerHTML = "&rsaquo;"
+//         }
+//         e.preventDefault()
+//     })
+// })
+// arrowToggleBtn.addEventListener('click',function(){
+//     arrowPad.classList.toggle("hide")
+//     if(arrowPad.classList.contains("hide")){
+//         arrowToggleBtn.innerHTML = "&lsaquo;"
+//     }else{
+//         arrowToggleBtn.innerHTML = "&rsaquo;"
 
-    }
-})
+//     }
+// })
