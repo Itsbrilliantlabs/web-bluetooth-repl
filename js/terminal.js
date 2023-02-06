@@ -123,7 +123,9 @@ const onConnectRepl = () => {
 
     // Move the cursor forward
     cursorPosition = replConsole.value.length;
-    checkVersion()
+    setTimeout(()=>{
+        checkVersion()
+    },500)
 
 }
 
