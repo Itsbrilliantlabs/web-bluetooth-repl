@@ -123,6 +123,7 @@ const onConnectRepl = () => {
 
     // Move the cursor forward
     cursorPosition = replConsole.value.length;
+    checkVersion()
 
 }
 
