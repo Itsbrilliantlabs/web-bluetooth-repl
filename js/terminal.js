@@ -65,6 +65,7 @@ let cursorPosition = 0;
 
 const SYSTEM_CMDS = {}
 const UPDATE_CMD = "import device;print(device.VERSION)"
+const UPDATE_MSG = 'import display as d;d.fill(0);d.text("New update available!",120,150,0xffffff);d.text("Check app for details",115,200,0xffffff);d.show();del(d)'
 const systemCMDHook = function(string){
     let sep_char_cmd = '\n>>> '
     let sep_char_cmd_resp = '\n'
@@ -81,7 +82,7 @@ const systemCMDHook = function(string){
         if(cmd_response.includes(latestVersion.innerHTML.trim())){
         }else{
             if(SYSTEM_CMDS[UPDATE_CMD]){
-                sendUartData('import display as d;d.fill(0);d.text("New update available!",120,150,0xffffff);d.text("Check app for details",115,200,0xffffff);d.show();del(d)\r\n')
+                sendUartData(UPDATE_MSG + '\r\n')
                 SYSTEM_CMDS[UPDATE_CMD] = false
             }
         }
