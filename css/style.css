@@ -177,6 +177,7 @@ a:hover {
 }
 .build-info{
   margin-top: 0.5rem;
+  word-spacing: 3px;
 }
 /* loader  */
 .app-header > div {

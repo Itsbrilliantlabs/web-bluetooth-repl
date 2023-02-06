@@ -1,30 +1,43 @@
+String.prototype.nthLastIndexOf = function(searchString, n){
+    let str = this;
+    if(str === null) {
+        return -1;
+    }
+    if(!n || isNaN(n) || n <= 1){
+        return str.lastIndexOf(searchString);
+    }
+    n--;
+    return str.lastIndexOf(searchString, str.nthLastIndexOf(searchString, n) - 1);
+}
+
 const nativeFunc = window.ReactNativeWebView?.postMessage||false; 
 
-    if(nativeFunc){
-        connectButton.remove()
-        menuBtn.addEventListener('click',function(){
-            window.ReactNativeWebView.postMessage("/menu")
-        })
-    }else{
+if(nativeFunc){
+    connectButton.remove()
+    menuBtn.addEventListener('click',function(){
+        window.ReactNativeWebView.postMessage("/menu")
+    })
+}else{
+    
+    // menuBtn.addEventListener('click',function(){
+    //     // window.location = "profile"
+    //     document.querySelector('.sidebar').classList.remove('close')
         
-        // menuBtn.addEventListener('click',function(){
-        //     // window.location = "profile"
-        //     document.querySelector('.sidebar').classList.remove('close')
-            
-        // })
-        menuBtn.innerHTML = ""
-        spinner.style.display = "none"
-    }
+    // })
+    menuBtn.innerHTML = ""
+    spinner.style.display = "none"
+}
 
 let touchstartX = 0
 let touchendX = 0
 let touchstartY = 0
 let touchendY = 0
 let startTime = 0
-    function checkDirection() {
-        let elapsedTime = (new Date() - startTime)
-        console.log(`(${touchendX-touchstartX}, ${touchendY-touchstartY})`)
-        console.log(`(${(touchendX-touchstartX)*1000/elapsedTime} x_px/s,${(touchendY-touchstartY)*1000/elapsedTime} y_px/s)`)
+
+function checkDirection() {
+    let elapsedTime = (new Date() - startTime)
+    console.log(`(${touchendX-touchstartX}, ${touchendY-touchstartY})`)
+    console.log(`(${(touchendX-touchstartX)*1000/elapsedTime} x_px/s,${(touchendY-touchstartY)*1000/elapsedTime} y_px/s)`)
     if (touchendX < touchstartX) {
         // left swiped
         document.querySelector('.sidebar')?.classList.add('close')
@@ -33,34 +46,62 @@ let startTime = 0
         // right swiped
         // document.querySelector('.sidebar')?.classList.remove('close')
     };
+}
+
+// document.addEventListener('touchstart', e => {
+//     // console.log(e)
+// startTime = new Date()
+// touchstartX = e.changedTouches[0].screenX
+// touchstartY = e.changedTouches[0].screenY
+// })
+
+// document.addEventListener('touchend', e => {
+// touchendX = e.changedTouches[0].screenX
+// touchendY = e.changedTouches[0].screenY
+// checkDirection()
+// })
+// Variable for keeping track of the current cursor position
+let cursorPosition = 0;
+
+const SYSTEM_CMDS = {}
+const UPDATE_CMD = "import device;print(device.VERSION)"
+const systemCMDHook = function(string){
+    let sep_char_cmd = '\n>>> '
+    let sep_char_cmd_resp = '\n'
+    let last_cmd_start_index = replConsole.value.nthLastIndexOf(sep_char_cmd,2)
+    let last_cmd_end_index = replConsole.value.nthLastIndexOf(sep_char_cmd,1)
+    let last_cmd = replConsole.value.slice(last_cmd_start_index+sep_char_cmd.length,last_cmd_end_index)
+    let cmd_resp_sep_index = last_cmd.nthLastIndexOf(sep_char_cmd_resp,1)
+    const cmd = last_cmd.slice(0,cmd_resp_sep_index)
+    const cmd_response = last_cmd.slice(cmd_resp_sep_index+1)
+    // }
+
+    // app command specific logics
+    if(cmd && cmd.trim().includes(UPDATE_CMD)){
+        if(cmd_response.includes(latestVersion.innerHTML.trim())){
+        }else{
+            if(SYSTEM_CMDS[UPDATE_CMD]){
+                sendUartData('import display as d;d.fill(0);d.text("New update available!",120,150,0xffffff);d.text("Check app for details",115,200,0xffffff);d.show();del(d)\r\n')
+                SYSTEM_CMDS[UPDATE_CMD] = false
+            }
+        }
     }
+}
+const checkVersion = function (){
+    SYSTEM_CMDS[UPDATE_CMD] = true
+    sendUartData(UPDATE_CMD+"\r\n")
+}
+// When the page loads
+window.addEventListener("load", (event) => {
+    replConsole.placeholder = replPlaceholderText;
+});
 
-    // document.addEventListener('touchstart', e => {
-    //     // console.log(e)
-    // startTime = new Date()
-    // touchstartX = e.changedTouches[0].screenX
-    // touchstartY = e.changedTouches[0].screenY
-    // })
-
-    // document.addEventListener('touchend', e => {
-    // touchendX = e.changedTouches[0].screenX
-    // touchendY = e.changedTouches[0].screenY
-    // checkDirection()
-    // })
-    // Variable for keeping track of the current cursor position
-    let cursorPosition = 0;
-
-    // When the page loads
-    window.addEventListener("load", (event) => {
-        replConsole.placeholder = replPlaceholderText;
-    });
-
-    const clearConsole = () =>{
-        replConsole.value = '';
-         cursorPosition = 0;
-        sendUartData('\x03');
-        focusREPL();
-    }
+const clearConsole = () =>{
+    replConsole.value = '';
+        cursorPosition = 0;
+    sendUartData('\x03');
+    focusREPL();
+}
 //on connect actions
 const onConnectRepl = () => {
     spinner.style.display = "none"
@@ -92,6 +133,7 @@ connectButton.addEventListener('click', ()=>{
         onConnectRepl()
         focusREPL();
         sendUartData("\x03");
+        checkVersion()
         return;
     }
     connectDisconnect()
@@ -104,6 +146,7 @@ connectButton.addEventListener('click', ()=>{
                 onConnectRepl()
                 // Send Ctrl-C to the device
                 sendUartData("\x03");
+                checkVersion()
                 // Focus the cursor to the REPL console, and scroll down
                 focusREPL();
             }
@@ -417,6 +460,7 @@ function pasteEvent() {
 
 
 function uartStringDataHandler(string){
+
     // For every character in the incoming string (i is incremented internally)
     for (let i = 0; i < string.length;) {
 
@@ -482,6 +526,7 @@ function uartStringDataHandler(string){
 
         // Make sure the REPL console is scrolled all the way down
         replConsole.scrollTop = replConsole.scrollHeight;
+        systemCMDHook(string)
 }
 // Whenever data arrives over bluetooth
 function receiveUartData(event) {
@@ -502,7 +547,9 @@ function receiveRawData(event) {
         if(appendBuffer(event.target.value.buffer)){
             showImage()
             console.log(`finished transfer: ${file_name} -  ${final_buffer.byteLength} of ${file_size}`)
-
+            final_buffer = null;
+            file_size = null;
+            file_name = null;
         }else{
             console.log(`progress: ${file_name} -  ${final_buffer.byteLength} of ${file_size}`)
         }
@@ -519,7 +566,6 @@ function receiveRawData(event) {
     let imageUrl = urlCreator.createObjectURL(img_blob);
     let img = document.querySelector(IMG_TAG);
     img.src = imageUrl;
-    
     let a = document.createElement('a');
     a.href = imageUrl;
     a.download = file_name;
@@ -527,9 +573,7 @@ function receiveRawData(event) {
     a.click();
     document.body.removeChild(a);
     
-    final_buffer = null;
-    file_size = null;
-    file_name = null;
+   
  }
 
 // Image Variables
