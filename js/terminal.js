@@ -137,7 +137,7 @@ connectButton.addEventListener('click', ()=>{
         onConnectRepl()
         focusREPL();
         sendUartData("\x03");
-        checkVersion()
+        // checkVersion()
         return;
     }
     connectDisconnect()
@@ -150,7 +150,7 @@ connectButton.addEventListener('click', ()=>{
                 onConnectRepl()
                 // Send Ctrl-C to the device
                 sendUartData("\x03");
-                checkVersion()
+                // checkVersion()
                 // Focus the cursor to the REPL console, and scroll down
                 focusREPL();
             }
