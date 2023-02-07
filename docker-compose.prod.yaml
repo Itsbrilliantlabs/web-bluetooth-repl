@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   web:
-    image: webrepl
+    container_name: webrepl
     build: 
       context: .
       dockerfile: Dockerfile.prod
@@ -22,6 +22,7 @@ services:
     #   - nginx_network
     #   - db_network
   db:
+    container_name: webrepl_db
     image: postgres:13.0-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -30,6 +31,7 @@ services:
     # networks:
     #   - db_network
   nginx:
+    container_name: webrepl_nginx
     build: ./nginx
     restart: always
     volumes:
@@ -43,7 +45,9 @@ services:
       - db
 volumes:
   postgres_data:
+    name: webrepl_db
   static_volume:
+    name: webrepl_static
 
 # networks:
 #   nginx_network:
