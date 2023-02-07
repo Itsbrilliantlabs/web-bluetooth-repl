@@ -1,0 +1,134 @@
+{% load static %}
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0" /> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+    <link rel="stylesheet" href="{% static 'css/login_style.css' %}">
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon" />
+
+    <!-- SEO title & description -->
+    <title>MicroPython Web REPL | Brilliant Labs</title>
+    <meta name="description" content="Web Bluetooth based REPL for Brilliant Labs AR devices.">
+    <link rel="canonical" href="https://repl.brilliant.xyz" />
+
+    <!-- Facebook & Twitter card meta -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@brilliantlabsAR" />
+    <meta property="og:title" content="MicroPython Web REPL | Brilliant Labs" />
+    <meta property="og:description" content="Web Bluetooth based REPL for Brilliant Labs AR devices." />
+    <meta property="og:image" content="https://repl.brilliant.xyz/images/share.png" />
+    <meta property="og:url" content="https://repl.brilliant.xyz/login" />
+    <meta property="og:type" content="website" />
+
+</head>
+
+<body>
+
+    <div class="login">
+			<h2 class="heading">Let’s get you set up</h2>
+			<p class="sub-heading">Sign in with one of your existing accounts</p>
+			
+		<div class="buttons">
+			<form action="{% provider_login_url 'github' %}" method="POST">
+				{% csrf_token %}
+				<button><img class="img-icon" src="{% static 'images/git_icon.png' %}" alt="Github Logo">Sign in with GitHub</button>
+			</form>
+		</div>
+		<div class="buttons">
+			<form action="{% provider_login_url 'discord' %}" method="POST">
+				{% csrf_token %}
+				<button><img class="img-icon" src="{% static 'images/discord-black-icon-1.png' %}" alt="Discord Logo">Sign in with Discord</button>
+			</form>
+		</div>
+		
+		<!-- <div class="buttons">
+			<form action="{% provider_login_url 'github' %}"  method="POST">
+				{% csrf_token %}
+				<button><img class="img-icon" src="{% static 'images/apple_icon.png' %}" alt="Apple Logo">Sign in with Apple</button>
+			</form>
+		</div>
+		<div  class="buttons">
+			<form action="{% provider_login_url 'github' %}"  method="POST">
+				{% csrf_token %}
+				<button><img class="img-icon" src="{% static 'images/google_icon.png' %}" alt="Google Logo">Sign in with Google</button>
+			</form>
+		</div> -->
+		<p class="terms"><a>Terms and Conditions</a></p>
+    </div>
+       
+
+
+        <!-- Footer -->
+        <!-- <footer>
+
+            <p>For help, bug reporting, and source code, visit the
+                <a href="https://github.com/brilliantlabsAR/web-bluetooth-repl" target="_blank">repository</a>
+            </p>
+
+            <p>Copyright © 2023 <a href="https://www.brilliant.xyz" target="_blank">Brilliant Labs</a></p>
+
+        </footer> -->
+
+    </div>
+
+</body>
+
+<!-- Populates the latest MicroPython version number via an API -->
+<script type="module">
+	window.onload = () => {
+        let rplUser = localStorage.getItem("replUser");
+        if(rplUser && JSON.parse(rplUser).username){
+            window.location.href ="../"
+        }
+		const fragment = new URLSearchParams(window.location.hash.slice(1));
+		const [accessToken, tokenType] = [fragment.get('access_token'), fragment.get('token_type')];
+
+		if (!accessToken) {
+			return ;
+		}
+
+		fetch('https://discord.com/api/users/@me', {
+			headers: {
+				authorization: `${tokenType} ${accessToken}`,
+			},
+		})
+			.then(result => result.json())
+			.then(response => {
+				console.log(response)
+				localStorage.setItem("replUser",JSON.stringify(response))
+				window.location.href = "../pairing"
+				// const { username, discriminator } = response;
+				// document.getElementById('info').innerText += ` ${username}#${discriminator}`;
+			})
+			.catch(console.error);
+	};
+    
+</script>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
