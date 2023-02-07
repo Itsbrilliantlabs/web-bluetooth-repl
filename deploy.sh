@@ -1,3 +1,5 @@
+git pull origin/dev_server
+git checkout origin/dev_server
 docker-compose -f docker-compose.prod.yaml build
 docker-compose -f docker-compose.prod.yaml down
 docker volume remove webrepl_static
