@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.3'
 
 services:
   web:
@@ -45,9 +45,7 @@ services:
       - db
 volumes:
   postgres_data:
-    name: webrepl_db
   static_volume:
-    name: webrepl_static
 
 # networks:
 #   nginx_network:
