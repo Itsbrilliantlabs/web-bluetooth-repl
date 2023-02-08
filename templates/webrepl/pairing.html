@@ -43,21 +43,8 @@
         <img class="up" src="{% static 'images/Up_arrow.png' %}" alt="Up arrow">
         <img class="phone-img" src="{% static 'images/Phone.png' %}" alt="Phone Image">    
     </div>
-
-</body>
-
-<!-- Populates the latest MicroPython version number via an API -->
-<script type="module">
-    //   let rplUser = localStorage.getItem("replUser");
-    //  const nativeFunc = window.ReactNativeWebView?.postMessage||false; 
-
-    //     if(rplUser && JSON.parse(rplUser).username){
-    //         // window.location.href ="index.html"
-    //     }else{
-    //         // window.location.href ="../login"
-    //     }
-  
-	function pairingDone(){
+    <script>
+        function pairingDone(){
         document.querySelectorAll(".pairing .spinner,.pairing .up,.pairing .down").forEach(el=>{
         el.classList.add("hide");
         // el.style.display = "none";
@@ -68,6 +55,6 @@
             window.location = "{% url 'home' %}"
         },2000)
     }
-</script>
-
+    </script>
+</body>
 </html>
