@@ -44,11 +44,10 @@
         <img class="phone-img" src="{% static 'images/Phone.png' %}" alt="Phone Image">    
     </div>
     <script>
-        function pairingDone(){
+    function pairingDone(){
         document.querySelectorAll(".pairing .spinner,.pairing .up,.pairing .down").forEach(el=>{
-        el.classList.add("hide");
+            el.classList.add("hide");
         // el.style.display = "none";
-        
         })
         document.querySelector(".pairing .spinner").remove()
         setTimeout(()=>{

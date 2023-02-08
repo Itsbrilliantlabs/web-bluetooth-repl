@@ -14,7 +14,7 @@
     const nativeFunc = window.ReactNativeWebView?.postMessage||false; 
     
     if(nativeFunc){
-        // connectButton.remove()
+        connectButton.remove()
         // menuBtn.addEventListener('click',function(){
         //     window.ReactNativeWebView.postMessage("/menu")
         // })
@@ -137,9 +137,9 @@
         // Move the cursor forward
         cursorPosition = replConsole.value.length;
         sendUartData("\x02")
-        setTimeout(()=>{
-            checkVersion()
-        },500)
+        // setTimeout(()=>{
+        //     checkVersion()
+        // },500)
     
     }
     
