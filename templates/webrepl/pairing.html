@@ -56,19 +56,18 @@
     //     }else{
     //         // window.location.href ="../login"
     //     }
-    setTimeout(()=>{
-    document.querySelectorAll(".pairing .spinner,.pairing .up,.pairing .down").forEach(el=>{
+  
+	function pairingDone(){
+        document.querySelectorAll(".pairing .spinner,.pairing .up,.pairing .down").forEach(el=>{
         el.classList.add("hide");
         // el.style.display = "none";
         
-    })
-    document.querySelector(".pairing .spinner").remove()
-    document.querySelector(".heading").innerHTML = "Connected"
+        })
+        document.querySelector(".pairing .spinner").remove()
         setTimeout(()=>{
             window.location = "{% url 'home' %}"
         },2000)
-    },2000)
-	
+    }
 </script>
 
 </html>

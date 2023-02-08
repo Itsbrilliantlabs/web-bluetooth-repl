@@ -14,9 +14,14 @@
     const nativeFunc = window.ReactNativeWebView?.postMessage||false; 
     
     if(nativeFunc){
-        connectButton.remove()
+        // connectButton.remove()
+        // menuBtn.addEventListener('click',function(){
+        //     window.ReactNativeWebView.postMessage("/menu")
+        // })
         menuBtn.addEventListener('click',function(){
-            window.ReactNativeWebView.postMessage("/menu")
+            // window.location = "profile"
+            document.querySelector('.sidebar').classList.remove('close')
+            
         })
     }else{
         
