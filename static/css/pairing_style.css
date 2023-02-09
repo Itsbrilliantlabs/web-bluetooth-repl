@@ -30,6 +30,8 @@
     font-weight: 100;
     text-decoration: none;
     color: var(--text-color);
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: transparent;
 }
 
 
@@ -49,7 +51,7 @@ body {
 
 }
 .heading{
-    margin-top: 25vh;
+    margin-top: 8vh;
     width: 100%;
     padding-left: 10px;
     font-family: 'Apercu Pro';
@@ -155,6 +157,19 @@ body {
     margin: 0;
     transition: height 2s;
     
+}
+.skip-btn {
+  position: absolute;
+  bottom: 2rem;
+  text-align: center;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.skip-btn a{
+  padding: 10px;
+  color: #000000;
+  text-align: center;
+  text-decoration: underline;
 }
 /* loader  */
 

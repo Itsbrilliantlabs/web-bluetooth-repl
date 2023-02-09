@@ -12,29 +12,14 @@
     }
     
     const nativeFunc = window.ReactNativeWebView?.postMessage||false; 
-    
+    menuBtn.addEventListener('click',function(){
+        // window.location = "profile"
+        document.querySelector('.sidebar').classList.remove('close')
+        
+    })
     if(nativeFunc){
         connectButton.remove()
-        // menuBtn.addEventListener('click',function(){
-        //     window.ReactNativeWebView.postMessage("/menu")
-        // })
-        menuBtn.addEventListener('click',function(){
-            // window.location = "profile"
-            document.querySelector('.sidebar').classList.remove('close')
-            
-        })
     }else{
-        
-        // menuBtn.addEventListener('click',function(){
-        //     // window.location = "profile"
-        //     document.querySelector('.sidebar').classList.remove('close')
-            
-        // })
-        menuBtn.addEventListener('click',function(){
-            // window.location = "profile"
-            document.querySelector('.sidebar').classList.remove('close')
-            
-        })
         // menuBtn.innerHTML = ""
         spinner.style.display = "none"
     }

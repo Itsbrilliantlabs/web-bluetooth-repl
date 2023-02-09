@@ -38,7 +38,7 @@
             <span class="menu-close">&#9587;</span>
         </div>
         {% if request.user.is_authenticated %}
-			<div class="heading">{{request.user.username}}</div>
+			<div class="heading"> {% if  social_acc %}<img class="avatar" src="{{social_acc.get_avatar_url}}">{% endif %}<span>{{request.user.username}}</span></div>
             <div class="profile-info">
                 <a href="#"><img src="{% static 'images/black_user.png' %}" class="menu-img-icon" alt=""> <span> Update Profile</span></a>
                 <a href="#"><img src="{% static 'images/menu_device_frame_new.png' %}" class="menu-img-icon" alt=""> <span> Update Device Firmware</span></a>
@@ -56,7 +56,13 @@
             <br><br>
     </div>
     <div class="app">
-
+        {% if messages %}
+        <!-- <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul> -->
+        {% endif %}
         <!-- Title -->
         <!-- <h1 class="brand-title">MicroPython Web REPL</h1> -->
         <div class="app-header">
@@ -164,6 +170,15 @@
     //         window.location = "../login"
     //     })
     // },2000)
+    menuBtn.addEventListener('click',function(){
+        // window.location = "profile"
+        {% if request.user.is_authenticated %}
+            document.querySelector('.sidebar').classList.remove('close')
+        {% else %}
+            window.location = "{% url 'login'%}"
+        {% endif %}
+        
+    })
     
 </script>
 <script src="{% static 'js/terminal.js' %}"></script>

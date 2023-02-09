@@ -29,7 +29,13 @@
 </head>
 
 <body>
-
+	{% if messages %}
+	<!-- <ul class="messages">
+		{% for message in messages %}
+		<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+		{% endfor %}
+	</ul> -->
+	{% endif %}
     <div class="login">
 			<h2 class="heading">Let’s get you set up</h2>
 			<p class="sub-heading">Sign in with one of your existing accounts</p>
@@ -60,6 +66,7 @@
 			</form>
 		</div> -->
 		<p class="terms"><a>Terms and Conditions</a></p>
+		<p class="skip-btn"><a href="{% url 'home' %}">skip</a></p>
     </div>
        
 
