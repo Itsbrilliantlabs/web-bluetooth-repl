@@ -139,7 +139,7 @@
         cursorPosition = replConsole.value.length;
         sendUartData("\x02")
         setTimeout(()=>{
-            checkVersion()
+            // checkVersion()
         },1000)
     
     }
@@ -190,29 +190,71 @@
             })
     })
     
-    // Whenever keys are pressed
-     replConsole.onkeyup = (event) => {
+    //android keys not emmiting events
+    if(!nativeFunc){
+        // Whenever keys are pressed
+        replConsole.onkeypress = (event) => {
+
+            // Create a mutable copy of the event.key value
+            let key = event.key;
     
-        key = replConsole.value.slice(cursorPosition)
-        if(key=="\n"){
-            key = "\r\n"
+            // If Enter is pressed
+            if (key === 'Enter') {
+    
+                // Move cursor to the end of the line
+                cursorPosition = replConsole.value.length;
+    
+                // Replace it with CRLF
+                key = "\r\n";
+            }
+    
+            // Send the keypress
+            sendUartData(key)
+    
+                // If an error occurs
+                .catch(error => {
+    
+                    // Print an error message in the REPL console
+                    replConsole.value += "\nBluetooth error. Are you connected?";
+    
+                    // Move the cursor forward
+                    cursorPosition = replConsole.value.length;
+    
+                    // Focus the cursor to the REPL console, and scroll down
+                    focusREPL();
+    
+                    // Log the error to the debug console
+                    console.error(error);
+                });
+    
+            // Don't print characters to the REPL console because the response will print it for us
+            event.preventDefault();
         }
-        if(key==""){
-            key="\x08";
-            return;
+    }else{
+        // Whenever keys are pressed
+        replConsole.onkeyup = (event) => {
+            
+            key = replConsole.value.slice(cursorPosition)
+            if(key=="\n"){
+                key = "\r\n"
+            }
+            if(key==""){
+                key="\x08";
+                return;
+            }
+
+            // Don't print characters to the REPL console because the response will print it for us
+            // event.preventDefault();
+            replConsole.value = replConsole.value.slice(0, cursorPosition);
+
+            // Send the keypress
+            sendUartData(key)
+
+                // If an error occurs
+                .catch(disconnectError);
+
+            
         }
-    
-        // Don't print characters to the REPL console because the response will print it for us
-        // event.preventDefault();
-        replConsole.value = replConsole.value.slice(0, cursorPosition);
-    
-        // Send the keypress
-        sendUartData(key)
-    
-            // If an error occurs
-            .catch(disconnectError);
-    
-        
     }
     const appBleDisconnected = function(){
         controlButtons.forEach(ele => { ele.disabled = true;}); 
