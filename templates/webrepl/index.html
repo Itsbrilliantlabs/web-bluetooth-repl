@@ -40,11 +40,11 @@
         {% if request.user.is_authenticated %}
 			<div class="heading"> {% if  social_acc %}<img class="avatar" src="{{social_acc.get_avatar_url}}">{% endif %}<span>{{request.user.username}}</span></div>
             <div class="profile-info">
-                <a href="#"><img src="{% static 'images/black_user.png' %}" class="menu-img-icon" alt=""> <span> Update Profile</span></a>
-                <a href="#"><img src="{% static 'images/menu_device_frame_new.png' %}" class="menu-img-icon" alt=""> <span> Update Device Firmware</span></a>
-                <a href="#"><img src="{% static 'images/menu_licence_new.png' %}" class="menu-img-icon" alt=""> <span> License Agreement</span></a>
-                <a href="#"><img src="{% static 'images/menu_data_new.png' %}" class="menu-img-icon" alt=""> <span> Data Privacy</span></a>
-                <a href="#"><img src="{% static 'images/menu_help_new.png' %}" class="menu-img-icon" alt=""> <span> Documentation</span></a>
+                <!-- <a href="#"><img src="{% static 'images/black_user.png' %}" class="menu-img-icon" alt=""> <span> Update Profile</span></a> -->
+                <a href="javascript:void(0)" class="firmware-update"><img src="{% static 'images/menu_device_frame_new.png' %}" class="menu-img-icon" alt=""> <span> Update Device Firmware</span></a>
+                <a href="https://www.brilliantmonocle.com/terms"   target="_blank"><img src="{% static 'images/menu_licence_new.png' %}" class="menu-img-icon" alt=""> <span> License Agreement</span></a>
+                <a href="https://www.brilliantmonocle.com/privacy"  target="_blank"><img src="{% static 'images/menu_data_new.png' %}" class="menu-img-icon" alt=""> <span> Data Privacy</span></a>
+                <a href="https://docs.brilliantmonocle.com/" target="_blank"><img src="{% static 'images/menu_help_new.png' %}" class="menu-img-icon" alt=""> <span> Documentation</span></a>
             </div>
             <form action="{% url 'account_logout' %}" method="POST">
                 {% csrf_token %}

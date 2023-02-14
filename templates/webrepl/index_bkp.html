@@ -38,13 +38,13 @@
             <span class="menu-close">&#9587;</span>
         </div>
         {% if request.user.is_authenticated %}
-			<div class="heading">{{request.user.username}}</div>
+        <div class="heading"> {% if  social_acc %}<img class="avatar" src="{{social_acc.get_avatar_url}}">{% endif %}<span>{{request.user.username}}</span></div>
             <div class="profile-info">
-                <a href="#"><img src="{% static 'images/black_user.png' %}" class="menu-img-icon" alt=""> <span> Update Profile</span></a>
-                <a href="#"><img src="{% static 'images/menu_device_frame_new.png' %}" class="menu-img-icon" alt=""> <span> Update Device Firmware</span></a>
-                <a href="#"><img src="{% static 'images/menu_licence_new.png' %}" class="menu-img-icon" alt=""> <span> License Agreement</span></a>
-                <a href="#"><img src="{% static 'images/menu_data_new.png' %}" class="menu-img-icon" alt=""> <span> Data Privacy</span></a>
-                <a href="#"><img src="{% static 'images/menu_help_new.png' %}" class="menu-img-icon" alt=""> <span> Documentation</span></a>
+                <!-- <a href="#"><img src="{% static 'images/black_user.png' %}" class="menu-img-icon" alt=""> <span> Update Profile</span></a> -->
+                <a href="javascript:void(0)" class="firmware-update"><img src="{% static 'images/menu_device_frame_new.png' %}" class="menu-img-icon" alt=""> <span> Update Device Firmware</span></a>
+                <a href="https://www.brilliantmonocle.com/terms"   target="_blank"><img src="{% static 'images/menu_licence_new.png' %}" class="menu-img-icon" alt=""> <span> License Agreement</span></a>
+                <a href="https://www.brilliantmonocle.com/privacy"  target="_blank"><img src="{% static 'images/menu_data_new.png' %}" class="menu-img-icon" alt=""> <span> Data Privacy</span></a>
+                <a href="https://docs.brilliantmonocle.com/" target="_blank"><img src="{% static 'images/menu_help_new.png' %}" class="menu-img-icon" alt=""> <span> Documentation</span></a>
             </div>
             <form action="{% url 'account_logout' %}" method="POST">
                 {% csrf_token %}
@@ -73,10 +73,10 @@
             Use <b>machine.git_tag</b> to check your current version. For full reference, check out the
             <a href="https://docs.brilliant.xyz/micropython/micropython/" target="_blank">documentation</a>.
         </p>
-        <div class="tabs">
+        <!-- <div class="tabs">
             <button class="tab console-btn active" onclick="tabSwitch('console')">Console</button>
             <button class="tab editor-btn " onclick="tabSwitch('terminal')">Editor</button>
-        </div>
+        </div> -->
         <div class="console-area">
             <!-- REPL console -->
             <textarea type="textarea" id="replConsole" rows=20 autocomplete="off" autocorrect="off" autocapitalize="off"
@@ -117,6 +117,11 @@
         </div>
         <div class="file_editor off">
             <div id="editor"></div>
+            <div class="buttons">
+                <button title="Terminal"> > </button>
+                <button>Run</button>
+                <button>clear</button>
+            </div>
         </div>
        
 
@@ -154,8 +159,7 @@
     const menuBtn = document.querySelector('.menu-btn')
     const spinner = document.querySelector('.lds-spinner')
     
-    // var editor = ace.edit("editor");
-    ace.edit("editor", {
+    var editor = ace.edit("editor", {
     mode: "ace/mode/python",
     theme: "ace/theme/nord_dark",
     selectionStyle: "text",
@@ -187,7 +191,7 @@
     // },2000)
     
 </script>
-<script src="{% static 'js/terminal.js' %}"></script>
+<script src="{% static 'js/terminal_v2.js' %}"></script>
 
 <!-- Populates the latest MicroPython version number via an API -->
 <script type="module">

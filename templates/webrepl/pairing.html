@@ -45,6 +45,9 @@
         <p class="skip-btn"><a href="{% url 'home' %}">skip</a></p>   
     </div>
     <script>
+        if(!window.ReactNativeWebView){
+            window.location =  window.location = "{% url 'home' %}"
+        }
     function pairingDone(){
         document.querySelectorAll(".pairing .spinner,.pairing .up,.pairing .down").forEach(el=>{
             el.classList.add("hide");

@@ -20,6 +20,7 @@
     if(nativeFunc){
         connectButton.remove()
     }else{
+
         // menuBtn.innerHTML = ""
         spinner.style.display = "none"
     }
@@ -42,29 +43,33 @@
         let dy =touchendY-touchstartY ;
         let dvx = (touchendX-touchstartX)*1000/elapsedTime ;
         let dvy = (touchendY-touchstartY)*1000/elapsedTime ;
-        // console.log(`travel (${dx}, ${dy})`)
-        // console.log(`speed (${dvx},${dvy})`)
+        console.log(`travel (${dx}, ${dy})`)
+        console.log(`speed (${dvx},${dvy})`)
         if (dy<-60) {
             // up swiped
             tabSwitch('editor')
+            setTimeout(()=>{
+                editor.resize()
+
+            },500)
         };
         if (dy>+60) {
             tabSwitch('terminal')
         };
     }
     
-    // document.addEventListener('touchstart', e => {
-    //     // console.log(e)
-    // startTime = new Date()
-    // touchstartX = e.changedTouches[0].screenX
-    // touchstartY = e.changedTouches[0].screenY
-    // })
+    document.addEventListener('touchstart', e => {
+        // console.log(e)
+    startTime = new Date()
+    touchstartX = e.changedTouches[0].screenX
+    touchstartY = e.changedTouches[0].screenY
+    })
     
-    // document.addEventListener('touchend', e => {
-    // touchendX = e.changedTouches[0].screenX
-    // touchendY = e.changedTouches[0].screenY
-    // checkDirection()
-    // })
+    document.addEventListener('touchend', e => {
+    touchendX = e.changedTouches[0].screenX
+    touchendY = e.changedTouches[0].screenY
+    checkDirection()
+    })
 
     
     
@@ -131,16 +136,14 @@
         })
     
         // Print "connected" in the REPL console
-        if(replConsole.value.lengh!=0){
-            replConsole.value = replConsole.value + "\n";
-        }
+        replConsole.value = replConsole.value + "\nConnected\n";
     
         // Move the cursor forward
         cursorPosition = replConsole.value.length;
         sendUartData("\x02")
-        setTimeout(()=>{
-            checkVersion()
-        },1000)
+        // setTimeout(()=>{
+        //     checkVersion()
+        // },500)
     
     }
     
