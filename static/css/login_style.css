@@ -137,12 +137,15 @@ body {
     text-align: center;
     left: 50%;
     transform: translateX(-50%);
+    
 }
 .skip-btn a{
     padding: 10px;
     color: #000000;
     text-align: center;
     text-decoration: underline;
+    font-family: 'Apercu Pro';
+    font-style: normal;
 }
 @media only screen and (min-width: 900px) {
     .login {
