@@ -139,7 +139,7 @@
         cursorPosition = replConsole.value.length;
         sendUartData("\x02")
         setTimeout(()=>{
-            // checkVersion()
+            checkVersion()
         },1000)
     
     }
@@ -151,7 +151,7 @@
         if(nativeFunc){
             onConnectRepl()
             focusREPL();
-            sendUartData("\x03");
+            // sendUartData("\x03");
             // checkVersion()
             return;
         }

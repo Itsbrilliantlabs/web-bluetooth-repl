@@ -182,17 +182,20 @@
     
 </script>
 <script src="{% static 'js/terminal.js' %}"></script>
+<script src="{% static 'js/zip.min.js' %}"></script>
+<!-- <script src="{% static 'js/dfu_ble.js' %}"></script> -->
 
 <!-- Populates the latest MicroPython version number via an API -->
 <script type="module">
 
     // Import GitHub Octokit API
     import { Octokit } from "https://cdn.skypack.dev/@octokit/core";
-
+    // import * as zipLib from "https://deno.land/x/zipjs/index.js";
     // Reference to the <a> link where we'll insert the version string
     const latestVersion = document.getElementById('latestVersion');
 
     // Get the version from the API and populate the value
+    var dfu_bin = null;
     (async function getVersion() {
 
         // Call the API for latest release
@@ -202,6 +205,14 @@
             repo: 'monocle-micropython'
         });
         console.log(latestRelease)
+        // dfu_bin = latestRelease.data.assets.filter(d=>d.content_type=='application/zip')
+        // if(dfu_bin.length==1){
+        //     dfu_bin=dfu_bin[0].url
+        // }
+        // // console.log(dfu_bin)
+        // parseBinaryFile(dfu_bin).then(d=>{
+        //     console.log(unZip(d))
+        // })
         // Set the inner value of the <a> link to the tag string
         latestVersion.innerHTML = latestRelease.data.tag_name;
     })();
