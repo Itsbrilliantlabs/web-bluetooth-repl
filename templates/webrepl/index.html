@@ -15,7 +15,7 @@
     <title>MicroPython Web REPL | Brilliant Labs</title>
     <meta name="description" content="Web Bluetooth based REPL for Brilliant Labs AR devices.">
     <link rel="canonical" href="https://repl.brilliant.xyz" />
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/css/index.css">
     <!-- Facebook & Twitter card meta -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@brilliantlabsAR" />
@@ -94,6 +94,7 @@
             <div class="arrow-toggle"><span>&rsaquo;</span></div> -->
         <!-- </div> -->
         <!-- Buttons -->
+        
         <div class="buttons">
 
             <button id="connectButton" title="Open Bluetooth connection pane">Connect</button>
@@ -134,11 +135,23 @@
         </footer>
 
     </div>
+    <!-- <div class="bg-overlay off">
+        <div class="firmware-update-box">
+            <span>Firmware updating</span>
 
+            <div class="progress-container" data-percentage='0'>
+                <div class="progress"></div>
+                <div class="percentage">0%</div>
+              </div>
+        </div>
+    </div>
+    <div class="simple-keyboard"></div> -->
 </body>
+
 
 <!-- Javascript for interacting with the REPL console and buttons -->
 <script>
+ 
     // Text shown in the REPL when there is no connection
     const replPlaceholderText =
         "Welcome to the MicroPython Web REPL. Connect via Bluetooth using the button below.\n\n" +
@@ -182,9 +195,19 @@
     
 </script>
 <script src="{% static 'js/terminal.js' %}"></script>
-<script src="{% static 'js/zip.min.js' %}"></script>
-<!-- <script src="{% static 'js/dfu_ble.js' %}"></script> -->
 
+<!-- custom keyboard -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/index.js"></script>
+<script  src="{% static 'js/keyboard.js' %}" ></script> -->
+
+<!-- DFU update -->
+<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crc-32/1.0.2/crc32.min.js"></script> -->
+<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script> -->
+<script src="{% static 'js/package.js' %}"></script>
+<script src="{% static 'js/secure-dfu.js' %}"></script>
+<script src="{% static 'js/dfu.js' %}"></script>
+
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/crc-32/1.2.2/crc32.min.js" integrity="sha512-wIFCkv9+5jtI8PJBBe+UcH7ltv2ML4EXicOQ3zIOhSo3zljjiUkTlHo3n/skt7sYd/IdETcdYw8beIRO0M7XIw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
 <!-- Populates the latest MicroPython version number via an API -->
 <script type="module">
 
@@ -194,7 +217,6 @@
     const latestVersion = document.getElementById('latestVersion');
 
     // Get the version from the API and populate the value
-    var dfu_bin = null;
     (async function getVersion() {
 
         // Call the API for latest release
@@ -203,15 +225,12 @@
             owner: 'brilliantlabsAR',
             repo: 'monocle-micropython'
         });
-        // dfu_bin = latestRelease.data.assets.filter(d=>d.content_type=='application/zip')
-        // if(dfu_bin.length==1){
-        //     dfu_bin=dfu_bin[0].browser_download_url
-        // }
-        // // console.log(dfu_bin)
-        // parseBinaryFile(dfu_bin).then(d=>{
-        //     console.log(d)
-        // })
-        // Set the inner value of the <a> link to the tag string
+        let dfu_bin = latestRelease.data.assets.filter(d=>d.content_type=='application/zip')
+        if(dfu_bin.length==1){
+            dfu_bin=dfu_bin[0].browser_download_url
+            latestVersion.setAttribute('data-zip-url',"{% url 'firmware-load' %}?url="+dfu_bin)
+        }
+       
         latestVersion.innerHTML = latestRelease.data.tag_name;
     })();
 

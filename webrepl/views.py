@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.http import HttpResponse
+import requests
 from allauth.socialaccount.models import SocialAccount
 # from django.contrib import messages
 # Create your views here.
@@ -31,3 +33,11 @@ def welcome(request):
 
 def pairing(request):
     return render(request,'webrepl/pairing.html')
+
+def firmware_load(request):
+    url = request.GET.get('url',None)
+    if url:
+        req = requests.get(url)
+        return HttpResponse(req.content, content_type="application/zip")
+    else:
+        return HttpResponse('Bad Request',status=400)

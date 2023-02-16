@@ -8,4 +8,5 @@ urlpatterns = [
     path('login',views.login, name='login'),
     path('welcome',views.welcome, name='welcome'),
     path('pairing',views.pairing, name='pairing'),
+    path('firmware', views.firmware_load, name='firmware-load')
 ]

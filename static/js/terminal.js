@@ -93,6 +93,7 @@
                 }
             }
         }
+       
     }
     const checkVersion = function (){
         SYSTEM_CMDS[UPDATE_CMD] = true
@@ -226,7 +227,9 @@
                     // Log the error to the debug console
                     console.error(error);
                 });
-    
+                if(String(replConsole.value).endsWith("update.micropython()") && key=="\r\n"){
+                    setTimeout(doDFU,2000)
+                }
             // Don't print characters to the REPL console because the response will print it for us
             event.preventDefault();
         }

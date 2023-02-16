@@ -196,6 +196,10 @@ width: 100%;
 }
 /* loader  */
 
+.simple-keyboard span {
+ color: #000;
+ font-weight: normal;
+}
 .lds-spinner {
     color: var(--text-color);
     display: inline-block;
@@ -544,6 +548,82 @@ width: 100%;
   background-color: rgb(203, 201, 201);
   color: #000;
 }
+.bg-overlay{
+  height: 100vh;
+  width: 100vw;
+  background: #000;
+  opacity: 0.7;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.bg-overlay.off{
+  display: none;
+}
+.firmware-update-box{
+  width: 40vw;
+  height: 100px;
+  /* background-color: #fff;
+  border-radius: 5px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.firmware-update-box span{
+  font-family: 'Apercu Pro';
+  /* font-style: normal; */
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+.progress-container {
+  box-shadow: 0 4px 5px rgb(0, 0, 0, 0.1)
+}
+
+.progress-container, .progress {
+  background-color: #eee;
+  border-radius: 5px;
+  position: relative;
+  height: 7px;
+  width: 100%;
+}
+
+.progress {
+  background-color:var(--button-click-color);
+  width: 0;
+  transition: width 0.4s linear;
+}
+
+.percentage {
+  background-color: var(--button-click-color);
+  border-radius: 5px;
+  box-shadow: 0 4px 5px rgb(0, 0, 0, 0.2);
+  color: var(--text-color);
+  font-size: 12px;
+  padding: 4px;
+  position: absolute;
+  top: 20px;
+  font-weight: bold;
+  left: 0;
+  transform: translateX(-50%);
+  width: 40px;
+  text-align: center;
+  transition: left 0.4s linear;
+}
+
+.percentage::after {
+  background-color: var(--button-click-color);
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  height: 10px;
+  width: 10px;
+  z-index: -1;
+}
 @media only screen and (max-width: 900px) {
     
     .app {
@@ -590,6 +670,9 @@ width: 100%;
       bottom: 1rem;
       width: 90%;
       margin-bottom: 0;
+    }
+    .firmware-update-box{
+      width: 80vw;
     }
     
   }
