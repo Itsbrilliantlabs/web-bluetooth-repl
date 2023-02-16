@@ -123,11 +123,11 @@
         replConsole.placeholder = "";
     
         // Change the button text to "Disconnect"
-        connectButton?.innerHTML = "Disconnect";
+        connectButton.innerHTML = "Disconnect";
     
         // Enable the control buttons
         controlButtons.forEach(ele => {
-            ele?.disabled = false;
+            ele.disabled = false;
         })
     
         // Print "connected" in the REPL console
