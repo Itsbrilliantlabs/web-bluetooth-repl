@@ -215,7 +215,12 @@ connectButton.addEventListener('click', ()=>{
         // Don't print characters to the REPL console because the response will print it for us
         event.preventDefault();
         if(String(replConsole.value).endsWith("update.micropython()") && key=="\r\n"){
-            setTimeout(doDFU,2000)
+           
+            setTimeout(()=>{
+                if(confirm("Select DfuTarg from after scan")){
+                    doDFU()
+                }
+            },2000)
         }
     }
 }else{
