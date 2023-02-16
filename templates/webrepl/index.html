@@ -190,7 +190,6 @@
 
     // Import GitHub Octokit API
     import { Octokit } from "https://cdn.skypack.dev/@octokit/core";
-    // import * as zipLib from "https://deno.land/x/zipjs/index.js";
     // Reference to the <a> link where we'll insert the version string
     const latestVersion = document.getElementById('latestVersion');
 
@@ -204,14 +203,13 @@
             owner: 'brilliantlabsAR',
             repo: 'monocle-micropython'
         });
-        console.log(latestRelease)
         // dfu_bin = latestRelease.data.assets.filter(d=>d.content_type=='application/zip')
         // if(dfu_bin.length==1){
-        //     dfu_bin=dfu_bin[0].url
+        //     dfu_bin=dfu_bin[0].browser_download_url
         // }
         // // console.log(dfu_bin)
         // parseBinaryFile(dfu_bin).then(d=>{
-        //     console.log(unZip(d))
+        //     console.log(d)
         // })
         // Set the inner value of the <a> link to the tag string
         latestVersion.innerHTML = latestRelease.data.tag_name;

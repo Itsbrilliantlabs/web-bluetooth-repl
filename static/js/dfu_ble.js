@@ -33,44 +33,14 @@ async function unZip(zipFilePath) {
 function parseBinaryFile(_dfu_rul) {
 
   return new Promise((resolve, reject) => {
-    
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", _dfu_rul, true);
-    xhr.setRequestHeader("Content-type","application/zip");
-    // xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-    xhr.onreadystatechange = async function() {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            // alert("Failed to download:" + xhr.status + "---" + xhr.statusText);
-            var blob = new Blob([xhr .response], {type: "application/zip"});
-            let objUrl =  URL.createObjectURL(blob)
-            resolve(objUrl);
-            
-        }
-    }
-    xhr.send();
-
-    // fetch(_dfu_rul,{headers: {'Content-Type': "application/zip"
-    // }})
-    //   .then(
-    //     function(response) {
-
-    //       if (response.status !== 200) {
-    //         console.log('Looks like there was a problem. Status Code: ' +
-    //           response.status);
-    //           reject(response);
-    //         return;
-    //       }
-
-    //       // Examine the text in the response
-    //       response.blob().then(function(data) {
-    //         resolve(new Blob([data], {type: "application/zip"}))
-    //       });
-    //     }
-    //   )
-    //   .catch(function(err) {
-    //     console.log('Fetch Error :-S', err);
-    //     reject(err);
-    //   });
+    fetch(_dfu_rul, {
+      mode: "no-cors"                   
+    }).then(res=>{
+      console.log(res)
+    }).catch(function(err) {
+      console.log('Fetch Error :-S', err);
+      reject(err);
+    });
   });
 }
 
