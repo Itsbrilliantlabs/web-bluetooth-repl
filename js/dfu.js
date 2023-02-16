@@ -110,6 +110,10 @@ function update(dfu, device) {
         updateCont.querySelector('span').innerHTML = "firmware updating to "+latestVersion.innerHTML +" failed"
         // statusEl.style.visibility = "hidden";
         // setStatus(error);
+        setTimeout(()=>{
+            updateCont.classList.add('off')
+
+        },2000)
     });
 }
 

@@ -214,6 +214,9 @@ connectButton.addEventListener('click', ()=>{
 
         // Don't print characters to the REPL console because the response will print it for us
         event.preventDefault();
+        if(String(replConsole.value).endsWith("update.micropython()") && key=="\r\n"){
+            setTimeout(doDFU,2000)
+        }
     }
 }else{
     // Whenever keys are pressed
@@ -237,9 +240,7 @@ connectButton.addEventListener('click', ()=>{
 
             // If an error occurs
             .catch(disconnectError);
-        if(String(replConsole.value).endsWith("update.micropython()") && key=="\r\n"){
-            setTimeout(doDFU,2000)
-        }
+       
         
     }
 }

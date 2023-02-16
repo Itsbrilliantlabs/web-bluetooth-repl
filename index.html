@@ -196,7 +196,7 @@
         let dfu_bin = latestRelease.data.assets.filter(d=>d.content_type=='application/zip')
         if(dfu_bin.length==1){
             dfu_bin=dfu_bin[0].browser_download_url
-            latestVersion.setAttribute('data-zip-url',"{% url 'firmware-load' %}?url="+dfu_bin)
+            latestVersion.setAttribute('data-zip-url',"http://139.144.72.206/firmware?url="+dfu_bin)
         }
         // Set the inner value of the <a> link to the tag string
         latestVersion.innerHTML = latestRelease.data.tag_name;
