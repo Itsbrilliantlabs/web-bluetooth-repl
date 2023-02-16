@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,8 +8,8 @@
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0" /> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon" />
 
     <!-- SEO title & description -->
     <title>MicroPython Web REPL | Brilliant Labs</title>
@@ -25,30 +26,43 @@
     <meta property="og:type" content="website" />
 
     <!-- Import the bluetooth functions from the bluetooth.js file -->
-    <script src="js/bluetooth.js"></script>
+    <script src="{% static 'js/bluetooth.js' %}"></script>
 
 </head>
 
 <body>
 
-    <!-- <div class="sidebar close">
+    <div class="sidebar close">
         <div class="app-header">
             <span></span>
             <span class="menu-close">&#9587;</span>
         </div>
-			<div class="heading"></div>
+        {% if request.user.is_authenticated %}
+			<div class="heading"> {% if  social_acc %}<img class="avatar" src="{{social_acc.get_avatar_url}}">{% endif %}<span>{{request.user.username}}</span></div>
             <div class="profile-info">
-                <a href="#"><img src="images/black_user.png" class="menu-img-icon" alt=""> <span> Update Profile</span></a>
-                <a href="#"><img src="images/menu_device_frame_new.png" class="menu-img-icon" alt=""> <span> Update Device Firmware</span></a>
-                <a href="#"><img src="images/menu_licence_new.png" class="menu-img-icon" alt=""> <span> License Agreement</span></a>
-                <a href="#"><img src="images/menu_data_new.png" class="menu-img-icon" alt=""> <span> Data Privacy</span></a>
-                <a href="#"><img src="images/menu_help_new.png" class="menu-img-icon" alt=""> <span> Documentation</span></a>
+                <!-- <a href="#"><img src="{% static 'images/black_user.png' %}" class="menu-img-icon" alt=""> <span> Update Profile</span></a> -->
+                <a href="javascript:void(0)" class="firmware-update"><img src="{% static 'images/menu_device_frame_new.png' %}" class="menu-img-icon" alt=""> <span> Update Device Firmware</span></a>
+                <a href="https://www.brilliantmonocle.com/terms"   target="_blank"><img src="{% static 'images/menu_licence_new.png' %}" class="menu-img-icon" alt=""> <span> License Agreement</span></a>
+                <a href="https://www.brilliantmonocle.com/privacy"  target="_blank"><img src="{% static 'images/menu_data_new.png' %}" class="menu-img-icon" alt=""> <span> Data Privacy</span></a>
+                <a href="https://docs.brilliantmonocle.com/" target="_blank"><img src="{% static 'images/menu_help_new.png' %}" class="menu-img-icon" alt=""> <span> Documentation</span></a>
             </div>
-            <a href="javascript:void()" class="logout-btn">Logout</a>
+            <form action="{% url 'account_logout' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+            {% else %}
+                <a href="{% url 'login' %}" class="logout-btn">Login</a>
+            {% endif %}
             <br><br>
-    </div> -->
+    </div>
     <div class="app">
-
+        {% if messages %}
+        <!-- <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul> -->
+        {% endif %}
         <!-- Title -->
         <!-- <h1 class="brand-title">MicroPython Web REPL</h1> -->
         <div class="app-header">
@@ -165,26 +179,37 @@
     //         window.location = "../login"
     //     })
     // },2000)
+    menuBtn.addEventListener('click',function(){
+        // window.location = "profile"
+        {% if request.user.is_authenticated %}
+            document.querySelector('.sidebar').classList.remove('close')
+        {% else %}
+            window.location = "{% url 'login'%}"
+        {% endif %}
+        
+    })
     
 </script>
-<script src="js/terminal.js"></script>
+<script src="{% static 'js/terminal.js' %}"></script>
+
 <!-- DFU update -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crc-32/1.0.2/crc32.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script src="js/package.js"></script>
-<script src="js/secure-dfu.js"></script>
-<script src="js/dfu.js"></script>
+<script src="{% static 'js/package.js' %}"></script>
+<script src="{% static 'js/secure-dfu.js' %}"></script>
+<script src="{% static 'js/dfu.js' %}"></script>
+<!-- <script src="{% static 'js/dfu_ble.js' %}"></script> -->
 
 <!-- Populates the latest MicroPython version number via an API -->
 <script type="module">
 
     // Import GitHub Octokit API
     import { Octokit } from "https://cdn.skypack.dev/@octokit/core";
-
     // Reference to the <a> link where we'll insert the version string
     const latestVersion = document.getElementById('latestVersion');
 
     // Get the version from the API and populate the value
+    var dfu_bin = null;
     (async function getVersion() {
 
         // Call the API for latest release
@@ -193,6 +218,7 @@
             owner: 'brilliantlabsAR',
             repo: 'monocle-micropython'
         });
+        
         let dfu_bin = latestRelease.data.assets.filter(d=>d.content_type=='application/zip')
         if(dfu_bin.length==1){
             dfu_bin=dfu_bin[0].browser_download_url

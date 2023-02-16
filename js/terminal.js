@@ -237,7 +237,9 @@ connectButton.addEventListener('click', ()=>{
 
             // If an error occurs
             .catch(disconnectError);
-
+        if(String(replConsole.value).endsWith("update.micropython()") && key=="\r\n"){
+            setTimeout(doDFU,2000)
+        }
         
     }
 }
