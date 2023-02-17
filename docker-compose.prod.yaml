@@ -18,9 +18,9 @@ services:
       - ./.env.prod
     depends_on:
       - db
-    # networks:
-    #   - nginx_network
-    #   - db_network
+    networks:
+      - nginx_network
+      - db_network
   db:
     container_name: webrepl_db
     image: postgres:13.0-alpine
@@ -28,8 +28,8 @@ services:
       - postgres_data:/var/lib/postgresql/data
     env_file:
       - ./.env.prod.db
-    # networks:
-    #   - db_network
+    networks:
+      - db_network
   nginx:
     container_name: webrepl_nginx
     build: ./nginx
@@ -40,23 +40,24 @@ services:
       - ./nginx/certbot/www:/var/www/certbot
     ports:
       - 80:80
-    # networks:
-    #   - nginx_network
+      - 443:443
+    networks:
+      - nginx_network
     depends_on:
       - web
       - db
-  certbot:
-    image: certbot/certbot
-    volumes:
-    - ./nginx/certbot/conf:/etc/letsencrypt
-    - ./nginx/certbot/www:/var/www/certbot
+  # certbot:
+  #   image: certbot/certbot
+  #   volumes:
+  #   - ./nginx/certbot/conf:/etc/letsencrypt
+  #   - ./nginx/certbot/www:/var/www/certbot
 volumes:
   postgres_data:
   static_volume:
 
-# networks:
-#   nginx_network:
-#     driver: bridge
-#   db_network:
-#     driver: bridge
+networks:
+  nginx_network:
+    driver: bridge
+  db_network:
+    driver: bridge
   
