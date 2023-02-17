@@ -65,6 +65,7 @@ let cursorPosition = 0;
 
 const SYSTEM_CMDS = {}
 const UPDATE_CMD = "import device;print(device.VERSION)"
+const UPDATE_START = "import update;update.micropython()"
 const UPDATE_MSG = 'import display as d;d.fill(0);d.text("New update available!",120,150,0xffffff);d.text("Check app for details",115,200,0xffffff);d.show();del(d)'
 const systemCMDHook = function(string){
     let sep_char_cmd = '\n>>> '
@@ -80,7 +81,9 @@ const systemCMDHook = function(string){
     // app command specific logics
     if(cmd && cmd.trim().includes(UPDATE_CMD)){
         if(cmd_response.includes(latestVersion.innerHTML.trim())){
+            document.querySelector('.update-start').innerHTML = "Use <b>device.VERSION</b>"
         }else{
+            document.querySelector('.update-start').innerHTML = "Click here to <b>update<b>"
             if(SYSTEM_CMDS[UPDATE_CMD]){
                 sendUartData(UPDATE_MSG + '\r\n')
                 SYSTEM_CMDS[UPDATE_CMD] = false
@@ -88,6 +91,12 @@ const systemCMDHook = function(string){
         }
     }
 }
+document.querySelector('.update-start').addEventListener('click',function(){
+    if(device){
+        sendUartData(UPDATE_START+"\r\n")
+        doDFU()
+    }
+})
 const checkVersion = function (){
     SYSTEM_CMDS[UPDATE_CMD] = true
     sendUartData(UPDATE_CMD+"\r\n")
@@ -119,8 +128,9 @@ const onConnectRepl = () => {
     })
 
     // Print "connected" in the REPL console
-    replConsole.value = replConsole.value + "\nConnected\n";
-
+    if(!replConsole.value.length==0){
+        replConsole.value = replConsole.value + "\n";
+    }
     // Move the cursor forward
     cursorPosition = replConsole.value.length;
     sendUartData("\x02")
@@ -134,6 +144,7 @@ const onConnectRepl = () => {
 // When the connect/disconnect button is pressed
 connectButton.addEventListener('click', ()=>{
     spinner.style.display = "inline-block"
+
     if(nativeFunc){
         onConnectRepl()
         focusREPL();
@@ -141,40 +152,46 @@ connectButton.addEventListener('click', ()=>{
         // checkVersion()
         return;
     }
+    initiatWebBleConnect()
+})
+
+const initiatWebBleConnect = function(){
+    spinner.style.display = "inline-block"
+
     connectDisconnect()
 
-        // Once the promise returns
-        .then(result => {
+    // Once the promise returns
+    .then(result => {
 
-            // If connected 
-            if (result === "connected") {
-                onConnectRepl()
-                // Send Ctrl-C to the device
-                sendUartData("\x03");
-                // checkVersion()
-                // Focus the cursor to the REPL console, and scroll down
-                focusREPL();
-            }
-        })
-
-        // If we couldn't connect
-        .catch(error => {
-
-            // Print an error message in the REPL console
-            replConsole.value = replConsole.value + "\nCanceled, or couldn't connect. Are you using Chrome?";
-
-            // Move the cursor forward
-            cursorPosition = replConsole.value.length;
-
+        // If connected 
+        if (result === "connected") {
+            onConnectRepl()
+            // Send Ctrl-C to the device
+            sendUartData("\x03");
+            // checkVersion()
             // Focus the cursor to the REPL console, and scroll down
             focusREPL();
+        }
+    })
 
-            // Log the error to the debug console
-            console.error(error);
-            spinner.style.display = "none"
+    // If we couldn't connect
+    .catch(error => {
 
-        })
-})
+        // Print an error message in the REPL console
+        replConsole.value = replConsole.value + "\nCanceled, or couldn't connect. Are you using Chrome?";
+
+        // Move the cursor forward
+        cursorPosition = replConsole.value.length;
+
+        // Focus the cursor to the REPL console, and scroll down
+        focusREPL();
+
+        // Log the error to the debug console
+        console.error(error);
+        spinner.style.display = "none"
+
+    })
+}
  //android keys not emmiting events
  if(!nativeFunc){
     // Whenever keys are pressed
@@ -215,12 +232,7 @@ connectButton.addEventListener('click', ()=>{
         // Don't print characters to the REPL console because the response will print it for us
         event.preventDefault();
         if(String(replConsole.value).endsWith("update.micropython()") && key=="\r\n"){
-           
-            setTimeout(()=>{
-                if(confirm("Select DfuTarg from after scan")){
-                    doDFU()
-                }
-            },2000)
+            doDFU()
         }
     }
 }else{

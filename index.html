@@ -62,7 +62,7 @@
         <p class="build-info">Latest MicroPython build:
             <a href="https://github.com/brilliantlabsAR/monocle-micropython/releases/latest" target="_blank"
                 id="latestVersion"></a>.
-            Use <b>device.VERSION</b> to check your current version. For full reference, check out the
+             <span class="update-start">Use <b>device.VERSION</b></span> to check your current version. For full reference, check out the
             <a href="https://docs.brilliantmonocle.com/micropython/micropython/" target="_blank">documentation</a>.
         </p>
 
@@ -120,10 +120,16 @@
         </footer>
 
     </div>
-    <div class="bg-overlay off">
+    <div class="bg-overlay off"></div>
+    <div class="firmware-update-cont">
+        
         <div class="firmware-update-box">
             <span>Firmware updating</span>
-
+            <div class="update-group">
+                <button class="update-group-btn" id="update-start-btn" onclick="selectDevice();">Start Update</button>
+                <button class="update-group-btn"  id="update-cancel-btn" onclick="cancelUpdate();">Cancel</button>
+            </div>
+               
             <div class="progress-container" data-percentage='0'>
                 <div class="progress"></div>
                 <div class="percentage">0%</div>

@@ -477,7 +477,7 @@ width: 13%;
   text-align: center;
 }
 
-.bg-overlay{
+.bg-overlay,.firmware-update-cont{
   height: 100vh;
   width: 100vw;
   background: #000;
@@ -487,7 +487,14 @@ width: 13%;
   justify-content: center;
   align-items: center;
 }
+.firmware-update-cont{
+  opacity: unset;
+  background: transparent;
+}
 .bg-overlay.off{
+  display: none;
+}
+.bg-overlay.off + .firmware-update-cont{
   display: none;
 }
 .firmware-update-box{
@@ -506,7 +513,16 @@ width: 13%;
   font-weight: 400;
   margin-bottom: 10px;
 }
-
+.update-group-btn{
+  width: 120px;
+}
+.update-group{
+  display: flex;
+  flex-direction: row;
+}
+.update-start{
+  cursor: pointer;
+}
 .progress-container {
   box-shadow: 0 4px 5px rgb(0, 0, 0, 0.1)
 }
@@ -520,7 +536,7 @@ width: 13%;
 }
 
 .progress {
-  background-color:var(--button-click-color);
+  background-color:var(--link-color);
   width: 0;
   transition: width 0.4s linear;
 }
@@ -535,6 +551,7 @@ width: 13%;
   position: absolute;
   top: 20px;
   font-weight: bold;
+  font-family: 'Apercu Pro';
   left: 0;
   transform: translateX(-50%);
   width: 40px;
