@@ -18,7 +18,7 @@
         
     })
     if(nativeFunc){
-        connectButton.remove()
+        connectButton.style.display = 'none'
     }else{
         // menuBtn.innerHTML = ""
         spinner.style.display = "none"
@@ -140,7 +140,7 @@
         cursorPosition = replConsole.value.length;
         sendUartData("\x02")
         setTimeout(()=>{
-            // checkVersion()
+            checkVersion()
         },1000)
     
     }
