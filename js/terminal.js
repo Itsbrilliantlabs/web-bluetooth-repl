@@ -214,20 +214,20 @@ const initiatWebBleConnect = function(){
         sendUartData(key)
 
             // If an error occurs
-            .catch(error => {
+            // .catch(error => {
 
-                // Print an error message in the REPL console
-                replConsole.value += "\nBluetooth error. Are you connected?";
+            //     // Print an error message in the REPL console
+            //     replConsole.value += "\nBluetooth error. Are you connected?";
 
-                // Move the cursor forward
-                cursorPosition = replConsole.value.length;
+            //     // Move the cursor forward
+            //     cursorPosition = replConsole.value.length;
 
-                // Focus the cursor to the REPL console, and scroll down
-                focusREPL();
+            //     // Focus the cursor to the REPL console, and scroll down
+            //     focusREPL();
 
-                // Log the error to the debug console
-                console.error(error);
-            });
+            //     // Log the error to the debug console
+            //     console.error(error);
+            // });
 
         // Don't print characters to the REPL console because the response will print it for us
         event.preventDefault();
@@ -256,7 +256,7 @@ const initiatWebBleConnect = function(){
         sendUartData(key)
 
             // If an error occurs
-            .catch(disconnectError);
+            // .catch(disconnectError);
        
         
     }
@@ -278,7 +278,8 @@ replConsole.onkeydown = (event) => {
             case 'a':
 
                 // Send control code 01
-                sendUartData("\x01").catch(disconnectError);
+                sendUartData("\x01")
+                // .catch(disconnectError);
 
                 // Prevent any action in the REPL console
                 event.preventDefault();
@@ -290,7 +291,8 @@ replConsole.onkeydown = (event) => {
             case 'b':
 
                 // Send control code 02
-                sendUartData("\x02").catch(disconnectError);
+                sendUartData("\x02")
+                // .catch(disconnectError);
 
                 // Prevent any action in the REPL console
                 event.preventDefault();
@@ -302,7 +304,8 @@ replConsole.onkeydown = (event) => {
             case 'c':
 
                 // Send control code 03
-                sendUartData("\x03").catch(disconnectError);
+                sendUartData("\x03")
+                // .catch(disconnectError);
 
                 // Prevent any action in the REPL console
                 event.preventDefault();
@@ -314,7 +317,8 @@ replConsole.onkeydown = (event) => {
             case 'd':
 
                 // Send control code 04
-                sendUartData("\x04").catch(disconnectError);
+                sendUartData("\x04")
+                // .catch(disconnectError);
 
                 // Prevent any action in the REPL console
                 event.preventDefault();
@@ -326,7 +330,8 @@ replConsole.onkeydown = (event) => {
             case 'e':
 
                 // Send control code 05
-                sendUartData("\x05").catch(disconnectError);
+                sendUartData("\x05")
+                // .catch(disconnectError);
 
                 // Prevent any action in the REPL console
                 event.preventDefault();
@@ -350,7 +355,8 @@ replConsole.onkeydown = (event) => {
                 cursorPosition = 0;
 
                 // Send control code 03 to reset the REPL
-                sendUartData("\x03").catch(disconnectError);
+                sendUartData("\x03")
+                // .catch(disconnectError);
 
                 // Prevent any action in the REPL console
                 event.preventDefault();
@@ -362,7 +368,8 @@ replConsole.onkeydown = (event) => {
             case 'Backspace':
 
                 // Send a bunch of backspaces to clear the whole line
-                sendUartData("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b").catch(disconnectError);
+                sendUartData("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b")
+                // .catch(disconnectError);
 
                 // Prevent any action in the REPL console
                 event.preventDefault();
@@ -376,7 +383,8 @@ replConsole.onkeydown = (event) => {
                 // Send a bunch of right arrow keys
                 sendUartData("\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C" +
                     "\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C" +
-                    "\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C").catch(disconnectError);
+                    "\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C")
+                    // .catch(disconnectError);
 
                 // Prevent any action in the REPL console
                 event.preventDefault();
@@ -390,7 +398,8 @@ replConsole.onkeydown = (event) => {
                 // Send a bunch of left arrow keys
                 sendUartData("\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D" +
                     "\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D" +
-                    "\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D").catch(disconnectError);
+                    "\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D")
+                    // .catch(disconnectError);
 
                 // Prevent any action in the REPL console
                 event.preventDefault();
@@ -417,7 +426,8 @@ replConsole.onkeydown = (event) => {
     if (event.key === 'ArrowUp') {
 
         // Send control sequence ESC-[A
-        sendUartData("\x1B[A").catch(disconnectError);
+        sendUartData("\x1B[A")
+        // .catch(disconnectError);
 
         // Prevent any action in the REPL console
         event.preventDefault();
@@ -430,7 +440,8 @@ replConsole.onkeydown = (event) => {
     if (event.key === 'ArrowDown') {
 
         // Send control sequence ESC-[B
-        sendUartData("\x1B[B").catch(disconnectError);
+        sendUartData("\x1B[B")
+        // .catch(disconnectError);
 
         // Prevent any action in the REPL console
         event.preventDefault();
@@ -443,7 +454,8 @@ replConsole.onkeydown = (event) => {
     if (event.key === 'ArrowRight') {
 
         // Send control sequence ESC-[C
-        sendUartData("\x1B[C").catch(disconnectError);
+        sendUartData("\x1B[C")
+        // .catch(disconnectError);
 
         // Prevent any action in the REPL console
         event.preventDefault();
@@ -456,7 +468,8 @@ replConsole.onkeydown = (event) => {
     if (event.key === 'ArrowLeft') {
 
         // Send control sequence ESC-[D
-        sendUartData("\x1B[D").catch(disconnectError);
+        sendUartData("\x1B[D")
+        // .catch(disconnectError);
 
         // Prevent any action in the REPL console
         event.preventDefault();
@@ -469,7 +482,8 @@ replConsole.onkeydown = (event) => {
     if (event.key === 'Tab') {
 
         // Send control code 09
-        sendUartData("\x09").catch(disconnectError);
+        sendUartData("\x09")
+        // .catch(disconnectError);
 
         // Prevent any action in the REPL console
         event.preventDefault();
@@ -504,7 +518,7 @@ function pasteEvent() {
             sendUartData(text.replace('\n', '\r\n'))
 
                 // If an error occurs
-                .catch(disconnectError);
+                // .catch(disconnectError);
         })
 
         // Catch any errors
