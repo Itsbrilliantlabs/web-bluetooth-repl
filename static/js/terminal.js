@@ -140,7 +140,7 @@
         cursorPosition = replConsole.value.length;
         sendUartData("\x02")
         setTimeout(()=>{
-            checkVersion()
+            // checkVersion()
         },1000)
     
     }
@@ -705,7 +705,7 @@
     // Helper function to ensure the REPL console is scrolled down and focused
     function focusREPL() {
         // Focus the cursor to the REPL console
-        // replConsole.focus();
+        replConsole.focus();
     
         // Make sure the REPL console is scrolled all the way down
         replConsole.scrollTop = replConsole.scrollHeight;
