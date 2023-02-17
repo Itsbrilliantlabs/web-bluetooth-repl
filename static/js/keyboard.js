@@ -13,23 +13,43 @@ function onKeyPress(button) {
   console.log("Button pressed", button);
   if (button === "{shift}" || button === "{lock}") handleShift();
   // Send the keypress
-  sendUartData(button)
+  let key = null
+  if(button[0]!=="{"){
+    key =button
+  }
+  if(button=="{bksp}"){
+    sendUartData("\x08");
+  }
+  if(button=="{enter}"){
+    key ="\r\n"
+  }
+  if(button=="{space}"){
+    key =" "
+  }
+  if(button=="{tab}"){
+    sendUartData("\x09")
+  }
+  if(key!=null){
+    sendUartData(key)
+
+  
     
-  // If an error occurs
-  .catch(error => {
+    // If an error occurs
+    .catch(error => {
 
-      // Print an error message in the REPL console
-      replConsole.value += "\nBluetooth error. Are you connected?";
+        // Print an error message in the REPL console
+        replConsole.value += "\nBluetooth error. Are you connected?";
 
-      // Move the cursor forward
-      cursorPosition = replConsole.value.length;
+        // Move the cursor forward
+        cursorPosition = replConsole.value.length;
 
-      // Focus the cursor to the REPL console, and scroll down
-      focusREPL();
+        // Focus the cursor to the REPL console, and scroll down
+        // focusREPL();
 
-      // Log the error to the debug console
-      console.error(error);
-  });
+        // Log the error to the debug console
+        console.error(error);
+    });
+  }
 }
 function handleShift(event) {
   let currentLayout = myKeyboard.options.layoutName;

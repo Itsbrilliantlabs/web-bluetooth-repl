@@ -624,6 +624,12 @@ width: 100%;
   width: 10px;
   z-index: -1;
 }
+.simple-keyboard{
+  display: none;
+  position: fixed;
+  bottom: 0;
+
+}
 @media only screen and (max-width: 900px) {
     
     .app {
@@ -674,6 +680,9 @@ width: 100%;
     .firmware-update-box{
       width: 80vw;
     }
-    
+    .simple-keyboard{
+  display: block;
+  
+}
   }
   
