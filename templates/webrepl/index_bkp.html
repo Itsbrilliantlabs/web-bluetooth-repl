@@ -139,10 +139,23 @@
         </footer>
 
     </div>
+  <!-- <div class="bg-overlay off">
+        <div class="firmware-update-box">
+            <span>Firmware updating</span>
 
+            <div class="progress-container" data-percentage='0'>
+                <div class="progress"></div>
+                <div class="percentage">0%</div>
+              </div>
+        </div>
+    </div> -->
+    <div class="simple-keyboard"></div>
 </body>
 <script src="{% static 'js/ace.js' %}" type="text/javascript" charset="utf-8"></script>
 <script src="{% static 'js/ext-language_tools.js' %}" type="text/javascript" charset="utf-8"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/index.js"></script>
+<script  src="{% static 'js/keyboard.js' %}" ></script>
+
 <!-- Javascript for interacting with the REPL console and buttons -->
 <script>
     // Text shown in the REPL when there is no connection
