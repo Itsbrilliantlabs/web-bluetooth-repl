@@ -2,7 +2,30 @@ const Keyboard = window.SimpleKeyboard.default;
 
 const myKeyboard = new Keyboard({
 //   onChange: input => onChange(input),
-  onKeyPress: button => onKeyPress(button)
+  onKeyPress: button => onKeyPress(button),
+  display: {
+    '{bksp}': '&#128281;',
+    '{enter}': '&#9166;',
+    '{space}' : '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
+  },
+  mergeDisplay: true,
+  autoUseTouchEvents: true,
+  layout: {
+    'default': [
+      '` 1 2 3 4 5 6 7 8 9 0 - = {bksp}',
+      'q w e r t y u i o p [ ] \\',
+      'a s d f g h j k l ; \'',
+      '{tab} z x c v b n m , . / {shift}',
+      '.com {space} {enter}'
+    ],
+    'shift': [
+      '~ ! @ # $ % ^ &amp; * ( ) _ + {bksp}',
+      'Q W E R T Y U I O P { } |',
+      'A S D F G H J K L : "',
+      '{tab} Z X C V B N M &lt; &gt; ? {shift}',
+      '@ {space} {enter}'
+    ]
+  }
 });
 function onChange(input) {
 //   document.querySelector(".input").value = input;
