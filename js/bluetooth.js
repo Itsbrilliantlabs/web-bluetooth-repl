@@ -7,6 +7,11 @@ var rawDataTxCharacteristic = null;
 const replDataServiceUuid = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
 const replRxCharacteristicUuid = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
 const replTxCharacteristicUuid = "6e400003-b5a3-f393-e0a9-e50e24dcca9e";
+// const dfuServiceUuid = "0000fe59-0000-1000-8000-00805f9b34fb"
+const dfuServiceUuid = 0xFE59
+const CONTROL_UUID = "8ec90001-f315-4f60-9fb8-838830daea50";
+const PACKET_UUID = "8ec90002-f315-4f60-9fb8-838830daea50";
+const BUTTON_UUID = "8ec90003-f315-4f60-9fb8-838830daea50";
 
 const rawDataServiceUuid = "e5700001-7bac-429a-b4ce-57ff900f479d";
 const rawDataRxCharacteristicUuid = "e5700002-7bac-429a-b4ce-57ff900f479d";
@@ -48,35 +53,51 @@ async function connectDisconnect() {
         // Otherwise bring up the device window
         device = await navigator.bluetooth.requestDevice({
 
-            filters: [{
-                services: [replDataServiceUuid]
-            }],
-            optionalServices: [rawDataServiceUuid]
+            // filters: [{
+            //     services: []
+            // }],
+            acceptAllDevices: true,
+            optionalServices: [replDataServiceUuid,rawDataServiceUuid,dfuServiceUuid,CONTROL_UUID,PACKET_UUID, BUTTON_UUID]
         });
 
-        // Handler to watch for device being disconnected due to loss of connection
-        device.addEventListener('gattserverdisconnected', disconnectHandler);
+        let deviceName = String(device.name).toLocaleLowerCase()
+        // if monocle continue and if DfuTarg update
+        if(deviceName=='monocle'){
+            // Handler to watch for device being disconnected due to loss of connection
+            device.addEventListener('gattserverdisconnected', disconnectHandler);
 
-        const server = await device.gatt.connect();
+            const server = await device.gatt.connect();
 
-        const replService = await server.getPrimaryService(replDataServiceUuid);
-        replRxCharacteristic = await replService.getCharacteristic(replRxCharacteristicUuid);
-        replTxCharacteristic = await replService.getCharacteristic(replTxCharacteristicUuid);
+            const replService = await server.getPrimaryService(replDataServiceUuid);
+            replRxCharacteristic = await replService.getCharacteristic(replRxCharacteristicUuid);
+            replTxCharacteristic = await replService.getCharacteristic(replTxCharacteristicUuid);
 
-        const rawDataService = await server.getPrimaryService(rawDataServiceUuid);
-        rawDataRxCharacteristic = await rawDataService.getCharacteristic(rawDataRxCharacteristicUuid);
-        rawDataTxCharacteristic = await rawDataService.getCharacteristic(rawDataTxCharacteristicUuid);
+            const rawDataService = await server.getPrimaryService(rawDataServiceUuid);
+            rawDataRxCharacteristic = await rawDataService.getCharacteristic(rawDataRxCharacteristicUuid);
+            rawDataTxCharacteristic = await rawDataService.getCharacteristic(rawDataTxCharacteristicUuid);
 
-        // Start notifications on the receiving characteristic and create handlers
-        await replTxCharacteristic.startNotifications();
-        await rawDataTxCharacteristic.startNotifications();
-        replTxCharacteristic.addEventListener('characteristicvaluechanged', receiveUartData);
-        rawDataTxCharacteristic.addEventListener('characteristicvaluechanged', receiveRawData);
+            // Start notifications on the receiving characteristic and create handlers
+            await replTxCharacteristic.startNotifications();
+            await rawDataTxCharacteristic.startNotifications();
+            replTxCharacteristic.addEventListener('characteristicvaluechanged', receiveUartData);
+            rawDataTxCharacteristic.addEventListener('characteristicvaluechanged', receiveRawData);
 
-        // Start sending data
-        setInterval(transmitReplData);
+            // Start sending data
+            setInterval(transmitReplData);
 
-        return Promise.resolve("connected");
+            return Promise.resolve("connected");
+        }else if(deviceName=='dfutarg'){
+            // const dfu = new SecureDfu(CRC32.buf);
+            await doDFU(()=>{
+                toggleUpdateButtons(false)
+                updateCont.classList.remove('off')
+                selectDevice(device)
+            })
+            
+        }else{
+            throw Error('Not a monocle or dfu device')
+        }
+        
 
     } catch (error) {
 

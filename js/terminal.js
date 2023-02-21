@@ -152,14 +152,14 @@ connectButton.addEventListener('click', ()=>{
         // checkVersion()
         return;
     }
-    if(localStorage.getItem('updateInprogess')==1){
-        if(confirm("Continue failed Update")){
-            doDFU()
-            return;
-        }else{
-            localStorage.setItem('updateInprogess',0)
-        }
-    }
+    // if(localStorage.getItem('updateInprogess')==1){
+    //     if(confirm("Continue failed Update")){
+    //         doDFU()
+    //         return;
+    //     }else{
+    //         localStorage.setItem('updateInprogess',0)
+    //     }
+    // }
     initiatWebBleConnect()
 })
 

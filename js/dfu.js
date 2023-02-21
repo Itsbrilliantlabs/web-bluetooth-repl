@@ -3,17 +3,25 @@
  const updateCont = document.querySelector('.bg-overlay');
  
  function setPercentage(percentage) {
-   const progressContainer = document.querySelector('.progress-container');
+    const progressContainer = document.querySelector('.progress-container');
+
    const progressEl = progressContainer.querySelector('.progress');
    const percentageEl = progressContainer.querySelector('.percentage');
-   const updateBtn = progressContainer.parentNode.querySelector('.update-group');
+
    progressEl.style.width = percentage+"%";
    percentageEl.innerText = percentage+"%";
    percentageEl.style.left = percentage+"%";
    document.getElementById('update-start-btn').style.display = 'block'
    document.getElementById('update-cancel-btn').innerHTML = 'Cancel'
    document.getElementById('update-start-btn').innerHTML = 'Start Update'
-   if(percentage==0 || percentage==100){
+   
+ }
+ function toggleUpdateButtons(on=true){
+    
+    const progressContainer = document.querySelector('.progress-container');
+
+ const updateBtn = progressContainer.parentNode.querySelector('.update-group');
+    if(on){
         progressContainer.style.display = "none";
         updateBtn.style.display = "block"
    }else{
@@ -21,7 +29,6 @@
         updateBtn.style.display = "none"
    }
  }
- 
  function firmwareUpdateStarted(start=true){
 
     if(start){
@@ -37,11 +44,11 @@
  setPercentage(0)
  function firmwareFound(){
     document.querySelector('.firmware-update-box span').innerHTML = "Firmware found "+latestVersion.innerHTML+". After start Select DfuTarg as Device"
-    setPercentage(0)
+    toggleUpdateButtons(true)
     updateCont.classList.remove('off')
  }
  var package = null
- function setPackage(file) {
+ function setPackage(file,callBack=false) {
     if (!file) return;
 
     package = new SecureDfuPackage(file);
@@ -49,8 +56,14 @@
     .then(() => {
         // setStatus(`Firmware package: ${file.name}`);
         // selectEl.style.visibility = "visible";
-      firmwareFound()
         console.log(`Firmware package: ${file.name}`)
+        if(callBack){
+            callBack()
+        }else{
+            firmwareFound()
+        }
+      
+       
     })
     .catch(error => {
         // selectEl.style.visibility = "hidden";
@@ -60,7 +73,7 @@
 }
 
 // Choose a device
-function selectDevice() {
+function selectDevice(device=false) {
     // setStatus("Selecting device...");
     // setTransfer();
 
@@ -73,6 +86,9 @@ function selectDevice() {
         setPercentage(Math.floor(event.currentBytes*100/event.totalBytes))
     });
 
+    if(device){
+        return update(dfu, device);
+    }
     dfu.requestDevice(true)
     .then(device => {
         if (!device) {
@@ -117,7 +133,6 @@ function update(dfu, device) {
         document.getElementById('update-start-btn').style.display = 'none'
         document.getElementById('update-cancel-btn').innerHTML = 'Connect'
         firmwareUpdateStarted(false)
-        localStorage.setItem('updateInprogess',0)
 
     })
     .catch(error => {
@@ -128,13 +143,12 @@ function update(dfu, device) {
     });
 }
 
-async function doDFU() {
+async function doDFU(afterPackageLoad=false) {
     // first download and parse zip
-    localStorage.setItem('updateInprogess',1)
-   await fetch(latestVersion.getAttribute('data-zip-url')).then(data=>{
+   await fetch(latestVersion.getAttribute('data-zip-url')).then(async data=>{
     // let zipFile = new Blob(d,{type:"application/zip"})
-    data.blob().then(d=>{
-      setPackage(d)
+    await data.blob().then(d=>{
+      setPackage(d,afterPackageLoad)
     })
    })
 }
