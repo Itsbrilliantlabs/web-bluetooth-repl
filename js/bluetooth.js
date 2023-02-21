@@ -90,7 +90,6 @@ async function connectDisconnect() {
             // const dfu = new SecureDfu(CRC32.buf);
             await doDFU(()=>{
                 toggleUpdateButtons(false)
-                updateCont.classList.remove('off')
                 selectDevice(device)
             })
             

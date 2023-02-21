@@ -36,17 +36,13 @@
         // setPercentage(0)
         // updateCont.classList.remove('off')
     }else{
+        toggleUpdateButtons(true)
         document.querySelector('.firmware-update-box span').innerHTML = "Firmware update Complete"
  
     }
 
  }
  setPercentage(0)
- function firmwareFound(){
-    document.querySelector('.firmware-update-box span').innerHTML = "Firmware found "+latestVersion.innerHTML+". After start Select DfuTarg as Device"
-    toggleUpdateButtons(true)
-    updateCont.classList.remove('off')
- }
  var package = null
  function setPackage(file,callBack=false) {
     if (!file) return;
@@ -56,13 +52,17 @@
     .then(() => {
         // setStatus(`Firmware package: ${file.name}`);
         // selectEl.style.visibility = "visible";
+        document.querySelector('.firmware-update-box span').innerHTML = "Firmware found "+latestVersion.innerHTML+". After start Select DfuTarg as Device"
+
         console.log(`Firmware package: ${file.name}`)
         if(callBack){
+
             callBack()
+           
         }else{
-            firmwareFound()
+            toggleUpdateButtons(true)
         }
-      
+        updateCont.classList.remove('off')
        
     })
     .catch(error => {
@@ -133,13 +133,14 @@ function update(dfu, device) {
         document.getElementById('update-start-btn').style.display = 'none'
         document.getElementById('update-cancel-btn').innerHTML = 'Connect'
         firmwareUpdateStarted(false)
+        
 
     })
     .catch(error => {
         console.log(error)
         document.querySelector('.firmware-update-box span').innerHTML = "firmware updating to "+latestVersion.innerHTML +" failed"
         document.getElementById('update-start-btn').innerHTML = 'Try Again'
-        setPercentage(0)
+        toggleUpdateButtons(true)
     });
 }
 
