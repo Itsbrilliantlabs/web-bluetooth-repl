@@ -117,6 +117,7 @@ function update(dfu, device) {
         document.getElementById('update-start-btn').style.display = 'none'
         document.getElementById('update-cancel-btn').innerHTML = 'Connect'
         firmwareUpdateStarted(false)
+        localStorage.setItem('updateInprogess',0)
 
     })
     .catch(error => {
@@ -129,6 +130,7 @@ function update(dfu, device) {
 
 async function doDFU() {
     // first download and parse zip
+    localStorage.setItem('updateInprogess',1)
    await fetch(latestVersion.getAttribute('data-zip-url')).then(data=>{
     // let zipFile = new Blob(d,{type:"application/zip"})
     data.blob().then(d=>{
