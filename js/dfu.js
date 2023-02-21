@@ -32,6 +32,7 @@
  function firmwareUpdateStarted(start=true){
 
     if(start){
+        toggleUpdateButtons(false)
         document.querySelector('.firmware-update-box span').innerHTML = "Starting firmware update to "+latestVersion.innerHTML
         // setPercentage(0)
         // updateCont.classList.remove('off')
