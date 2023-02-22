@@ -25,7 +25,7 @@ var rawDataTxInProgress = false;
 
 // Web-Bluetooth doesn't have any MTU API, so we just set it to something reasonable
 const max_mtu = 100;
-
+var intervalId = null
 function isWebBluetoothAvailable() {
     return new Promise((resolve, reject) => {
         navigator.bluetooth
@@ -45,7 +45,7 @@ async function connectDisconnect() {
             await device.gatt.disconnect();
 
             // Stop transmitting data
-            clearInterval(transmitReplData);
+            clearInterval(intervalId);
 
             return Promise.resolve("disconnected");
         }
@@ -83,7 +83,7 @@ async function connectDisconnect() {
             rawDataTxCharacteristic.addEventListener('characteristicvaluechanged', receiveRawData);
 
             // Start sending data
-            setInterval(transmitReplData);
+            intervalId = setInterval(transmitReplData);
 
             return Promise.resolve("connected");
         }else if(deviceName=='dfutarg'){
