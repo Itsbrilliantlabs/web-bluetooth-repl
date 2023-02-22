@@ -138,7 +138,7 @@
     
         // Move the cursor forward
         cursorPosition = replConsole.value.length;
-        sendUartData("\x02")
+        // sendUartData("\x02")
          
         setTimeout(()=>{
             // checkVersion()
@@ -148,7 +148,7 @@
             replConsole.value = '';
             cursorPosition = 0;
             sendUartData("\x02"); // Send Ctrl-B to enter friendly mode
-        },1000)
+        },500)
     
     }
     
