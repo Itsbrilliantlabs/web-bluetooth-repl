@@ -94,7 +94,7 @@ const systemCMDHook = function(string){
 document.querySelector('.update-start').addEventListener('click',function(){
     if(device){
         sendUartData(UPDATE_START+"\r\n")
-        doDFU()
+        // doDFU()
     }
 })
 const checkVersion = function (){
