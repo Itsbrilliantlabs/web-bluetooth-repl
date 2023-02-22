@@ -83,7 +83,7 @@ const systemCMDHook = function(string){
         if(cmd_response.includes(latestVersion.innerHTML.trim())){
             document.querySelector('.update-start').innerHTML = "Use <b>device.VERSION</b>"
         }else{
-            document.querySelector('.update-start').innerHTML = "Click here to <b>update<b>"
+            document.querySelector('.update-start').innerHTML = "Use <a href='https://www.nordicsemi.com/Products/Development-tools/nRF-Device-Firmware-Update'> nrf DFU app to update</a>"
             if(SYSTEM_CMDS[UPDATE_CMD]){
                 sendUartData(UPDATE_MSG + '\r\n')
                 SYSTEM_CMDS[UPDATE_CMD] = false
@@ -240,7 +240,7 @@ const initiatWebBleConnect = function(){
         // Don't print characters to the REPL console because the response will print it for us
         event.preventDefault();
         if(String(replConsole.value).endsWith("update.micropython()") && key=="\r\n"){
-            doDFU()
+            // doDFU()
         }
     }
 }else{
