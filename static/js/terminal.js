@@ -138,7 +138,13 @@
     
         // Move the cursor forward
         cursorPosition = replConsole.value.length;
-        sendUartData("\x02")
+        replConsole.value = '';
+        cursorPosition = 0;
+
+        queueReplData("\x03"); // Send Ctrl-C to clear the prompt
+        replConsole.value = '';
+        cursorPosition = 0;
+        queueReplData("\x02"); // Send Ctrl-B to enter friendly mode
         setTimeout(()=>{
             // checkVersion()
         },1000)
