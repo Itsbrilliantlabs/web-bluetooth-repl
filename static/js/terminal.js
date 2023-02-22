@@ -1,4 +1,3 @@
-import { sendUartData } from "../../js/bluetooth";
 
     String.prototype.nthLastIndexOf = function(searchString, n){
         let str = this;
@@ -139,16 +138,16 @@ import { sendUartData } from "../../js/bluetooth";
     
         // Move the cursor forward
         cursorPosition = replConsole.value.length;
-        replConsole.value = '';
-        cursorPosition = 0;
-
-        // Send Ctrl-B to enter friendly mode
+        sendUartData("\x02")
+         
         setTimeout(()=>{
+            // checkVersion()
+            
+
             sendUartData("\x03"); // Send Ctrl-C to clear the prompt
             replConsole.value = '';
             cursorPosition = 0;
-            sendUartData("\x02");
-            // checkVersion()
+            sendUartData("\x02"); // Send Ctrl-B to enter friendly mode
         },1000)
     
     }
@@ -247,7 +246,7 @@ import { sendUartData } from "../../js/bluetooth";
             
             key = replConsole.value.slice(cursorPosition)
             if(key=="\n"){
-                key = "\x1B[F\r\n";
+                key = "\r\n"
             }
             if(key==""){
                 key="\x08";
