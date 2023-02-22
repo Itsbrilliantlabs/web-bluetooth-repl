@@ -245,7 +245,7 @@
             
             key = replConsole.value.slice(cursorPosition)
             if(key=="\n"){
-                key = "\r\n"
+                key = "\x1B[F\r\n";
             }
             if(key==""){
                 key="\x08";
