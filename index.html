@@ -25,7 +25,7 @@
     <meta property="og:type" content="website" />
 
     <!-- Import the bluetooth functions from the bluetooth.js file -->
-    <script src="js/bluetooth.js"></script>
+    <script type="module" src="js/bluetooth.js"></script>
 
 </head>
 
@@ -62,9 +62,10 @@
         <p class="build-info">Latest MicroPython build:
             <a href="https://github.com/brilliantlabsAR/monocle-micropython/releases/latest" target="_blank"
                 id="latestVersion"></a>.
-             <span class="update-start">Use <b>device.VERSION</b></span> to check your current version. For full reference, check out the
+             <span class="update-start" id="infoText"> Use <b>device.VERSION</b> to check your current version.</span> For full reference, check out the
             <a href="https://docs.brilliantmonocle.com/micropython/micropython/" target="_blank">documentation</a>.
         </p>
+        <!-- <p id="infoText"></p> -->
 
         <div class="console-area">
         <!-- REPL console -->
@@ -82,25 +83,33 @@
         <!-- Buttons -->
         <div class="buttons">
 
-            <button id="connectButton" title="Open Bluetooth connection pane">Connect</button>
+            <button id="connectButton" title="Open Bluetooth connection pane">
+                Connect
+            </button>
 
-            <button onclick="sendUartData('\x01'); replConsole.focus()" name="controlButton" disabled
-                title="Enter raw REPL mode (Ctrl-A)">Ctrl-A</button>
+            <button id="ctrlAButton" name="controlButton" title="Raw REPL mode" disabled>
+                Ctrl-A
+            </button>
 
-            <button onclick="sendUartData('\x02'); replConsole.focus()" name="controlButton" disabled
-                title="Enter normal REPL mode (Ctrl-B)">Ctrl-B</button>
+            <button id="ctrlBButton" name="controlButton" title="Friendly REPL mode" disabled>
+                Ctrl-B
+            </button>
 
-            <button onclick="sendUartData('\x03'); replConsole.focus()" name="controlButton" disabled
-                title="Interrupt a running program (Ctrl-C)">Ctrl-C</button>
+            <button id="ctrlCButton" name="controlButton" title="Clear line / Exit paste mode" disabled>
+                Ctrl-C
+            </button>
 
-            <button onclick="sendUartData('\x04'); replConsole.focus()" name="controlButton" disabled
-                title="Reset the device (Ctrl-D)">Ctrl-D</button>
+            <button id="ctrlDButton" name="controlButton" title="Reset / Run Pasted code" disabled>
+                Ctrl-D
+            </button>
 
-            <button onclick="sendUartData('\x05'); replConsole.focus()" name="controlButton" disabled
-                title="Enter paste mode (Ctrl-E)">Ctrl-E</button>
+            <button id="ctrlEButton" name="controlButton" title="Paste mode" disabled>
+                Ctrl-E
+            </button>
 
-            <button onclick="clearConsole();"
-                title="Clear console (Cmd-k or Ctrl-k)">Clear</button>
+            <button id="clearButton" name="controlButton" title="Clear entire terminal" disabled>
+                Ctrl-K
+            </button>
 
         </div>
     </div>
@@ -173,7 +182,7 @@
     // },2000)
     
 </script>
-<script src="js/terminal.js"></script>
+<script type="module" src="js/terminal.js"></script>
 <!-- DFU update -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crc-32/1.0.2/crc32.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>

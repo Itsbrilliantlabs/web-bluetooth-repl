@@ -1,3 +1,6 @@
+import {connectDisconnect, sendUartData} from "./bluetooth.js"
+import { getLatestGitTag ,} from "./gitutils.js";
+
 String.prototype.nthLastIndexOf = function(searchString, n){
     let str = this;
     if(str === null) {
@@ -33,7 +36,14 @@ let touchendX = 0
 let touchstartY = 0
 let touchendY = 0
 let startTime = 0
+// Variables for handling raw REPL responses
+var catchResponseFlag = false;
+var catchResponseString = "";
 
+// Variables regarding current firmware version and repo link
+var latestGitTag = "";
+var gitRepoLink = "";
+const infoText = document.getElementById('infoText');
 function checkDirection() {
     let elapsedTime = (new Date() - startTime)
     console.log(`(${touchendX-touchstartX}, ${touchendY-touchstartY})`)
@@ -114,6 +124,8 @@ const clearConsole = () =>{
 }
 //on connect actions
 const onConnectRepl = () => {
+     // Prepare for automated command handling
+    catchResponseFlag = true;
     spinner.style.display = "none"
 
     // Clear placeholder text in the REPL console
@@ -135,12 +147,96 @@ const onConnectRepl = () => {
     cursorPosition = replConsole.value.length;
     sendUartData("\x02")
     setTimeout(()=>{
-        checkVersion()
+         // Enter raw REPL mode to get device info and suggest updates
+         sendUartData("\x03"); // Send Ctrl-C to clear the prompt
+         sendUartData("\x01"); // Send Ctrl-A to enter RAW mode
+         sendUartData("import device\r\n");
+         sendUartData("print(device.GIT_REPO)\r\n");
+         sendUartData("\x04"); // Send Ctrl-D to execute
     },500)
 
 }
 
+async function processCaughtResponse(string) {
 
+    console.log("Background REPL response");
+    console.log(string);
+
+    let exitRawReplModeFlag = false;
+
+    if (string.includes("no module named 'device'") ||
+        string.includes("no attribute 'GIT_REPO'")) {
+
+        infoText.innerText = "Could not automatically detect the device. " +
+            "Automation features may not be available. Be sure to update " +
+            "your device to receive these latest improvements."
+
+        exitRawReplModeFlag = true;
+    }
+
+    if (string.includes("https://github.com/")) {
+
+        gitRepoLink = string.substring(string.indexOf("https"),
+            string.lastIndexOf('\r\n'));
+
+        let owner = gitRepoLink.split('/')[3];
+        let repo = gitRepoLink.split('/')[4];
+
+        latestGitTag = await getLatestGitTag(owner, repo);
+
+        // Check the device version
+        sendUartData("print('VERSION='+device.VERSION)\r\n");
+        sendUartData("\x04");
+    }
+
+    if (string.includes("VERSION=")) {
+
+        let currentVersion =
+            string.substring(string.indexOf("=v") + 1, string.lastIndexOf("\r\n"));
+
+        if ((currentVersion != latestGitTag) &&
+            gitRepoLink.includes("monocle")) {
+
+            // Show update message on the display
+            sendUartData("import display\r\n");
+            sendUartData("display.text('New firmware available',100,180,0xffffff)\r\n");
+            sendUartData("display.show()\r\n");
+            sendUartData("print('NOTIFIED UPDATE')\r\n");
+            sendUartData("\x04");
+
+            infoText.innerHTML = " Click <a href='#' " +
+                "onclick='startMonocleFirmwareUpdate();return false;'>" +
+                "here</a> to update.";
+        }
+
+        else {
+            infoText.innerHTML = "";
+            exitRawReplModeFlag = true;
+        }
+    }
+
+    if (string.includes("NOTIFIED UPDATE")) {
+        // Wait until the previous commands are fully processed
+        exitRawReplModeFlag = true;
+    }
+
+    if (string.includes("UPDATE STARTED")) {
+        // Wait until the update commands are fully processed
+        exitRawReplModeFlag = true;
+    }
+
+    if (exitRawReplModeFlag) {
+
+        // Clear the screen
+        replConsole.value = '';
+        cursorPosition = 0;
+
+        sendUartData("\x03"); // Send Ctrl-C to clear the prompt
+        sendUartData("\x02"); // Send Ctrl-B to enter friendly mode
+
+        catchResponseFlag = false;
+    }
+}
 // When the connect/disconnect button is pressed
 connectButton.addEventListener('click', ()=>{
     spinner.style.display = "inline-block"
@@ -163,6 +259,37 @@ connectButton.addEventListener('click', ()=>{
     initiatWebBleConnect()
 })
 
+ctrlAButton.addEventListener('click', () => {
+    sendUartData('\x01');
+    replConsole.focus()
+});
+
+ctrlBButton.addEventListener('click', () => {
+    sendUartData('\x02');
+    replConsole.focus()
+});
+
+ctrlCButton.addEventListener('click', () => {
+    sendUartData('\x03');
+    replConsole.focus()
+});
+
+ctrlDButton.addEventListener('click', () => {
+    sendUartData('\x04');
+    replConsole.focus()
+});
+
+ctrlEButton.addEventListener('click', () => {
+    sendUartData('\x05');
+    replConsole.focus()
+});
+
+clearButton.addEventListener('click', () => {
+    replConsole.value = '';
+    cursorPosition = 0;
+    sendUartData('\x03');
+    replConsole.focus();
+});
 const initiatWebBleConnect = function(){
     spinner.style.display = "inline-block"
 
@@ -175,7 +302,7 @@ const initiatWebBleConnect = function(){
         if (result === "connected") {
             onConnectRepl()
             // Send Ctrl-C to the device
-            sendUartData("\x03");
+            // sendUartData("\x03");
             // checkVersion()
             // Focus the cursor to the REPL console, and scroll down
             focusREPL();
@@ -250,6 +377,8 @@ const initiatWebBleConnect = function(){
         key = replConsole.value.slice(cursorPosition)
         if(key=="\n"){
             key = "\r\n"
+            key = "\x1B[F\r\n"; // Send End key before sending \r\n
+
         }
         if(key==""){
             key="\x08";
@@ -353,152 +482,70 @@ replConsole.onkeydown = (event) => {
     if (event.metaKey) {
         switch (event.key) {
 
-            // In the case of Meta-K or Meta-backspace
-            case 'k':
+            case 'a':
+                sendUartData("\x01"); // Send Ctrl-A
+                break;;
 
-                // Clear the console
-                replConsole.value = "";
+            case 'b':
+                sendUartData("\x02"); // Send Ctrl-B
+                break;;
 
-                // Reset the cursor position to zero
-                cursorPosition = 0;
+            case 'c':
+                sendUartData("\x03"); // Send Ctrl-C
+                break;;
 
-                // Send control code 03 to reset the REPL
-                sendUartData("\x03")
-                // .catch(disconnectError);
+            case 'd':
+                sendUartData("\x04"); // Send Ctrl-D
+                break;;
 
-                // Prevent any action in the REPL console
-                event.preventDefault();
+            case 'e':
+                sendUartData("\x05"); // Send Ctrl-E
+                break;;
 
-                // Return
-                return;
-
-            // In the case of Meta-backspace
-            case 'Backspace':
-
-                // Send a bunch of backspaces to clear the whole line
-                sendUartData("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b")
-                // .catch(disconnectError);
-
-                // Prevent any action in the REPL console
-                event.preventDefault();
-
-                // Return
-                return;
-
-            // In the case of Meta-right
-            case 'ArrowRight':
-
-                // Send a bunch of right arrow keys
-                sendUartData("\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C" +
-                    "\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C" +
-                    "\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C\x1B[C")
-                    // .catch(disconnectError);
-
-                // Prevent any action in the REPL console
-                event.preventDefault();
-
-                // Return
-                return;
-
-            // In the case of Meta-left
-            case 'ArrowLeft':
-
-                // Send a bunch of left arrow keys
-                sendUartData("\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D" +
-                    "\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D" +
-                    "\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D\x1B[D")
-                    // .catch(disconnectError);
-
-                // Prevent any action in the REPL console
-                event.preventDefault();
-
-                // Return
+            case 'v':
+                // Allow pasting
                 return;
         }
     }
 
-    // If backspace is pressed
-    if (event.key === 'Backspace') {
+    switch (event.key) {
 
-        // Send control code 08
-        sendUartData("\x08");
+        case 'Backspace':
+            sendUartData("\x08"); // Send backspace
+            break;
 
-        // Prevent any action in the REPL console
-        event.preventDefault();
+        case 'ArrowUp':
+            sendUartData("\x1B[A"); // Send up arrow key
+            break;
 
-        // Return
-        return;
+        case 'ArrowDown':
+            sendUartData("\x1B[B"); // Send down arrow key
+            break;
+
+        case 'ArrowRight':
+            sendUartData("\x1B[C"); // Send right arrow key
+            break;
+
+        case 'ArrowLeft':
+            sendUartData("\x1B[D"); // Send left arrow key
+            break;
+
+        case 'Tab':
+            sendUartData("\x09"); // Send Tab key
+            break;
+
+        case 'Enter':
+            // sendUartData("\x1B[F\r\n"); // Send End key before sending \r\n
+            break;
+
+        default:
+            // Only printable keys
+            // if (event.key.length == 1) {
+            //     sendUartData(event.key)
+            // }
+            break;
     }
-
-    // If up is pressed
-    if (event.key === 'ArrowUp') {
-
-        // Send control sequence ESC-[A
-        sendUartData("\x1B[A")
-        // .catch(disconnectError);
-
-        // Prevent any action in the REPL console
-        event.preventDefault();
-
-        // Return
-        return;
-    }
-
-    // If down is pressed
-    if (event.key === 'ArrowDown') {
-
-        // Send control sequence ESC-[B
-        sendUartData("\x1B[B")
-        // .catch(disconnectError);
-
-        // Prevent any action in the REPL console
-        event.preventDefault();
-
-        // Return
-        return;
-    }
-
-    // If right is pressed
-    if (event.key === 'ArrowRight') {
-
-        // Send control sequence ESC-[C
-        sendUartData("\x1B[C")
-        // .catch(disconnectError);
-
-        // Prevent any action in the REPL console
-        event.preventDefault();
-
-        // Return
-        return;
-    }
-
-    // If left is pressed
-    if (event.key === 'ArrowLeft') {
-
-        // Send control sequence ESC-[D
-        sendUartData("\x1B[D")
-        // .catch(disconnectError);
-
-        // Prevent any action in the REPL console
-        event.preventDefault();
-
-        // Return
-        return;
-    }
-
-    // If Tab is pressed
-    if (event.key === 'Tab') {
-
-        // Send control code 09
-        sendUartData("\x09")
-        // .catch(disconnectError);
-
-        // Prevent any action in the REPL console
-        event.preventDefault();
-
-        // Return
-        return;
-    }
+    // event.preventDefault()
 }
 
 const disconnectError = error => {
@@ -516,7 +563,7 @@ const disconnectError = error => {
     console.error(error);
 }
 // Handle pasting of text into the REPL
-function pasteEvent() {
+replConsole.onpaste = function () {
 
     // Read the clipboard
     navigator.clipboard.readText()
@@ -549,75 +596,75 @@ function pasteEvent() {
 
 function uartStringDataHandler(string){
 
-    // For every character in the incoming string (i is incremented internally)
+    // If catching raw REPL responses, handle separately
+    if (catchResponseFlag) {
+
+        // Concat the string until '>' appears
+        catchResponseString += string;
+
+        if (catchResponseString.slice(-1) === '>') {
+
+            processCaughtResponse(catchResponseString);
+
+            catchResponseString = "";
+        }
+
+        return;
+    }
+
+    // For every character in the string, i is incremented internally
     for (let i = 0; i < string.length;) {
 
-        // Check if there's a backspace character at the current position
+        // Move cursor back one if there is a backspace
         if (string.indexOf('\b', i) == i) {
 
-            // Move the cursor back by one space
             cursorPosition--;
-
-            // Skip past the backspace character
             i += '\b'.length;
         }
 
-        // Check if there is a carriage return at the current position
+        // Skip carriage returns. We only need newlines '\n'
         else if (string.indexOf('\r', i) == i) {
 
-            // Skip past the carriage return character
             i += '\r'.length;
         }
 
-        // Check if there's an ESC-[K sequence at the current position
+        // ESC-[K deletes to the end of the line
         else if (string.indexOf('\x1B[K', i) == i) {
 
-            // Remove everything from the cursor to the end of the string
             replConsole.value = replConsole.value.slice(0, cursorPosition);
-
-            // Skip ahead past the ESC-[K
             i += '\x1B[K'.length;
         }
 
-        // Check if there's an ESC-[nD sequence at the current position
+        // ESC-[nD moves backwards n characters
         else if (string.slice(i).search(/\x1B\[\d+D/) == 0) {
 
             // Extract the number of spaces to move
             let backspaces = parseInt(string.slice(i).match(/(\d+)(?!.*\1)/g));
-
-            // Move the cursor back that many spaces
             cursorPosition -= backspaces;
-
-            // Skip ahead past the ESC-[nD
             i += '\x1B[D'.length + String(backspaces).length;
         }
 
-        // Otherwise for all other characters
+        // Append other characters as normal
         else {
 
-            // Append the output with the new character
             replConsole.value = replConsole.value.slice(0, cursorPosition)
                 + string[i]
                 + replConsole.value.slice(cursorPosition + 1);
 
-            // Move the cursor forward by one space
             cursorPosition++;
-
-            // Skip one character
             i++;
         }
-        }
+    }
 
-        // Reposition the cursor
-        replConsole.selectionEnd = cursorPosition;
-        replConsole.selectionStart = cursorPosition;
+    // Reposition the cursor
+    replConsole.selectionEnd = cursorPosition;
+    replConsole.selectionStart = cursorPosition;
 
-        // Make sure the REPL console is scrolled all the way down
-        replConsole.scrollTop = replConsole.scrollHeight;
+    replConsole.scrollTop = replConsole.scrollHeight;
         systemCMDHook(string)
 }
 // Whenever data arrives over bluetooth
-function receiveUartData(event) {
+export function receiveUartData(event) {
 
     // Decode the byte array into a UTF-8 string
     const decoder = new TextDecoder('utf-8');
@@ -628,7 +675,7 @@ function receiveUartData(event) {
     
 }
 // Whenever raw data arrives over bluetooth
-function receiveRawData(event) {
+export function receiveRawData(event) {
     console.log(event.target.value);
 
     try{
@@ -705,7 +752,7 @@ const appendBuffer = function (buffer) {
 };
 
 // Whenever a disconnect event occurs
-function disconnectHandler() {
+export function disconnectHandler() {
 
     // Print "disconnected" in the REPL console
     replConsole.value = replConsole.value + "\nDisconnected";
@@ -755,6 +802,23 @@ replConsole.addEventListener('focus',()=>{
     // consoleControl.classList.add("blur")
     // arrowToggleBtn.parentNode.classList.add("blur")
 })
+
+window.startMonocleFirmwareUpdate = () => {
+
+    catchResponseFlag = true;
+
+    sendUartData("\x03"); // Send Ctrl-C to clear the prompt
+    sendUartData("\x01"); // Send Ctrl-A to enter RAW mode
+
+    sendUartData("import display\r\n");
+    sendUartData("display.text('Updating firmware...',120,180,0xffffff)\r\n");
+    sendUartData("display.show()\r\n");
+    sendUartData("import update\r\n");
+    sendUartData("update.micropython()\r\n");
+    sendUartData("print('UPDATE STARTED')\r\n");
+
+    sendUartData("\x04"); // Send Ctrl-D to execute
+}
 // let arrowBtns = document.querySelectorAll(".arrow")
 // arrowBtns.forEach(el=>{
 //     el.addEventListener("click",function(e){

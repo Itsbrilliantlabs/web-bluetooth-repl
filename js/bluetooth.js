@@ -1,8 +1,10 @@
+import { disconnectHandler, receiveUartData,receiveRawData } from "./terminal.js";
 var device = null;
 var replRxCharacteristic = null;
 var replTxCharacteristic = null;
 var rawDataRxCharacteristic = null;
 var rawDataTxCharacteristic = null;
+const nativeFunc = window.ReactNativeWebView?.postMessage||false; 
 
 const replDataServiceUuid = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
 const replRxCharacteristicUuid = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
@@ -34,7 +36,7 @@ function isWebBluetoothAvailable() {
     });
 }
 
-async function connectDisconnect() {
+export async function connectDisconnect() {
     try {
 
         await isWebBluetoothAvailable();
@@ -111,7 +113,7 @@ function queueReplData(string) {
     replDataTxQueue.push.apply(replDataTxQueue, encoder.encode(string));
 }
 
-function sendUartData(string){
+export function sendUartData(string){
     queueReplData(string)
 }
 async function transmitReplData() {
