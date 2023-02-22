@@ -1,3 +1,4 @@
+import { sendUartData } from "../../js/bluetooth";
 
     String.prototype.nthLastIndexOf = function(searchString, n){
         let str = this;
@@ -140,11 +141,11 @@
         cursorPosition = replConsole.value.length;
         replConsole.value = '';
         cursorPosition = 0;
-
-        queueReplData("\x03"); // Send Ctrl-C to clear the prompt
         replConsole.value = '';
         cursorPosition = 0;
-        queueReplData("\x02"); // Send Ctrl-B to enter friendly mode
+        sendUartData("\x03"); // Send Ctrl-C to clear the prompt
+       
+        sendUartData("\x02"); // Send Ctrl-B to enter friendly mode
         setTimeout(()=>{
             // checkVersion()
         },1000)
