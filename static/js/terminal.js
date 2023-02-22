@@ -141,12 +141,13 @@ import { sendUartData } from "../../js/bluetooth";
         cursorPosition = replConsole.value.length;
         replConsole.value = '';
         cursorPosition = 0;
-        replConsole.value = '';
-        cursorPosition = 0;
-        sendUartData("\x03"); // Send Ctrl-C to clear the prompt
-       
-        sendUartData("\x02"); // Send Ctrl-B to enter friendly mode
+
+        // Send Ctrl-B to enter friendly mode
         setTimeout(()=>{
+            sendUartData("\x03"); // Send Ctrl-C to clear the prompt
+            replConsole.value = '';
+            cursorPosition = 0;
+            sendUartData("\x02");
             // checkVersion()
         },1000)
     
