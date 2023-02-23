@@ -1,4 +1,3 @@
- // Load a firmware package
 
  const updateCont = document.querySelector('.bg-overlay');
  
