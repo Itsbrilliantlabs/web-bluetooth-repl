@@ -93,11 +93,13 @@ const systemCMDHook = function(string){
         if(cmd_response.includes(latestVersion.innerHTML.trim())){
             document.querySelector('.update-start').innerHTML = "Use <b>device.VERSION</b>"
         }else{
-            document.querySelector('.update-start').innerHTML = "Use <a href='https://www.nordicsemi.com/Products/Development-tools/nRF-Device-Firmware-Update'> nrf DFU app to update</a>"
-            if(SYSTEM_CMDS[UPDATE_CMD]){
-                sendUartData(UPDATE_MSG + '\r\n')
-                SYSTEM_CMDS[UPDATE_CMD] = false
-            }
+            document.querySelector('.update-start').innerHTML = "Click <a href='#' " +
+            "onclick='startMonocleFirmwareUpdate();return false;'>" +
+            "here</a> to update."
+            // if(SYSTEM_CMDS[UPDATE_CMD]){
+            //     sendUartData(UPDATE_MSG + '\r\n')
+            //     SYSTEM_CMDS[UPDATE_CMD] = false
+            // }
         }
     }
 }
@@ -347,27 +349,10 @@ const initiatWebBleConnect = function(){
 
         // Send the keypress
         sendUartData(key)
-
-            // If an error occurs
-            // .catch(error => {
-
-            //     // Print an error message in the REPL console
-            //     replConsole.value += "\nBluetooth error. Are you connected?";
-
-            //     // Move the cursor forward
-            //     cursorPosition = replConsole.value.length;
-
-            //     // Focus the cursor to the REPL console, and scroll down
-            //     focusREPL();
-
-            //     // Log the error to the debug console
-            //     console.error(error);
-            // });
-
         // Don't print characters to the REPL console because the response will print it for us
         event.preventDefault();
         if(String(replConsole.value).endsWith("update.micropython()") && key=="\r\n"){
-            // doDFU()
+            doDFU()
         }
     }
 }else{
@@ -571,7 +556,7 @@ replConsole.onpaste = function () {
 
             // Send the entire clipboard, with line-feeds replaced with CRLF
             sendUartData(text.replace('\n', '\r\n'))
-
+            
                 // If an error occurs
                 // .catch(disconnectError);
         })
