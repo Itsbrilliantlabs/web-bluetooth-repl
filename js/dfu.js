@@ -154,7 +154,4 @@ async function doDFU(afterPackageLoad=false) {
    })
 }
 
-function cancelUpdate(){
-    updateCont.classList.add('off')
-    initiatWebBleConnect()
-}
+

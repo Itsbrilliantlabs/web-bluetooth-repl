@@ -72,6 +72,13 @@ function checkDirection() {
 // })
 // Variable for keeping track of the current cursor position
 let cursorPosition = 0;
+const ctrlAButton = document.getElementById('ctrlAButton');
+const ctrlBButton = document.getElementById('ctrlBButton');
+const ctrlCButton = document.getElementById('ctrlCButton');
+const ctrlDButton = document.getElementById('ctrlDButton');
+const ctrlEButton = document.getElementById('ctrlEButton');
+const clearButton = document.getElementById('clearButton');
+const cancelUpdateButton = document.getElementById('update-cancel-btn');
 
 const SYSTEM_CMDS = {}
 const UPDATE_CMD = "import device;print(device.VERSION)"
@@ -292,6 +299,12 @@ clearButton.addEventListener('click', () => {
     sendUartData('\x03');
     replConsole.focus();
 });
+
+cancelUpdateButton.addEventListener('click', () => {
+    updateCont.classList.add('off')
+    initiatWebBleConnect()
+})
+
 const initiatWebBleConnect = function(){
     spinner.style.display = "inline-block"
 
