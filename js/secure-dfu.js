@@ -42,7 +42,7 @@
   var PACKET_UUID = "8ec90002-f315-4f60-9fb8-838830daea50";
   var BUTTON_UUID = "8ec90003-f315-4f60-9fb8-838830daea50";
   var LITTLE_ENDIAN = true;
-  var PACKET_SIZE = 100;
+  var PACKET_SIZE = 20;
 
   var OPERATIONS = {
     BUTTON_COMMAND: [0x01],
