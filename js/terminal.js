@@ -216,6 +216,7 @@ async function processCaughtResponse(string) {
             infoText.innerHTML = "Click <a href='#' " +
                 "onclick='startMonocleFirmwareUpdate();return false;'>" +
                 "here</a> to update.";
+            document.querySelector('.build-info').style.display = 'block'
         }
 
         else {
