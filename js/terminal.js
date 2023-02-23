@@ -101,12 +101,12 @@ const systemCMDHook = function(string){
         }
     }
 }
-document.querySelector('.update-start').addEventListener('click',function(){
-    if(device){
-        sendUartData(UPDATE_START+"\r\n")
-        // doDFU()
-    }
-})
+// document.querySelector('.update-start').addEventListener('click',function(){
+//     // if(device){
+//         // sendUartData(UPDATE_START+"\r\n")
+//         // doDFU()
+//     // }
+// })
 const checkVersion = function (){
     SYSTEM_CMDS[UPDATE_CMD] = true
     sendUartData(UPDATE_CMD+"\r\n")

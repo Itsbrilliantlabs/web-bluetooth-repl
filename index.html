@@ -199,7 +199,7 @@
 
     // Reference to the <a> link where we'll insert the version string
     const latestVersion = document.getElementById('latestVersion');
-
+    const apiURL = "https://api.brilliant.xyz/firmware";
     // Get the version from the API and populate the value
     (async function getVersion() {
 
@@ -211,7 +211,8 @@
         });
         let dfu_bin = latestRelease.data.assets.filter(d=>d.content_type=='application/zip')
         if(dfu_bin.length==1){
-            dfu_bin=dfu_bin[0].browser_download_url
+            dfu_bin= dfu_bin[0].browser_download_url
+            dfu_bin = apiURL +"?url="+dfu_bin
             latestVersion.setAttribute('data-zip-url',dfu_bin)
         }
         // Set the inner value of the <a> link to the tag string
