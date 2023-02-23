@@ -1,4 +1,4 @@
-
+//taken from https://github.com/thegecko/web-bluetooth-dfu/issues/70
 (function (root, factory) {
   if (typeof define === "function" && define.amd) {
     // AMD. Register as an anonymous module.
