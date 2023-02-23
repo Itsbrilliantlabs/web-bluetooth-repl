@@ -203,10 +203,10 @@ async function processCaughtResponse(string) {
             sendUartData("display.show()\r\n");
             sendUartData("print('NOTIFIED UPDATE')\r\n");
             sendUartData("\x04");
-
-            infoText.innerHTML = " Click <a href='#' " +
+            let latestVersion = document.getElementById('latestVersion');
+            infoText.innerHTML = "Download latest <a href='"+latestVersion.getAttribute('data-zip-url')+"'>zip</a>, Click <a href='#' " +
                 "onclick='startMonocleFirmwareUpdate();return false;'>" +
-                "here</a> to update.";
+                "here</a> to update and then use <a href='https://www.nordicsemi.com/Products/Development-tools/nRF-Device-Firmware-Update'>nrf DFU app.</a>";
         }
 
         else {
@@ -879,6 +879,9 @@ function getOS() {
   }
 
   if(getOS()=="Android"){
-    document.querySelector('.simple-keyboard').style.display="block";
-    replConsole.setAttribute('input-mode','none')
+    // document.querySelector('.simple-keyboard').style.display="block";
+    // replConsole.setAttribute('input-mode','none')
+    if(!nativeFunc){
+        infoText.innerHTML = "For android chrome we are working on meanwhile try the <a href='https://play.google.com/store/apps/details?id=com.brilliantmonocle'>app<a>"
+    }
   }
