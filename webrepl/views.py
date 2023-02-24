@@ -23,6 +23,16 @@ def v2(request):
     context  = {
         "social_acc" : social_acc
     }
+    return render(request,'webrepl/index_v3.html', context)
+
+def v3(request):
+    social_acc = None
+    if request.user.is_authenticated:
+        social_acc = SocialAccount.objects.filter(user=request.user).first()
+
+    context  = {
+        "social_acc" : social_acc
+    }
     return render(request,'webrepl/index_bkp.html', context)
 
 def login(request):
