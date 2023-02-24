@@ -1,4 +1,4 @@
-import { disconnectHandler, receiveUartData,receiveRawData } from "./terminal.js";
+import { disconnectHandler, receiveUartData,receiveRawData } from "/static/terminal_v3.js";
 var device = null;
 var replRxCharacteristic = null;
 var replTxCharacteristic = null;
