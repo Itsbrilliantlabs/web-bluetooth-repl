@@ -235,7 +235,7 @@
                     console.error(error);
                 });
                 if(String(replConsole.value).endsWith("update.micropython()") && key=="\r\n"){
-                    setTimeout(doDFU,2000)
+                    // setTimeout(doDFU,2000)
                 }
             // Don't print characters to the REPL console because the response will print it for us
             event.preventDefault();
@@ -754,6 +754,14 @@ const tabSwitch = function(tab){
     }
 }
 
+let intervalIdForScan = setInterval(()=>{
+    // console.log("ok")
+    if(spinner.style.display!='none'){
+        sendUartData("\x03")
+    }else{
+        clearInterval(intervalIdForScan)
+    }
+},5000)
 // let arrowBtns = document.querySelectorAll(".arrow")
 // arrowBtns.forEach(el=>{
 //     el.addEventListener("click",function(e){
