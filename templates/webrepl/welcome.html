@@ -43,11 +43,8 @@
 
 <script type="module">
      setTimeout(()=>{
-    {% if request.user.is_authenticated %}
         window.location ="{% url 'home' %}"
-    {% else %}
-        window.location ="{% url 'login' %}"
-    {% endif %}
+  
      },3000)
 	
 </script>
