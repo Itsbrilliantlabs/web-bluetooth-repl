@@ -1,5 +1,5 @@
-import {connectDisconnect, sendUartData} from "/static/bluetooth_v3.js"
-import { getLatestGitTag ,} from "/static/gitutils.js";
+import {connectDisconnect, sendUartData} from "./bluetooth_v3.js"
+import { getLatestGitTag ,} from "./gitutils.js";
 
 String.prototype.nthLastIndexOf = function(searchString, n){
     let str = this;
