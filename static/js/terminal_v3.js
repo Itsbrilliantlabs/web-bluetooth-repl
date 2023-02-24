@@ -886,7 +886,7 @@ function getOS() {
     onKeyPress: button => onKeyPress(button),
     display: {
         '{bksp}': '⌫',
-        '{enter}': '&#11168;',
+        '{enter}': 'return',
         '{shift}' : '&#8679;',
         '{tab}' : '&#8677;',
         '{space}' : '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
@@ -927,46 +927,30 @@ function getOS() {
     //     '@ , {space} , {enter}'
     //     ]
     function onKeyPress(button) {
-    console.log("Button pressed", button);
-    if (button === "{shift}" || button === "{lock}") handleShift();
-    // Send the keypress
-    let key = null
-    if(button[0]!=="{"){
-        key =button
-    }
-    if(button=="{bksp}"){
-        sendUartData("\x08");
-    }
-    if(button=="{enter}"){
-        key ="\r\n"
-    }
-    if(button=="{space}"){
-        key =" "
-    }
-    if(button=="{tab}"){
-        sendUartData("\x09")
-    }
-    if(key!=null){
-        sendUartData(key)
+        console.log("Button pressed", button);
+        if (button === "{shift}" || button === "{lock}") handleShift();
+        // Send the keypress
+        let key = null
+        if(button[0]!=="{"){
+            key =button
+        }
+        if(button=="{bksp}"){
+            sendUartData("\x08");
+        }
+        if(button=="{enter}"){
+            key ="\r\n"
+        }
+        if(button=="{space}"){
+            key =" "
+        }
+        if(button=="{tab}"){
+            sendUartData("\x09")
+        }
+        if(key!=null){
+            sendUartData(key)
 
-    
         
-        // If an error occurs
-        .catch(error => {
-
-            // Print an error message in the REPL console
-            replConsole.value += "\nBluetooth error. Are you connected?";
-
-            // Move the cursor forward
-            cursorPosition = replConsole.value.length;
-
-            // Focus the cursor to the REPL console, and scroll down
-            // focusREPL();
-
-            // Log the error to the debug console
-            console.error(error);
-        });
-    }
+        }
     }
     function handleShift(event) {
     let currentLayout = myKeyboard.options.layoutName;
@@ -983,7 +967,19 @@ function getOS() {
         layoutName: shiftToggle
     });
     }
-
+    let key_height =  40
+    if(window.screen.availHeight<800){
+         key_height = 35
+    }
+    if(window.screen.availHeight<700){
+        key_height = 25
+   }
+        let btns = document.querySelectorAll('.hg-theme-default .hg-button')
+        btns.forEach(b=>{
+            b.style.height= String(key_height)+'px'
+        })
+        document.querySelector('.app').style.height = String(window.screen.availHeight - (key_height*5)-30)+"px"
+    
   }else{
     document.querySelector('.simple-keyboard').style.display= 'none'
   }
