@@ -968,16 +968,20 @@ function getOS() {
     });
     }
     let key_height =  40
+    let console_height = 20
     if(window.screen.availHeight<800){
          key_height = 35
+         console_height =16
     }
     if(window.screen.availHeight<700){
         key_height = 25
+        console_height =14
    }
         let btns = document.querySelectorAll('.hg-theme-default .hg-button')
         btns.forEach(b=>{
             b.style.height= String(key_height)+'px'
         })
+        replConsole.setAttribute("rows",console_height)
         document.querySelector('.app').style.height = String(window.screen.availHeight - (key_height*5)-30)+"px"
     
   }else{
