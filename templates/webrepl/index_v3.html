@@ -8,8 +8,7 @@
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0" /> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 
-    <!-- <link rel="stylesheet" href="css/style.css"> -->
-    <link rel="stylesheet" href="{% static 'css/style_v3.css' %}">
+    
     <!-- <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" /> -->
     <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon" />
 
@@ -26,7 +25,9 @@
     <meta property="og:image" content="https://repl.brilliant.xyz/images/share.png" />
     <meta property="og:url" content="https://repl.brilliant.xyz" />
     <meta property="og:type" content="website" />
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/css/index.css">
+<!-- <link rel="stylesheet" href="css/style.css"> -->
+<link rel="stylesheet" href="{% static 'css/style_v3.css' %}">
     <!-- Import the bluetooth functions from the bluetooth.js file -->
     <!-- <script src="js/bluetooth.js"></script> -->
     <script  type="module" src="{% static 'js/bluetooth_v3.js' %}"></script>
@@ -72,7 +73,7 @@
 
         <div class="console-area">
         <!-- REPL console -->
-        <textarea type="textarea" id="replConsole" rows=20 autocomplete="off" autocorrect="off" autocapitalize="off"
+        <textarea type="textarea"  inputmode='none'  id="replConsole" rows=20 autocomplete="off" autocorrect="off" autocapitalize="off"
             spellcheck="false" placeholder="" onpaste="pasteEvent();event.preventDefault()"></textarea>
         <!-- <div class="controls"> -->
             <!-- <div class="arrow-pad">
