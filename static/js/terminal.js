@@ -268,6 +268,7 @@
     }
     const appBleDisconnected = function(){
         controlButtons.forEach(ele => { ele.disabled = true;}); 
+        replConsole.value = ''
         replConsole.value  += "\nBluetooth error. Are you connected? Trying to connect!";
         cursorPosition = replConsole.value.length;
         spinner.style.display = "inline-block";
