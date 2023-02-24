@@ -272,7 +272,7 @@
         replConsole.value  += "\nBluetooth error. Are you connected? Trying to connect!";
         cursorPosition = replConsole.value.length;
         spinner.style.display = "inline-block";
-        scanTrigger()
+        setTimeout(scanTrigger, 10)
     }
     // Whenever keys such as Ctrl, Tab or Backspace are pressed/held
     replConsole.onkeydown = (event) => {
@@ -764,7 +764,7 @@ function scanTrigger(){
         }else{
             clearInterval(intervalIdForScan)
         }
-    },5000)
+    },10000)
 }
 
 // let arrowBtns = document.querySelectorAll(".arrow")
