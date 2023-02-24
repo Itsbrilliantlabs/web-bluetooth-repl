@@ -270,7 +270,8 @@
         controlButtons.forEach(ele => { ele.disabled = true;}); 
         replConsole.value  += "\nBluetooth error. Are you connected? Trying to connect!";
         cursorPosition = replConsole.value.length;
-        spinner.style.display = "inline-block"
+        spinner.style.display = "inline-block";
+        scanTrigger()
     }
     // Whenever keys such as Ctrl, Tab or Backspace are pressed/held
     replConsole.onkeydown = (event) => {
@@ -754,14 +755,17 @@ const tabSwitch = function(tab){
     }
 }
 
-let intervalIdForScan = setInterval(()=>{
-    // console.log("ok")
-    if(spinner.style.display!='none'){
-        sendUartData("\x03")
-    }else{
-        clearInterval(intervalIdForScan)
-    }
-},5000)
+function scanTrigger(){
+    let intervalIdForScan = setInterval(()=>{
+        // console.log("ok")
+        if(spinner.style.display!='none'){
+            sendUartData("\x03")
+        }else{
+            clearInterval(intervalIdForScan)
+        }
+    },5000)
+}
+
 // let arrowBtns = document.querySelectorAll(".arrow")
 // arrowBtns.forEach(el=>{
 //     el.addEventListener("click",function(e){
