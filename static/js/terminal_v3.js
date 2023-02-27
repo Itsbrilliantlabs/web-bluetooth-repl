@@ -781,12 +781,7 @@ function focusREPL() {
     replConsole.scrollTop = replConsole.scrollHeight;
 }
 
-replConsole.addEventListener('focus',()=>{
-    keyBoardUi.style.display = 'block'
-})
-replConsole.addEventListener('focusout',()=>{
-    keyBoardUi.style.display = 'none'
-})
+
 
 // const arrowToggleBtn = document.querySelector('.arrow-toggle span')
 // const arrowPad = document.querySelector(".arrow-pad")
@@ -1018,8 +1013,17 @@ function getOS() {
     //     b.style.height= String(key_height)+'px'
     // })
     replConsole.setAttribute("rows",console_height)
-    document.querySelector('.app').style.height = String(window.screen.availHeight - (key_height*5)-30)+"px"
-    
+    // document.querySelector('.app').style.height = String(window.screen.availHeight - (key_height*5)-30)+"px"
+    keyBoardUi.addEventListener('click',function(event){
+        event.stopPropagation()
+    })
+    replConsole.addEventListener('focus',()=>{
+        keyBoardUi.style.display = 'block'
+    })
+    document.addEventListener('click',function(event){
+        // debugger
+        keyBoardUi.style.display = 'none'
+    })
   }else{
     document.querySelector('.simple-keyboard').style.display= 'none'
   }
