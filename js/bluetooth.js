@@ -10,7 +10,7 @@ const replDataServiceUuid = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
 const replRxCharacteristicUuid = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
 const replTxCharacteristicUuid = "6e400003-b5a3-f393-e0a9-e50e24dcca9e";
 // const dfuServiceUuid = "0000fe59-0000-1000-8000-00805f9b34fb"
-const dfuServiceUuid = 0xFE59
+// const dfuServiceUuid = 0xFE59
 const CONTROL_UUID = "8ec90001-f315-4f60-9fb8-838830daea50";
 const PACKET_UUID = "8ec90002-f315-4f60-9fb8-838830daea50";
 const BUTTON_UUID = "8ec90003-f315-4f60-9fb8-838830daea50";
@@ -59,7 +59,7 @@ export async function connectDisconnect() {
             //     services: []
             // }],
             acceptAllDevices: true,
-            optionalServices: [replDataServiceUuid,rawDataServiceUuid,dfuServiceUuid,CONTROL_UUID,PACKET_UUID, BUTTON_UUID]
+            optionalServices: [replDataServiceUuid,rawDataServiceUuid,CONTROL_UUID,PACKET_UUID, BUTTON_UUID]
         });
 
         let deviceName = String(device.name).toLocaleLowerCase()
