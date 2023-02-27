@@ -138,7 +138,7 @@ function update(dfu, device) {
     })
     .catch(error => {
         console.log(error)
-        document.querySelector('.firmware-update-box span').innerHTML = "firmware updating to "+latestVersion.innerHTML +" failed"
+        document.querySelector('.firmware-update-box span').innerHTML = "firmware updating to "+latestVersion.innerHTML +" failed: "+String(error)
         document.getElementById('update-start-btn').innerHTML = 'Try Again'
         toggleUpdateButtons(true)
     });
