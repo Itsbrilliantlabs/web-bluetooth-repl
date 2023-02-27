@@ -144,7 +144,7 @@
             // checkVersion()
             
 
-            sendUartData("\x03"); // Send Ctrl-C to clear the prompt
+            // sendUartData("\x03"); // Send Ctrl-C to clear the prompt
             replConsole.value = '';
             cursorPosition = 0;
             sendUartData("\x02"); // Send Ctrl-B to enter friendly mode

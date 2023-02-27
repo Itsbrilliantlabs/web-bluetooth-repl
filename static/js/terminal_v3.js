@@ -886,6 +886,8 @@ function getOS() {
     onKeyPress: button => onKeyPress(button),
     display: {
         '{bksp}': '⌫',
+        '{num}':'?123',
+        '{abc}':'Abc',
         '{enter}': 'return',
         '{shift}' : '&#8679;',
         '{tab}' : '&#8677;',
@@ -896,19 +898,25 @@ function getOS() {
     autoUseTouchEvents: true,
     layout: {
         'default': [
-        '` 1 2 3 4 5 6 7 8 9 0 - =',
-        'q w e r t y u i o p [ ] \\',
-        '{tab} a s d f g h j k l',
+        'q w e r t y u i o p',
+        'a s d f g h j k l',
         '{shift} z x c v b n m {bksp}',
-        '@ , {space} . {enter}'
+        '{num} , {space} . {enter}'
         ],
         'shift': [
-        '~ ! @ # $ % ^ &amp; * ( ) _ +',
-        'Q W E R T Y U I O P { } |',
-        '{tab} A S D F G H J K L : "',
+        'Q W E R T Y U I O P',
+        'A S D F G H J K L',
         '{shift} Z X C V B N M {bksp}',
-        '? &lt; {space} &gt; {enter}'
-        ]
+        '{num} &lt; {space} &gt; {enter}'
+        ],
+        'num': [
+            '1 2 3 4 5 6 7 8 9 0',
+            '` " \' : ; # ? [ ] \\',
+            '_ * - + / { } ( )',
+            '{shift} ~ ! @ $ % ^ &amp; {bksp}',
+            '{abc} &lt; {space} &gt; {enter}'
+            ],
+        
     }
     });
 
@@ -929,6 +937,7 @@ function getOS() {
     function onKeyPress(button) {
         console.log("Button pressed", button);
         if (button === "{shift}" || button === "{lock}") handleShift();
+        if (button === "{num}" || button === "{abc}") handleNum();
         // Send the keypress
         let key = null
         if(button[0]!=="{"){
@@ -953,19 +962,22 @@ function getOS() {
         }
     }
     function handleShift(event) {
-    let currentLayout = myKeyboard.options.layoutName;
-    let shiftToggle = currentLayout === "default" ? "shift" : "default";
+        let currentLayout = myKeyboard.options.layoutName;
+        let shiftToggle = (currentLayout === "default") ? "shift" : "default";
 
-    /**
-     * If phyisical keyboard's CapsLock is enabled
-     */
-    if (event && event.getModifierState("CapsLock")) {
-        shiftToggle = "shift";
+        myKeyboard.setOptions({
+            layoutName: shiftToggle
+        });
+
     }
-
-    myKeyboard.setOptions({
-        layoutName: shiftToggle
-    });
+    function handleNum(event) {
+        let currentLayout = myKeyboard.options.layoutName;
+        let shiftToggle = (currentLayout === "default") ? "num" : "default";
+    
+        myKeyboard.setOptions({
+            layoutName: shiftToggle
+        });
+    
     }
     let key_height =  40
     let console_height = 20
@@ -974,7 +986,7 @@ function getOS() {
          console_height =16
     }
     if(window.screen.availHeight<700){
-        key_height = 25
+        // key_height = 25
         console_height =14
    }
         let btns = document.querySelectorAll('.hg-theme-default .hg-button')
