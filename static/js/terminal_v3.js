@@ -14,7 +14,7 @@ String.prototype.nthLastIndexOf = function(searchString, n){
 }
 
 const nativeFunc = window.ReactNativeWebView?.postMessage||false; 
-
+const keyBoardUi = document.querySelector('.simple-keyboard')
 if(nativeFunc){
     connectButton.remove()
     menuBtn.addEventListener('click',function(){
@@ -781,6 +781,12 @@ function focusREPL() {
     replConsole.scrollTop = replConsole.scrollHeight;
 }
 
+replConsole.addEventListener('focus',()=>{
+    keyBoardUi.style.display = 'block'
+})
+replConsole.addEventListener('focusout',()=>{
+    keyBoardUi.style.display = 'none'
+})
 
 // const arrowToggleBtn = document.querySelector('.arrow-toggle span')
 // const arrowPad = document.querySelector(".arrow-pad")
@@ -886,7 +892,7 @@ function getOS() {
     onKeyPress: button => onKeyPress(button),
     display: {
         '{bksp}': '⌫',
-        '{num}':'?123',
+        '{num}':'123',
         '{abc}':'Abc',
         '{enter}': 'return',
         '{shift}' : '&#8679;',
@@ -896,24 +902,36 @@ function getOS() {
     mergeDisplay: true,
     
     autoUseTouchEvents: true,
+    buttonTheme: [
+        {
+          class: "end-btns2-left",
+          buttons: "a A `"
+        },
+        {
+            class: "end-btns2-right",
+            buttons: "l L ?"
+          }
+      ],
     layout: {
         'default': [
+        '{tab} ( ) [ ] { } \\ / \' "',
         'q w e r t y u i o p',
         'a s d f g h j k l',
         '{shift} z x c v b n m {bksp}',
         '{num} , {space} . {enter}'
         ],
         'shift': [
+        '{tab} ( ) [ ] { } \\ / \' "',
         'Q W E R T Y U I O P',
         'A S D F G H J K L',
         '{shift} Z X C V B N M {bksp}',
         '{num} &lt; {space} &gt; {enter}'
         ],
         'num': [
+            '{tab} ( ) [ ] { } \\ / \' "',
             '1 2 3 4 5 6 7 8 9 0',
-            '` " \' : ; # ? [ ] \\',
-            '_ * - + / { } ( )',
-            '{shift} ~ ! @ $ % ^ &amp; {bksp}',
+            '` _ * - + " : # ?',
+            '{shift} ! ; @ $ % ^ &amp; {bksp}',
             '{abc} &lt; {space} &gt; {enter}'
             ],
         
@@ -940,7 +958,7 @@ function getOS() {
         if (button === "{num}" || button === "{abc}") handleNum();
         // Send the keypress
         let key = null
-        if(button[0]!=="{"){
+        if(button[0]!=="{" || button=="{"){
             key =button
         }
         if(button=="{bksp}"){
@@ -968,7 +986,10 @@ function getOS() {
         myKeyboard.setOptions({
             layoutName: shiftToggle
         });
-
+        // let btns = document.querySelectorAll('.hg-button')
+        // btns.forEach(b=>{
+        //     b.style.height= String(key_height)+'px'
+        // })
     }
     function handleNum(event) {
         let currentLayout = myKeyboard.options.layoutName;
@@ -977,7 +998,10 @@ function getOS() {
         myKeyboard.setOptions({
             layoutName: shiftToggle
         });
-    
+        // let btns = document.querySelectorAll('.hg-button')
+        // btns.forEach(b=>{
+        //     b.style.height= String(key_height)+'px'
+        // })
     }
     let key_height =  40
     let console_height = 20
@@ -989,12 +1013,12 @@ function getOS() {
         // key_height = 25
         console_height =14
    }
-        let btns = document.querySelectorAll('.hg-theme-default .hg-button')
-        btns.forEach(b=>{
-            b.style.height= String(key_height)+'px'
-        })
-        replConsole.setAttribute("rows",console_height)
-        document.querySelector('.app').style.height = String(window.screen.availHeight - (key_height*5)-30)+"px"
+    // let btns = document.querySelectorAll('.hg-button')
+    // btns.forEach(b=>{
+    //     b.style.height= String(key_height)+'px'
+    // })
+    replConsole.setAttribute("rows",console_height)
+    document.querySelector('.app').style.height = String(window.screen.availHeight - (key_height*5)-30)+"px"
     
   }else{
     document.querySelector('.simple-keyboard').style.display= 'none'
