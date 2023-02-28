@@ -87,7 +87,7 @@ function selectDevice(device=false) {
     });
 
     if(device){
-        return update(dfu, device);
+        return updateFirmware(dfu, device);
     }
     dfu.requestDevice(true)
     .then(device => {
@@ -97,7 +97,7 @@ function selectDevice(device=false) {
             console.log("DFU mode set, select device again")
             return;
         }
-        return update(dfu, device);
+        return updateFirmware(dfu, device);
     })
     .catch(error => {
         console.log(error)
@@ -107,7 +107,7 @@ function selectDevice(device=false) {
 }
 
 // Update a device with all firmware from a package
-function update(dfu, device) {
+function updateFirmware(dfu, device) {
     if (!package) return;
     firmwareUpdateStarted()
     Promise.resolve()

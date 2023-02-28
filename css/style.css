@@ -155,7 +155,7 @@ a:hover {
 .menu-icon::before {
     box-sizing: border-box;
     position: relative;
-    display: block;
+    display: none;
     width: 24px;
     height: 2px;
     border-radius: 2px;
@@ -192,7 +192,7 @@ width: 13%;
 
 .lds-spinner {
     color: var(--text-color);
-    display: inline-block;
+    display: none;
     position: relative;
     width: 25px;
     height: 25px;
