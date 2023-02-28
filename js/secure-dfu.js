@@ -209,7 +209,7 @@
   var SecureDfu = (function (_super) {
     function SecureDfu(crc32, bluetooth, delay) {
       if (delay === void 0) {
-        delay = 15;
+        delay = 20;
       }
       var _this = this;
       _this.crc32 = crc32;
