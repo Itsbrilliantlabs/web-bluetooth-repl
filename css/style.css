@@ -570,7 +570,76 @@ width: 13%;
   width: 10px;
   z-index: -1;
 }
+.simple-keyboard{
+    display: none;
+    position: fixed;
+    bottom: 0;
+    border-radius: 0;
+  
+  }
 
+.hg-theme-default {
+    background-color: #333;
+}
+.simple-keyboard span {
+    color: #f1f1f1;
+    font-weight: normal;
+}
+   
+.hg-theme-default .hg-button {
+    -webkit-tap-highlight-color: rgba(198, 191, 191, 0.758);
+    align-items: center;
+    background: #5a5a5a;
+    /* border-bottom: 1px solid #b5b5b5; */
+    border-radius: 5px;
+    /* box-shadow: 1px -1px 3px -1px rgb(20 20 20); */
+    box-sizing: border-box;
+    cursor: pointer;
+    display: flex;
+    height: 40px;
+    justify-content: center;
+    padding: 5px;
+  border: none;
+
+}
+.hg-theme-default .end-btns2-left{
+  margin-left: 20px;
+}
+.hg-theme-default .end-btns2-right{
+  margin-right: 20px !important;
+}
+.hg-theme-default .hg-button-shift{
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+}
+.hg-theme-default .hg-button-bksp{
+  padding-left: 11px !important;
+  padding-right: 11px !important;
+}
+.hg-theme-default .hg-row:first-child .hg-button {
+  background-color: unset;
+  border: none;
+    box-shadow: none;
+
+}
+.hg-theme-default .hg-row:last-child{
+    display: inline-block;
+
+
+}
+.hg-theme-default .hg-row:last-child .hg-button:first-child {
+  background-color: unset;
+  border: none;
+  height: 30px;
+    padding-top: 0;
+    padding-bottom: 10px;
+    box-shadow: none;
+    padding-left: 15px;
+    padding-right: 10px;
+    display: block;
+
+
+}
 @media only screen and (max-width: 900px) {
     
     .app {
@@ -610,6 +679,12 @@ width: 13%;
     .firmware-update-box{
       width: 80vw;
     }
+    .simple-keyboard{
+        /* display: block; */
+        position: fixed;
+        bottom: 0;
+      
+      }
     
   }
   

@@ -14,7 +14,7 @@ String.prototype.nthLastIndexOf = function(searchString, n){
 }
 
 const nativeFunc = window.ReactNativeWebView?.postMessage||false; 
-
+const keyBoardUi = document.querySelector('.simple-keyboard')
 if(nativeFunc){
     connectButton.remove()
     menuBtn.addEventListener('click',function(){
@@ -854,6 +854,7 @@ window.startMonocleFirmwareUpdate = () => {
 // })
 
 
+
 // from https://stackoverflow.com/questions/38241480/detect-macos-ios-windows-android-and-linux-os-with-js
 function getOS() {
     var userAgent = window.navigator.userAgent,
@@ -878,10 +879,167 @@ function getOS() {
     return os;
   }
 
-//   if(getOS()=="Android"){
-//     // document.querySelector('.simple-keyboard').style.display="block";
-//     // replConsole.setAttribute('input-mode','none')
-//     if(!nativeFunc){
-//         infoText.innerHTML = "For android chrome we are working on meanwhile try the <a href='https://play.google.com/store/apps/details?id=com.brilliantmonocle'>app<a>"
-//     }
-//   }
+  if(getOS()=='Android'){
+    const Keyboard = window.SimpleKeyboard.default;
+
+    const myKeyboard = new Keyboard({
+    //   onChange: input => onChange(input),
+    onKeyPress: button => onKeyPress(button),
+    display: {
+        '{bksp}': '⌫',
+        '{off}': '&#8964;',
+        '{num}':'123',
+        '{abc}':'Abc',
+        '{enter}': 'return',
+        '{shift}' : '⇧',
+        '{tab}' : '&#8677;',
+        '{space}' : '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
+    },
+    mergeDisplay: true,
+    
+    autoUseTouchEvents: true,
+    buttonTheme: [
+        {
+          class: "end-btns2-left",
+          buttons: "a A `"
+        },
+        {
+            class: "end-btns2-right",
+            buttons: "l L ?"
+          }
+      ],
+    layout: {
+        'default': [
+        '{tab} ( ) [ ] { } \\ / \' "',
+        'q w e r t y u i o p',
+        'a s d f g h j k l',
+        '{shift} z x c v b n m {bksp}',
+        '{num} , {space} . {enter}',
+        '{off}'
+        ],
+        'shift': [
+        '{tab} ( ) [ ] { } \\ / \' "',
+        'Q W E R T Y U I O P',
+        'A S D F G H J K L',
+        '{shift} Z X C V B N M {bksp}',
+        '{num} &lt; {space} &gt; {enter}',
+        '{off}'
+        ],
+        'num': [
+            '{tab} ( ) [ ] { } \\ / \' "',
+            '1 2 3 4 5 6 7 8 9 0',
+            '` _ * - + " : # ?',
+            '{shift} ! ; @ $ % ^ &amp; {bksp}',
+            '{abc} &lt; {space} &gt; {enter}',
+            '{off}'
+            ],
+        
+    }
+    });
+
+    // 'default': [
+    //     '` 1 2 3 4 5 6 7 8 9 0 - =',
+    //     'q w e r t y u i o p [ ] \\',
+    //     '{tab} a s d f g h j k l ; \'',
+    //     '{shift} z x c v b n m / {bksp}',
+    //     '.com , {space} . {enter}'
+    //     ],
+    //     'shift': [
+    //     '~ ! @ # $ % ^ &amp; * ( ) _ +',
+    //     'Q W E R T Y U I O P { } |',
+    //     '{tab} A S D F G H J K L : "',
+    //     '{shift} Z X C V B N M &lt; &gt; ? {bksp}',
+    //     '@ , {space} , {enter}'
+    //     ]
+    function onKeyPress(button) {
+        console.log("Button pressed", button);
+        if (button === "{shift}" || button === "{lock}") handleShift();
+        if (button === "{num}" || button === "{abc}") handleNum();
+        if (button === "{off}"){
+            myKeyboard.setOptions({
+                layoutName: "default"
+            });
+            keyBoardUi.style.display = 'none'
+        };
+        // Send the keypress
+        let key = null
+        if(button[0]!=="{" || button=="{"){
+            key =button
+        }
+        if(button=="{bksp}"){
+            sendUartData("\x08");
+        }
+        if(button=="{enter}"){
+            key ="\r\n"
+        }
+        if(button=="{space}"){
+            key =" "
+        }
+        if(button=="{tab}"){
+            sendUartData("\x09")
+        }
+        if(key!=null){
+            sendUartData(key)
+
+        
+        }
+    }
+    function handleShift(event) {
+        let currentLayout = myKeyboard.options.layoutName;
+        let shiftToggle = (currentLayout === "default") ? "shift" : "default";
+
+        myKeyboard.setOptions({
+            layoutName: shiftToggle
+        });
+        // let btns = document.querySelectorAll('.hg-button')
+        // btns.forEach(b=>{
+        //     b.style.height= String(key_height)+'px'
+        // })
+    }
+    function handleNum(event) {
+        let currentLayout = myKeyboard.options.layoutName;
+        let shiftToggle = (currentLayout === "default") ? "num" : "default";
+    
+        myKeyboard.setOptions({
+            layoutName: shiftToggle
+        });
+        // let btns = document.querySelectorAll('.hg-button')
+        // btns.forEach(b=>{
+        //     b.style.height= String(key_height)+'px'
+        // })
+    }
+    let key_height =  40
+    let console_height = 20
+    if(window.screen.availHeight<800){
+         key_height = 35
+         console_height =16
+    }
+    if(window.screen.availHeight<700){
+        // key_height = 25
+        console_height =14
+   }
+    // let btns = document.querySelectorAll('.hg-button')
+    // btns.forEach(b=>{
+    //     b.style.height= String(key_height)+'px'
+    // })
+    replConsole.setAttribute("rows",console_height)
+    // document.querySelector('.app').style.height = String(window.screen.availHeight - (key_height*5)-30)+"px"
+    keyBoardUi.addEventListener('click',function(event){
+        event.stopPropagation()
+    })
+    replConsole.addEventListener('focus',()=>{
+        keyBoardUi.style.display = 'block'
+    })
+    document.addEventListener('click',function(event){
+        
+        // debugger
+        keyBoardUi.style.display = 'none'
+    })
+    replConsole.addEventListener('click',function(event){
+        event.stopPropagation()
+        keyBoardUi.style.display = 'block'
+    })
+    replConsole.setAttribute('inputmode','none')
+  }else{
+    document.querySelector('.simple-keyboard').style.display= 'none'
+  }
