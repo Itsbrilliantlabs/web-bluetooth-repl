@@ -107,10 +107,82 @@ clearButton.addEventListener('click', () => {
     replConsole.focus();
 });
 
-export function receiveRawData(event) {
 
+
+// Whenever raw data arrives over bluetooth
+export function receiveRawData(event) {
     console.log(event.target.value);
+
+    try{
+        if(appendBuffer(event.target.value.buffer)){
+            showImage()
+            console.log(`finished transfer: ${file_name} -  ${final_buffer.byteLength} of ${file_size}`)
+            final_buffer = null;
+            file_size = null;
+            file_name = null;
+        }else{
+            console.log(`progress: ${file_name} -  ${final_buffer.byteLength} of ${file_size}`)
+        }
+    }catch(error){
+        console.log(error)
+    }
+    
 }
+
+//for displaying recieved imaged
+ function showImage(){
+    let img_blob = new Blob([final_buffer], { type: "image/png" });
+    let urlCreator = window.URL || window.webkitURL;
+    let imageUrl = urlCreator.createObjectURL(img_blob);
+    let img = document.querySelector("#photo");
+    img.src = imageUrl;
+    let a = document.createElement('a');
+    a.href = imageUrl;
+    a.download = file_name;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+ }
+
+// Image Variables
+let final_buffer = null;
+let file_name = null;
+let file_size = null;
+
+// concatinating data function
+const appendBuffer = function (buffer) {
+    let w_temp = new Uint8Array(buffer)
+
+//FLAGS for data read
+    const FILE_INDEX = w_temp[0]
+    const FILE_SIZE_START = 1
+    const FILE_SIZE_BITS = 4
+    const FILE_NAME_LENGTH_SIZE = 5
+    const FILE_NAME_LENGTH_BIT= 1
+
+    const FILE_NAME_START = FILE_NAME_LENGTH_SIZE + FILE_NAME_LENGTH_BIT
+
+    if (FILE_INDEX === 1 || FILE_INDEX === 0) {
+
+        file_size = new Int32Array(w_temp.slice(FILE_SIZE_START, FILE_SIZE_START+FILE_SIZE_BITS).buffer).toString(10)
+        file_name = new TextDecoder("utf-8").decode(w_temp.slice(FILE_NAME_START, w_temp[FILE_NAME_LENGTH_SIZE] + FILE_NAME_START))
+        final_buffer = w_temp.slice(w_temp[FILE_NAME_LENGTH_SIZE] + FILE_NAME_START, w_temp.byteLength).buffer
+    }
+    if(FILE_INDEX === 2 || FILE_INDEX === 3){
+        let tmp = new Uint8Array(final_buffer.byteLength + w_temp.byteLength-1);
+        tmp.set(new Uint8Array(final_buffer), 0);
+        tmp.set(new Uint8Array(w_temp.slice(1, w_temp.byteLength)), final_buffer.byteLength);
+        final_buffer = tmp.buffer
+    }
+
+    if (FILE_INDEX === 0 || FILE_INDEX === 3) {
+        return true;
+        // payload finished
+    }else{
+        return false;
+    }
+
+};
 
 export function disconnectHandler() {
 
