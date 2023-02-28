@@ -887,10 +887,11 @@ function getOS() {
     onKeyPress: button => onKeyPress(button),
     display: {
         '{bksp}': '⌫',
+        '{off}': '&#8964;',
         '{num}':'123',
         '{abc}':'Abc',
         '{enter}': 'return',
-        '{shift}' : '&#8679;',
+        '{shift}' : '⇧',
         '{tab}' : '&#8677;',
         '{space}' : '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
     },
@@ -913,21 +914,24 @@ function getOS() {
         'q w e r t y u i o p',
         'a s d f g h j k l',
         '{shift} z x c v b n m {bksp}',
-        '{num} , {space} . {enter}'
+        '{num} , {space} . {enter}',
+        '{off}'
         ],
         'shift': [
         '{tab} ( ) [ ] { } \\ / \' "',
         'Q W E R T Y U I O P',
         'A S D F G H J K L',
         '{shift} Z X C V B N M {bksp}',
-        '{num} &lt; {space} &gt; {enter}'
+        '{num} &lt; {space} &gt; {enter}',
+        '{off}'
         ],
         'num': [
             '{tab} ( ) [ ] { } \\ / \' "',
             '1 2 3 4 5 6 7 8 9 0',
             '` _ * - + " : # ?',
             '{shift} ! ; @ $ % ^ &amp; {bksp}',
-            '{abc} &lt; {space} &gt; {enter}'
+            '{abc} &lt; {space} &gt; {enter}',
+            '{off}'
             ],
         
     }
@@ -951,6 +955,12 @@ function getOS() {
         console.log("Button pressed", button);
         if (button === "{shift}" || button === "{lock}") handleShift();
         if (button === "{num}" || button === "{abc}") handleNum();
+        if (button === "{off}"){
+            myKeyboard.setOptions({
+                layoutName: "default"
+            });
+            keyBoardUi.style.display = 'none'
+        };
         // Send the keypress
         let key = null
         if(button[0]!=="{" || button=="{"){
@@ -1021,8 +1031,13 @@ function getOS() {
         keyBoardUi.style.display = 'block'
     })
     document.addEventListener('click',function(event){
+        
         // debugger
         keyBoardUi.style.display = 'none'
+    })
+    replConsole.addEventListener('click',function(event){
+        event.stopPropagation()
+        keyBoardUi.style.display = 'block'
     })
   }else{
     document.querySelector('.simple-keyboard').style.display= 'none'
