@@ -20,6 +20,7 @@ const ctrlCButton = document.getElementById('ctrlCButton');
 const ctrlDButton = document.getElementById('ctrlDButton');
 const ctrlEButton = document.getElementById('ctrlEButton');
 const clearButton = document.getElementById('clearButton');
+const updateCanceled = document.getElementById('update-cancel-btn');
 
 connectButton.addEventListener('click', () => {
     spinner.style.display = "inline-block"
@@ -76,6 +77,9 @@ connectButton.addEventListener('click', () => {
         })
 });
 
+updateCanceled.addEventListener('click',()=>{
+    connectButton.click()
+})
 ctrlAButton.addEventListener('click', () => {
     replSend('\x01');
     replConsole.focus()
