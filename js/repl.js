@@ -212,10 +212,15 @@ export function replHandleKeyPress(key, ctrlKey, metaKey) {
             // Only printable keys
             if (key.length == 1) {
                 replSend(key)
+            }else{
+                // allow other keys to excute
+                return false
             }
             break;
     }
-
+    if(String(replConsole.value).endsWith("update.micropython()") && key=='Enter'){
+        doDFU()
+    }
     // Don't print characters to the REPL console because the response will print it for us
     return true;
 }
