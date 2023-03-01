@@ -41,7 +41,7 @@ connectButton.addEventListener('click', () => {
             }
 
             if (result.status === "repl connected") {
-
+                updateCont.classList.add('off')
                 replConsole.placeholder = "";
                 connectButton.innerHTML = "Disconnect";
 
@@ -79,6 +79,7 @@ connectButton.addEventListener('click', () => {
 
 updateCanceled.addEventListener('click',()=>{
     connectButton.click()
+    updateCont.classList.add('off')
 })
 ctrlAButton.addEventListener('click', () => {
     replSend('\x01');

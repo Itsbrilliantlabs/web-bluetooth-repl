@@ -177,8 +177,7 @@
             dfu_bin = apiURL +"?url="+dfu_bin
             latestVersion.setAttribute('data-zip-url',dfu_bin)
         }
-        // Set the inner value of the <a> link to the tag string
-        // latestVersion.innerHTML = latestRelease.data.tag_name;
+            latestVersion.setAttribute('data-firmware',latestRelease.data.tag_name)
     })();
 
 </script>

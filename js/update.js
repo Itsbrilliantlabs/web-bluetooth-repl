@@ -62,16 +62,14 @@ export async function checkForUpdates() {
     );
 }
 
-export function startFirmwareUpdate() {
+export async function startFirmwareUpdate() {
 
-    replSendRaw("import display");
-    replSendRaw("display.text('Updating firmware...',120,180,0xffffff)");
-    replSendRaw("display.show()");
-    setTimeout(()=>{
-        replSendRaw("import update");
-        replSendRaw("update.micropython()");
-        replSendRaw("print('UPDATE STARTED')");
-    },50)
+    await replSendRaw("import display");
+    await replSendRaw("display.text('Updating firmware...',120,180,0xffffff)");
+    await replSendRaw("display.show()");
+    await replSendRaw("import update");
+    await replSendRaw("update.micropython()");
+    await replSendRaw("print('UPDATE STARTED')");
     
 }
 

@@ -1,6 +1,6 @@
 
  const updateCont = document.querySelector('.bg-overlay');
- 
+ const latestVersion = document.getElementById('latestVersion');
  function setPercentage(percentage) {
     const progressContainer = document.querySelector('.progress-container');
 
@@ -46,13 +46,14 @@
  var package = null
  function setPackage(file,callBack=false) {
     if (!file) return;
-
+    document.getElementById('update-start-btn').style.display = 'block'
+    document.getElementById('update-cancel-btn').innerHTML = 'Cancel'
     package = new SecureDfuPackage(file);
     package.load()
     .then(() => {
         // setStatus(`Firmware package: ${file.name}`);
         // selectEl.style.visibility = "visible";
-        document.querySelector('.firmware-update-box span').innerHTML = "Firmware found "+latestVersion.innerHTML+". After start Select DfuTarg as Device"
+        document.querySelector('.firmware-update-box span').innerHTML = "Firmware found "+latestVersion.getAttribute('data-firmware')+". After start Select DfuTarg as Device"
 
         console.log(`Firmware package: ${file.name}`)
         if(callBack){
@@ -122,7 +123,7 @@ function updateFirmware(dfu, device) {
     .then(() => package.getAppImage())
     .then(image => {
         if (image) {
-            document.querySelector('.firmware-update-box span').innerHTML = "firmware updating to "+latestVersion.innerHTML
+            document.querySelector('.firmware-update-box span').innerHTML = "firmware updating to "+latestVersion.getAttribute('data-firmware')
 
             // setStatus(`Updating ${image.type}: ${image.imageFile}...`);
             return dfu.update(device, image.initData, image.imageData);

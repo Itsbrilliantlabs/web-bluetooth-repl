@@ -209,7 +209,7 @@
   var SecureDfu = (function (_super) {
     function SecureDfu(crc32, bluetooth, delay) {
       if (delay === void 0) {
-        delay = 20;
+        delay = 12;
       }
       var _this = this;
       _this.crc32 = crc32;
@@ -391,7 +391,9 @@
           resolve: resolve,
           reject: reject,
         };
-        characteristic.writeValue(value);
+        characteristic.writeValue(value).catch(function(errr){
+          reject(errr)
+        });
       });
     };
     SecureDfu.prototype.sendControl = function (operation, buffer) {
@@ -441,6 +443,11 @@
         };
         _this.progress(0);
         return _this.transferObject(buffer, createType, maxSize, offset);
+      }).catch(function(errr){
+        console.log(errr)
+        if(String(errr).includes("GATT operation already in progress")){
+          return _this.transfer(buffer,type,selectType,createType);
+        }
       });
     };
     SecureDfu.prototype.transferObject = function (
